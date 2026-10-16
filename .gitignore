@@ -85,3 +85,24 @@ Thumbs.db
 # WebGL publish folder is committed. Unity debug leftovers are not.
 webgl/**/*_BurstDebugInformation_DoNotShip/
 webgl/**/DoNotShip/
+
+# ===== FMOD Studio: кэш и служебный мусор =====
+# ВАЖНО: банки (*.bank, включая Build/**) НЕ игнорируются — не добавлять их сюда.
+# Папка Metadata/ProfilerFolder/ — это метаданные проекта, НЕ сессии; её не игнорировать.
+
+# Кэш сборки банков (build records) — пересоздаётся при каждом Ctrl+B
+.cache/
+
+# Несохранённое состояние FMOD Studio (остаётся после сбоев)
+.unsaved/
+
+# Пер-пользовательское состояние Studio (workspace, раскладка окон)
+.user/
+
+# Сохранённые профайлинг-сессии Profiler
+Metadata/Profiler/
+
+# ===== ОС-мусор =====
+Thumbs.db
+Desktop.ini
+.DS_Store
