@@ -1,0 +1,23 @@
+{
+    "name": "LD60.UI",
+    "rootNamespace": "LD60.UI",
+    "references": [
+        "LD60.Core",
+        "LD60.Gameplay",
+        "UniTask",
+        "VContainer",
+        "Unity.TextMeshPro",
+        "Unity.UGUI",
+        "Unity.InputSystem",
+        "Unity.Localization"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

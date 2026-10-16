@@ -1,0 +1,20 @@
+{
+    "name": "LD60.Main",
+    "rootNamespace": "LD60.Main",
+    "references": [
+        "LD60.Core",
+        "LD60.Gameplay",
+        "LD60.UI",
+        "UniTask",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
