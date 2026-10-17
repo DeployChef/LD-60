@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{9a06eca8-430c-4bc1-9cab-0b5ec29aedbd}">
+		<property name="assetPath">
+			<value>vinyl/Communications, Phonograph, Static, Vinyl, Crackle, Noise, Needle, Scratch 02 SND78791 S02.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>6.4643750000000004</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
+		</relationship>
+	</object>
+</objects>
