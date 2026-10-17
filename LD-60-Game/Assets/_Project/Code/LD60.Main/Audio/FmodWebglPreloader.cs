@@ -214,7 +214,7 @@ namespace LD60.Main.Audio
             FMOD.Debug.Initialize(FMOD.DEBUG_FLAGS.NONE, FMOD.DEBUG_MODE.CALLBACK, _fmodDebugSwallow, null);
         }
 
-        [UnityEngine.Scripting.AOT.MonoPInvokeCallback(typeof(FMOD.DEBUG_CALLBACK))]
+        [AOT.MonoPInvokeCallback(typeof(FMOD.DEBUG_CALLBACK))]
         private static FMOD.RESULT SwallowDebugCallback(FMOD.DEBUG_FLAGS flags, IntPtr file, int line, IntPtr func, IntPtr message)
         {
             return FMOD.RESULT.OK;
