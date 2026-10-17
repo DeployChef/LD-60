@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="EncodableAsset" id="{fba5af55-55b4-4b6f-9f4b-bb19549000c5}">
+		<property name="assetPath">
+			<value>vinyl/stop/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
+		</relationship>
+	</object>
+</objects>

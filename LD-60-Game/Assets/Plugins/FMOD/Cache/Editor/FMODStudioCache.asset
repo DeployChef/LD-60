@@ -15,8 +15,63 @@ MonoBehaviour:
   Path: ../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639278324075411619
+  lastModified: 639278506437105885
   FileSizes: []
+  Exists: 1
+--- !u!114 &-3653932198355097566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: "event:/\u0433\u0440\u043E\u043C\u043E\u0444\u043E\u043D"
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: "event:/\u0433\u0440\u043E\u043C\u043E\u0444\u043E\u043D"
+  Guid:
+    Data1: 1342904625
+    Data2: 1137695097
+    Data3: -1822960751
+    Data4: 1007047309
+  Banks:
+  - {fileID: -7447600172461945603}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -3468529686460047849}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 601043
+--- !u!114 &-3468529686460047849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: "parameter:/\u0433\u0440\u043E\u043C\u043E\u0444\u043E\u043D/track"
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: track
+  StudioPath: 
+  Min: 0
+  Max: 2
+  Default: 0
+  ID:
+    data1: 1218751567
+    data2: 1627769641
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - track1
+  - track2
+  - track3
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -33,15 +88,18 @@ MonoBehaviour:
   EditorBanks:
   - {fileID: 1284009227102235462}
   - {fileID: -7447600172461945603}
-  EditorEvents: []
+  EditorEvents:
+  - {fileID: -3653932198355097566}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7447600172461945603}
   StringsBanks:
   - {fileID: 1284009227102235462}
   cacheVersion: 131857
-  cacheTime: 639278324075416671
-  SerializableEventsDict: []
+  cacheTime: 639278506437135908
+  SerializableEventsDict:
+  - key: "event:/\u0433\u0440\u043E\u043C\u043E\u0444\u043E\u043D"
+    index: 0
 --- !u!114 &1284009227102235462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,8 +115,8 @@ MonoBehaviour:
   Path: ../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639278324075416671
+  lastModified: 639278506437135908
   FileSizes:
   - Name: 
-    Value: 724
+    Value: 824
   Exists: 1

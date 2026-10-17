@@ -6,7 +6,9 @@
         "LD60.Gameplay",
         "LD60.UI",
         "UniTask",
-        "VContainer"
+        "VContainer",
+        "FMODUnity",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

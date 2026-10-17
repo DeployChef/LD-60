@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{f89c5066-49f6-4f4c-9742-3e0e44e1714b}">
+		<property name="assetPath">
+			<value>vinyl/Communications, Phonograph, Vinyl Crackle, End Loop SND31245.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>10.519229166666667</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
+		</relationship>
+	</object>
+</objects>

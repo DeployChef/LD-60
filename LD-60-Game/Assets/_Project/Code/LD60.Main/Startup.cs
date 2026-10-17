@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using LD60.Core;
+using LD60.Main.Audio;
 using LD60.Main.DI;
 using UnityEngine;
 using VContainer;
@@ -25,6 +26,8 @@ namespace LD60.Main
         private async UniTaskVoid BootAsync()
         {
             rootScope.Build();
+            // WebGL: до меню ждём банки FMOD, сэмплы и первый клик игрока (прелоудер).
+            await FmodWebglPreloader.PrepareAsync(destroyCancellationToken);
             var shell = rootScope.Container.Resolve<IShellService>();
             await shell.StartAsync();
         }
