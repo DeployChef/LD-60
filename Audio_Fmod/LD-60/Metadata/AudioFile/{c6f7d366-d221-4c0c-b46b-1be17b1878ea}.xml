@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{c6f7d366-d221-4c0c-b46b-1be17b1878ea}">
+		<property name="assetPath">
+			<value>vinyl/Communications, Phonograph, Vinyl Crackle 01 SND31248 S00 1.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>11.65315625</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
+		</relationship>
+	</object>
+</objects>
