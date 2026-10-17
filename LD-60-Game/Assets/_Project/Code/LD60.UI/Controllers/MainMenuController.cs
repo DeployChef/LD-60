@@ -11,10 +11,15 @@ namespace LD60.UI
     {
         [SerializeField] private Button playButton;
         [SerializeField] private Button resumeButton;
+        [SerializeField] private Button optionsButton;
+        [SerializeField] private GameObject background;
+        [SerializeField] private GameObject backgroundSound;
+        [SerializeField] private GameObject volume;
         [SerializeField] private MainMenuIntro intro;
 
         private IShellService _shell;
         private IGameSession _session;
+        private MenuButtonHover _optionsHover;
 
         [Inject]
         public void Construct(IShellService shell, IGameSession session)
@@ -25,8 +30,11 @@ namespace LD60.UI
 
         private void Awake()
         {
+            _optionsHover = optionsButton.GetComponent<MenuButtonHover>();
             playButton.onClick.AddListener(OnPlayClicked);
             resumeButton.onClick.AddListener(OnResumeClicked);
+            optionsButton.onClick.AddListener(OnOptionsClicked);
+            SetOptionsOpen(false);
         }
 
         private void Start()
@@ -50,6 +58,7 @@ namespace LD60.UI
 
             playButton.onClick.RemoveListener(OnPlayClicked);
             resumeButton.onClick.RemoveListener(OnResumeClicked);
+            optionsButton.onClick.RemoveListener(OnOptionsClicked);
         }
 
         private void OnIntroFinished()
@@ -74,6 +83,19 @@ namespace LD60.UI
         private void OnResumeClicked()
         {
             _shell.EnterGameAsync(GameStart.Continue).Forget();
+        }
+
+        private void OnOptionsClicked()
+        {
+            SetOptionsOpen(!volume.activeSelf);
+        }
+
+        private void SetOptionsOpen(bool open)
+        {
+            background.SetActive(!open);
+            backgroundSound.SetActive(open);
+            volume.SetActive(open);
+            _optionsHover?.SetActiveState(open);
         }
     }
 }
