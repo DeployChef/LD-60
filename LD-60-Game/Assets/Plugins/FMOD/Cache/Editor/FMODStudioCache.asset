@@ -68,7 +68,7 @@ MonoBehaviour:
   Path: ../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639278593852304301
+  lastModified: 639278675983740091
   FileSizes: []
   Exists: 1
 --- !u!114 &-6413073753126757322
@@ -206,7 +206,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 3030291278079964112}
   cacheVersion: 131857
-  cacheTime: 639278593852304301
+  cacheTime: 639278675983830036
   SerializableEventsDict:
   - key: "event:/\u0433\u0440\u043E\u043C\u043E\u0444\u043E\u043D"
     index: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
   Path: ../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639278593182644545
+  lastModified: 639278675983830036
   FileSizes:
   - Name: 
     Value: 924
