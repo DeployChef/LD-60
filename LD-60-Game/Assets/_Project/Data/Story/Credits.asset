@@ -12,15 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
   m_Name: Credits
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
-  events:
-  - trigger: 0
-    seconds: 0
-    fill: 1
-    id: 
-    action: 3
-    actionId: credits
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
+  title: Credits
+  behaviourIds:
+  - credits.close
   rules: []

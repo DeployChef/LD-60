@@ -152,6 +152,18 @@ namespace LD60.UI
             return column;
         }
 
+        public void CopyCells(List<Vector2> centers)
+        {
+            centers.Clear();
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                var child = transform.GetChild(i);
+                if (child.name != "Cell")
+                    continue;
+                centers.Add(child.localPosition);
+            }
+        }
+
         private static Vector2 Span(List<CellBox> row)
         {
             var bounds = BoundsOf(row);

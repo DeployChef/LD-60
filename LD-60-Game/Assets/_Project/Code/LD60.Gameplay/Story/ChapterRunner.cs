@@ -16,29 +16,48 @@ namespace LD60.Gameplay.Story
 
     public sealed class ChapterRunner : IDisposable
     {
-        private readonly ChapterEvent[] _events;
+        private readonly ChapterBehaviour[] _behaviours;
         private readonly NewspaperRule[] _rules;
         private readonly IMessageBus _bus;
         private readonly StoryContext _context;
+        private readonly ChapterBehaviours _behavioursFactory;
         private readonly Action<ChapterResult> _onFinished;
         private readonly bool[] _fired;
         private readonly Queue<int> _queue = new();
+        private readonly ChapterRead _read = new ChapterRead();
         private List<IDisposable> _subscriptions = new();
 
         private ChapterMode? _mode;
-        private ChapterEvent _current;
-        private CancellationTokenSource _workWait;
+        private ChapterBehaviour _current;
+        private CancellationTokenSource _life;
+        private CancellationTokenSource _play;
+        private UniTaskCompletionSource _complete;
+        private bool _ended;
+        private bool _skip;
         private float _worked;
         private float _segmentStart;
+        private CancellationTokenSource _workWait;
 
-        public ChapterRunner(ChapterDefinition chapter, IMessageBus bus, StoryContext context, Action<ChapterResult> onFinished)
+        public ChapterRunner(
+            ChapterDefinition chapter,
+            IMessageBus bus,
+            StoryContext context,
+            ChapterBehaviours behaviours,
+            Action<ChapterResult> onFinished)
         {
-            _events = chapter.Events;
+            var ids = chapter.BehaviourIds;
+            _behaviours = new ChapterBehaviour[ids.Length];
+            for (var i = 0; i < ids.Length; i++)
+                _behaviours[i] = behaviours.Create(ids[i]);
+
             _rules = chapter.Rules;
             _bus = bus;
             _context = context;
+            _behavioursFactory = behaviours;
             _onFinished = onFinished;
-            _fired = new bool[_events.Length];
+            _fired = new bool[_behaviours.Length];
+            _life = new CancellationTokenSource();
+            _read.Context = context;
         }
 
         public ChapterMode Mode
@@ -78,22 +97,36 @@ namespace LD60.Gameplay.Story
         {
             _subscriptions.Add(_bus.Subscribe<FieldStateChanged>(OnField));
             _subscriptions.Add(_bus.Subscribe<PaperStamped>(OnStamped));
-            _subscriptions.Add(_bus.Subscribe<DialogueFinished>(OnDialogueFinished));
-            _subscriptions.Add(_bus.Subscribe<CapsuleTaken>(OnCapsuleTaken));
 
-            if (!RaiseMatching(StoryTriggerKind.OnChapterStart, null))
+            _read.Started = true;
+            if (!Consider())
                 Mode = ChapterMode.Work;
         }
 
         public void CompleteCurrent()
         {
-            if (_current != null)
-                FinishCurrent();
+            if (_complete != null)
+            {
+                _complete.TrySetResult();
+                return;
+            }
+
+            _skip = true;
+            _play?.Cancel();
+            _behavioursFactory.Cancel();
         }
 
         public void Dispose()
         {
             CancelWorkWait();
+            _behavioursFactory.Cancel();
+            _life?.Cancel();
+            _life?.Dispose();
+            _life = null;
+            _play?.Dispose();
+            _play = null;
+            _complete?.TrySetCanceled();
+
             if (_subscriptions == null)
                 return;
 
@@ -105,7 +138,8 @@ namespace LD60.Gameplay.Story
 
         private void OnField(FieldStateChanged message)
         {
-            RaiseMatching(StoryTriggerKind.OnFieldFillAtLeast, null, message.Fill);
+            _read.Fill = message.Fill;
+            Consider();
         }
 
         private void OnStamped(PaperStamped message)
@@ -120,25 +154,10 @@ namespace LD60.Gameplay.Story
             }
 
             Debug.Log($"[Story] Paper accepted. fill={message.Fill:0.00}");
-            if (!RaiseMatching(StoryTriggerKind.OnPaperStamped, null))
-                Debug.Log("[Story] Rules passed and this chapter has no ending event.");
-        }
-
-        private void OnDialogueFinished(DialogueFinished message)
-        {
-            RaiseMatching(StoryTriggerKind.OnDialogueFinished, message.DialogueId);
-        }
-
-        private void OnCapsuleTaken(CapsuleTaken message)
-        {
-            var waiting = _current != null
-                && _current.action == StoryActionKind.Capsule
-                && string.Equals(_current.actionId, message.CapsuleId, StringComparison.Ordinal);
-            RaiseMatching(StoryTriggerKind.OnCapsuleTaken, message.CapsuleId);
-            if (waiting && _current != null
-                && _current.action == StoryActionKind.Capsule
-                && string.Equals(_current.actionId, message.CapsuleId, StringComparison.Ordinal))
-                FinishCurrent();
+            _read.Fill = message.Fill;
+            _read.Stamped = true;
+            if (!Consider())
+                Debug.Log("[Story] Rules passed and this chapter has no ending behaviour.");
         }
 
         private bool RulesMet(float fill)
@@ -164,15 +183,16 @@ namespace LD60.Gameplay.Story
             return true;
         }
 
-        private bool RaiseMatching(StoryTriggerKind kind, string id, float value = float.NaN)
+        private bool Consider()
         {
             var started = false;
-            for (var i = 0; i < _events.Length; i++)
+            for (var i = 0; i < _behaviours.Length; i++)
             {
-                if (_fired[i] || _events[i] == null || _events[i].trigger != kind || !CanFire(_events[i]))
-                    continue;
+                if (_ended)
+                    break;
 
-                if (!TriggerMatches(_events[i], id, value))
+                var behaviour = _behaviours[i];
+                if (_fired[i] || behaviour == null || !behaviour.CanPlay(_read))
                     continue;
 
                 _fired[i] = true;
@@ -180,97 +200,81 @@ namespace LD60.Gameplay.Story
                 if (_current != null)
                     _queue.Enqueue(i);
                 else
-                    Play(i);
+                {
+                    Play(i).Forget();
+                    if (_ended)
+                        break;
+                }
             }
 
+            _read.Started = false;
+            _read.EnteredWork = false;
+            _read.Stamped = false;
             return started;
-        }
-
-        private bool CanFire(ChapterEvent storyEvent)
-        {
-            return _context.Meets(storyEvent.conditionParameter, storyEvent.conditionMinimum);
-        }
-
-        private static bool TriggerMatches(ChapterEvent storyEvent, string id, float value)
-        {
-            switch (storyEvent.trigger)
-            {
-                case StoryTriggerKind.AfterWorkSeconds:
-                    return !float.IsNaN(value) && value + 0.0001f >= storyEvent.seconds;
-                case StoryTriggerKind.OnFieldFillAtLeast:
-                    return !float.IsNaN(value) && value + 0.0001f >= storyEvent.fill;
-                case StoryTriggerKind.OnDialogueFinished:
-                case StoryTriggerKind.OnCapsuleTaken:
-                    return string.Equals(storyEvent.id, id, StringComparison.Ordinal);
-                default:
-                    return true;
-            }
         }
 
         private void BeginWork()
         {
-            RaiseMatching(StoryTriggerKind.OnEnterWork, null);
+            _read.EnteredWork = true;
+            _read.WorkSeconds = _worked;
+            Consider();
             if (_subscriptions != null && Mode == ChapterMode.Work)
                 ScheduleWork();
         }
 
-        private void Play(int index)
+        private async UniTaskVoid Play(int index)
         {
-            _current = _events[index];
-            if (_current.action == StoryActionKind.Dialogue)
-                Mode = ChapterMode.Dialogue;
-            else if (_current.action == StoryActionKind.Capsule)
-                Mode = ChapterMode.Work;
-            else
-                Mode = ChapterMode.Cutscene;
+            var behaviour = _behaviours[index];
+            _current = behaviour;
+            _skip = false;
+            _play?.Dispose();
+            _play = CancellationTokenSource.CreateLinkedTokenSource(_life.Token);
+            Mode = ChapterMode.Cutscene;
 
-            if (!string.IsNullOrEmpty(_current.setParameter))
-                _context.SetParameter(_current.setParameter, _current.setValue);
-
-            Debug.Log($"[Story] {_current.action} '{_current.actionId}'");
-            if (_current.action == StoryActionKind.Capsule)
+            Debug.Log($"[Story] {behaviour.GetType().Name}");
+            try
             {
-                _bus.Publish(new CapsuleArrived(_current.actionId));
-                return;
+                await behaviour.Play(this);
+            }
+            catch (OperationCanceledException)
+            {
+                if (_ended || _subscriptions == null || !_skip)
+                    return;
             }
 
-            if (_current.action != StoryActionKind.Summary)
-                FinishCurrent();
-        }
-
-        private void FinishCurrent()
-        {
-            if (_current == null)
+            if (_ended || _subscriptions == null)
                 return;
 
-            var action = _current.action;
             _current = null;
-
-            if (action == StoryActionKind.Summary)
-            {
-                End(ChapterResult.NextDay);
-                return;
-            }
-
-            if (action == StoryActionKind.Ending)
-            {
-                End(ChapterResult.Ending);
-                return;
-            }
-
+            _skip = false;
             if (_queue.Count > 0)
             {
-                Play(_queue.Dequeue());
+                Play(_queue.Dequeue()).Forget();
                 return;
             }
 
             Mode = ChapterMode.Work;
         }
 
-        private void End(ChapterResult result)
+        public CancellationToken Token => _play != null ? _play.Token : CancellationToken.None;
+
+        public UniTask WaitUntilCompleted()
         {
+            _complete = new UniTaskCompletionSource();
+            return _complete.Task;
+        }
+
+        public void End(ChapterResult result)
+        {
+            if (_ended)
+                return;
+
+            _ended = true;
+            _current = null;
+            _queue.Clear();
+            var callback = _onFinished;
             Dispose();
-            _onFinished?.Invoke(result);
+            callback?.Invoke(result);
         }
 
         private void PauseWork()
@@ -279,6 +283,7 @@ namespace LD60.Gameplay.Story
                 return;
 
             _worked += Mathf.Max(0f, Time.time - _segmentStart);
+            _read.WorkSeconds = _worked;
             CancelWorkWait();
         }
 
@@ -297,26 +302,22 @@ namespace LD60.Gameplay.Story
             if (_subscriptions == null || Mode != ChapterMode.Work || _workWait != null)
                 return;
 
-            RaiseMatching(StoryTriggerKind.AfterWorkSeconds, null, _worked);
+            _read.WorkSeconds = _worked;
+            Consider();
             if (_subscriptions == null || Mode != ChapterMode.Work || _workWait != null)
                 return;
 
-            var mark = NextWorkMark();
-            if (float.IsPositiveInfinity(mark))
-                return;
-
-            var wait = Mathf.Max(0f, mark - _worked);
-            var milliseconds = Mathf.Max(1, Mathf.CeilToInt(wait * 1000f));
             _segmentStart = Time.time;
             _workWait = new CancellationTokenSource();
-            WaitUntilWork(mark, milliseconds, _workWait.Token).Forget();
+            Tick(_workWait.Token).Forget();
         }
 
-        private async UniTaskVoid WaitUntilWork(float mark, int milliseconds, CancellationToken token)
+        private async UniTaskVoid Tick(CancellationToken token)
         {
+            var start = _segmentStart;
             try
             {
-                await UniTask.Delay(milliseconds, cancellationToken: token);
+                await UniTask.Delay(250, cancellationToken: token);
             }
             catch (OperationCanceledException)
             {
@@ -326,26 +327,11 @@ namespace LD60.Gameplay.Story
             if (_subscriptions == null)
                 return;
 
+            _worked += Mathf.Max(0f, Time.time - start);
+            _read.WorkSeconds = _worked;
             _workWait.Dispose();
             _workWait = null;
-            _worked = mark;
             ScheduleWork();
-        }
-
-        private float NextWorkMark()
-        {
-            var next = float.PositiveInfinity;
-            for (var i = 0; i < _events.Length; i++)
-            {
-                var storyEvent = _events[i];
-                if (_fired[i] || storyEvent == null || storyEvent.trigger != StoryTriggerKind.AfterWorkSeconds)
-                    continue;
-
-                if (storyEvent.seconds > _worked + 0.0001f && storyEvent.seconds < next)
-                    next = storyEvent.seconds;
-            }
-
-            return next;
         }
     }
 }

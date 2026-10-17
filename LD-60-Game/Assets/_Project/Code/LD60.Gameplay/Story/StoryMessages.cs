@@ -15,10 +15,24 @@ namespace LD60.Gameplay.Story
     public readonly struct FieldStateChanged
     {
         public readonly float Fill;
+        public readonly float Politics;
+        public readonly float Social;
 
-        public FieldStateChanged(float fill)
+        public FieldStateChanged(float fill, float politics, float social)
         {
             Fill = fill;
+            Politics = politics;
+            Social = social;
+        }
+    }
+
+    public readonly struct DayStarted
+    {
+        public readonly string Title;
+
+        public DayStarted(string title)
+        {
+            Title = title;
         }
     }
 
@@ -32,13 +46,13 @@ namespace LD60.Gameplay.Story
         }
     }
 
-    public readonly struct DialogueFinished
+    public readonly struct ArticleGiven
     {
-        public readonly string DialogueId;
+        public readonly string ArticleId;
 
-        public DialogueFinished(string dialogueId)
+        public ArticleGiven(string articleId)
         {
-            DialogueId = dialogueId;
+            ArticleId = articleId;
         }
     }
 

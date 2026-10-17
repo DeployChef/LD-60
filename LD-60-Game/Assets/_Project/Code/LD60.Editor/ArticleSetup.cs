@@ -43,15 +43,39 @@ namespace LD60.Editor
                 new Vector2(0.05f, -0.55f), new Vector2(1.7f, 0.7f), 2.8f);
             var note = BuildNote(sprite, material, font, layer);
 
-            var morning = MakeArticle("MorningEdition", ArticleShape.Square, ArticleKind.Report,
-                "Morning Edition", "The city woke to a quiet press and a full inbox.", 0.35f, 0f, 0f, 0f);
-            var council = MakeArticle("CouncilVote", ArticleShape.Z, ArticleKind.Politics,
-                "Council Vote", "The council meets behind closed doors.", 0f, 0.4f, 0f, 0f, ArticleKind.Ad);
-            var bread = MakeArticle("BreadQueue", ArticleShape.Gamma, ArticleKind.Social,
-                "Bread Queue", "The bakery line starts before dawn.", 0f, 0f, 0.35f, 0f);
-            var soap = MakeArticle("SoapCoupon", ArticleShape.Square, ArticleKind.Ad,
-                "Soap Coupon", "A clean shirt for a clean conscience.", 0f, 0f, 0f, 4f, ArticleKind.Politics);
+            var articles = WriteMorningArticles();
+            WireGame(square, zed, gamma, note);
+            BuildLookup(articles, new[] { square, zed, gamma, square, square, square, gamma, zed, square, gamma, zed });
+            AssetDatabase.SaveAssets();
+            Debug.Log("[Articles] Props, DayOne capsule and ArticleLookup are ready.");
+        }
 
+        public static ArticleDefinition[] WriteMorningArticles()
+        {
+            var morning = MakeArticle("MorningEdition", "morning-edition", ArticleShape.Square, ArticleKind.Report,
+                "Morning Edition", "The city woke to a quiet press and a full inbox.", 0.35f, 0f, 0f, 0f);
+            var council = MakeArticle("CouncilVote", "council-vote", ArticleShape.Z, ArticleKind.Politics,
+                "Council Vote", "The council meets behind closed doors.", 0f, 0.4f, 0f, 0f, ArticleKind.Ad);
+            var bread = MakeArticle("BreadQueue", "bread-queue", ArticleShape.Gamma, ArticleKind.Social,
+                "Bread Queue", "The bakery line starts before dawn.", 0f, 0f, 0.35f, 0f);
+            var soap = MakeArticle("SoapCoupon", "soap-coupon", ArticleShape.Square, ArticleKind.Ad,
+                "Soap Coupon", "A clean shirt for a clean conscience.", 0f, 0f, 0f, 4f, ArticleKind.Politics);
+            var city = MakeArticle("CityBrief", "city-brief", ArticleShape.Square, ArticleKind.Report,
+                "City Brief", "A short note on the morning wires.", 0.3f, 0f, 0f, 0f);
+            var night = MakeArticle("NightWire", "night-wire", ArticleShape.Square, ArticleKind.Report,
+                "Night Wire", "The presses ran after midnight.", 0.25f, 0f, 0f, 0f);
+            var market = MakeArticle("MarketBell", "market-bell", ArticleShape.Gamma, ArticleKind.Social,
+                "Market Bell", "The square fills when the bell rings.", 0f, 0f, 0.25f, 0f);
+            var union = MakeArticle("UnionNote", "union-note", ArticleShape.Z, ArticleKind.Politics,
+                "Union Note", "The shift asks for a louder vote.", 0f, 0.3f, 0f, 0f, ArticleKind.Ad);
+            var tram = MakeArticle("TramDelay", "tram-delay", ArticleShape.Square, ArticleKind.Social,
+                "Tram Delay", "The first car is late again.", 0f, 0f, 0.2f, 0f);
+            var dog = MakeArticle("LostDog", "lost-dog", ArticleShape.Gamma, ArticleKind.Report,
+                "Lost Dog", "A brown dog, last seen by the bakery.", 0.2f, 0f, 0f, 0f);
+            var harbor = MakeArticle("HarborTax", "harbor-tax", ArticleShape.Z, ArticleKind.Politics,
+                "Harbor Tax", "The docks argue over a new levy.", 0f, 0.2f, 0f, 0f, ArticleKind.Ad);
+
+            var articles = new[] { morning, council, bread, soap, city, night, market, union, tram, dog, harbor };
             var day = AssetDatabase.LoadAssetAtPath<ChapterDefinition>("Assets/_Project/Data/Story/DayOne.asset");
             var chapter = new SerializedObject(day);
             var capsules = chapter.FindProperty("capsules");
@@ -60,17 +84,13 @@ namespace LD60.Editor
             delivery.FindPropertyRelative("id").stringValue = "morning-drop";
             delivery.FindPropertyRelative("note").stringValue = "Fill the page. Do not place an ad beside politics.";
             var list = delivery.FindPropertyRelative("articles");
-            list.arraySize = 3;
-            list.GetArrayElementAtIndex(0).objectReferenceValue = morning;
-            list.GetArrayElementAtIndex(1).objectReferenceValue = council;
-            list.GetArrayElementAtIndex(2).objectReferenceValue = bread;
+            list.arraySize = articles.Length;
+            for (var i = 0; i < articles.Length; i++)
+                list.GetArrayElementAtIndex(i).objectReferenceValue = articles[i];
             chapter.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(day);
-
-            WireGame(square, zed, gamma, note);
-            BuildLookup(new[] { morning, council, bread, soap }, new[] { square, zed, gamma, square });
             AssetDatabase.SaveAssets();
-            Debug.Log("[Articles] Props, DayOne capsule and ArticleLookup are ready.");
+            return articles;
         }
 
         private static ArticlePiece BuildForm(string name, Sprite sprite, Material material, TMP_FontAsset font, int layer, Color paper,
@@ -168,7 +188,7 @@ namespace LD60.Editor
             return text;
         }
 
-        private static ArticleDefinition MakeArticle(string name, ArticleShape shape, ArticleKind kind, string title, string body,
+        private static ArticleDefinition MakeArticle(string name, string id, ArticleShape shape, ArticleKind kind, string title, string body,
             float fill, float politics, float social, float money, params ArticleKind[] forbidden)
         {
             var path = DataFolder + "/" + name + ".asset";
@@ -180,6 +200,7 @@ namespace LD60.Editor
             }
 
             var data = new SerializedObject(article);
+            data.FindProperty("id").stringValue = id;
             data.FindProperty("shape").enumValueIndex = (int)shape;
             data.FindProperty("kind").enumValueIndex = (int)kind;
             data.FindProperty("title").stringValue = title;

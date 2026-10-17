@@ -12,67 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
   m_Name: DayOne
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
-  events:
-  - trigger: 0
-    seconds: 0
-    fill: 1
-    id: 
-    action: 0
-    actionId: intro
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
-  - trigger: 1
-    seconds: 0
-    fill: 1
-    id: 
-    action: 2
-    actionId: morning-drop
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
-  - trigger: 2
-    seconds: 12
-    fill: 1
-    id: 
-    action: 1
-    actionId: knock
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
-  - trigger: 3
-    seconds: 0
-    fill: 0.8
-    id: 
-    action: 1
-    actionId: second-guest
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
-  - trigger: 6
-    seconds: 0
-    fill: 1
-    id: 
-    action: 4
-    actionId: shot
-    conditionParameter: heat
-    conditionMinimum: 1
-    setParameter: 
-    setValue: 0
-  - trigger: 6
-    seconds: 0
-    fill: 1
-    id: 
-    action: 3
-    actionId: day-end
-    conditionParameter: 
-    conditionMinimum: 0
-    setParameter: 
-    setValue: 0
+  title: Day One
+  behaviourIds:
+  - day-one.capsule
+  - day-one.payer
+  - day-one.full-page
+  - day-one.shot
+  - day-one.close
   rules:
   - parameterId: fill
     minimum: 0.8
@@ -82,4 +28,12 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 2736ce92b232e1149b00ba1988c480be, type: 2}
     - {fileID: 11400000, guid: b3e3c36d8f26d7c4d858e485552f0130, type: 2}
     - {fileID: 11400000, guid: 1fa496e1d8b26454ebf29e9ecac45720, type: 2}
+    - {fileID: 11400000, guid: 6d3d15e427167b143b45825bab88dc9d, type: 2}
+    - {fileID: 11400000, guid: 7325df259e72061468f26b81242caaf9, type: 2}
+    - {fileID: 11400000, guid: b8e9f4166d5e8e6499d13ac977f2676b, type: 2}
+    - {fileID: 11400000, guid: 0e37fac9e7b24a34180b20b97637fa34, type: 2}
+    - {fileID: 11400000, guid: 9416858742ed0554eab65b88a8ed2595, type: 2}
+    - {fileID: 11400000, guid: 063f30e15a34aa640b1d8d3a95209157, type: 2}
+    - {fileID: 11400000, guid: d26b13980fe381b48b31b3eb41f67036, type: 2}
+    - {fileID: 11400000, guid: 348717c4f1158c046aea4af31335fd30, type: 2}
     note: Fill the page. Do not place an ad beside politics.

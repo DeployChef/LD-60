@@ -1,6 +1,5 @@
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace LD60.UI
@@ -8,21 +7,25 @@ namespace LD60.UI
     public sealed class DeskDrag : MonoBehaviour
     {
         private const int LiftOrder = 300;
+        private const int RestBias = 30;
         private const float LiftDistance = 0.2f;
 
         private WorkstationViewController _views;
+        private NewspaperDesk _board;
         private CinemachineBrain _brain;
         private Renderer[] _renderers;
         private int[] _orders;
         private bool _held;
         private Vector3 _grab;
-        private Vector3 _rest;
+        private Vector3 _home;
+        private Vector3 _homeScale;
 
         private void Awake()
         {
             _views = FindAnyObjectByType<WorkstationViewController>();
+            _board = FindAnyObjectByType<NewspaperDesk>();
             if (_views != null)
-                _brain = _views.GetComponent<CinemachineBrain>();
+                _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
             if (_brain == null)
                 _brain = FindAnyObjectByType<CinemachineBrain>();
             RememberOrder();
@@ -54,7 +57,7 @@ namespace LD60.UI
         {
             if (_views != null && !_views.IsShowingTable)
                 return false;
-            return EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject();
+            return Time.timeScale > 0f;
         }
 
         private Camera OutputCamera()
@@ -76,17 +79,22 @@ namespace LD60.UI
             if (!plane.Raycast(ray, out var distance))
                 return;
 
+            var piece = GetComponent<ArticlePiece>();
+            _home = transform.position;
+            _homeScale = transform.localScale;
+            if (piece != null && _board != null)
+                _board.PrepareLift(piece);
+
             _grab = transform.position - ray.GetPoint(distance);
-            _rest = transform.position;
             _held = true;
-            transform.position = _rest - transform.forward * LiftDistance;
+            transform.position = _home - transform.forward * LiftDistance;
             Lift(true);
         }
 
         private void Move(Camera camera, Vector2 screen)
         {
             var ray = camera.ScreenPointToRay(screen);
-            var plane = new Plane(transform.forward, _rest);
+            var plane = new Plane(transform.forward, _home);
             if (!plane.Raycast(ray, out var distance))
                 return;
 
@@ -96,9 +104,15 @@ namespace LD60.UI
         private void Drop()
         {
             _held = false;
-            var lifted = transform.position + transform.forward * LiftDistance;
-            transform.position = lifted;
+            transform.position += transform.forward * LiftDistance;
             Lift(false);
+            var piece = GetComponent<ArticlePiece>();
+            if (piece == null || _board == null || _board.Settle(piece))
+                return;
+
+            transform.position = _home;
+            transform.localScale = _homeScale;
+            _board.Settle(piece);
         }
 
         private void RememberOrder()
@@ -112,7 +126,7 @@ namespace LD60.UI
         private void Lift(bool held)
         {
             for (var i = 0; i < _renderers.Length; i++)
-                _renderers[i].sortingOrder = held ? LiftOrder + i : _orders[i];
+                _renderers[i].sortingOrder = held ? LiftOrder + i : _orders[i] + RestBias;
         }
     }
 }

@@ -15,18 +15,30 @@ namespace LD60.Gameplay.Story
         }
 
         public float Fill { get; private set; }
+        public float Politics { get; private set; }
+        public float Social { get; private set; }
         public IReadOnlyList<string> KeptArticleIds => _kept;
 
         public void ResetDay()
         {
             Fill = 0f;
+            Politics = 0f;
+            Social = 0f;
             _kept.Clear();
+            _bus.Publish(new FieldStateChanged(0f, 0f, 0f));
         }
 
         public void SetFill(float fill)
         {
-            Fill = Mathf.Clamp01(fill);
-            _bus.Publish(new FieldStateChanged(Fill));
+            SetScores(fill, Politics, Social);
+        }
+
+        public void SetScores(float fill, float politics, float social)
+        {
+            Fill = Mathf.Max(0f, fill);
+            Politics = Mathf.Max(0f, politics);
+            Social = Mathf.Max(0f, social);
+            _bus.Publish(new FieldStateChanged(Fill, Politics, Social));
         }
 
         public void SetKeptArticles(IReadOnlyList<string> ids)

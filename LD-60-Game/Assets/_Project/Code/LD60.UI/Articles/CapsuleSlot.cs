@@ -109,8 +109,11 @@ namespace LD60.UI
 
                 var piece = Instantiate(source, desk);
                 piece.Bind(articles[i]);
-                piece.transform.localPosition = new Vector3(tray.x, tray.y - spacing * i, -0.08f);
-                piece.transform.localRotation = Quaternion.identity;
+                piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-8f, 8f));
+                piece.transform.localPosition = new Vector3(
+                    tray.x + UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
+                    tray.y + UnityEngine.Random.Range(-spacing, spacing * 0.55f),
+                    -0.08f - i * 0.01f);
             }
 
             if (note != null && !string.IsNullOrEmpty(delivery.Note))

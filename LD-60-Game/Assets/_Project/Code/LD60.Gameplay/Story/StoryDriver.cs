@@ -15,6 +15,7 @@ namespace LD60.Gameplay.Story
         private readonly Desk _desk;
         private readonly IGameSession _session;
         private readonly IShellService _shell;
+        private readonly ChapterBehaviours _behaviours;
         private readonly ChapterDefinition[] _chapters;
         private readonly ChapterDefinition _finale;
         private readonly DayStartPreset _debugStart;
@@ -28,6 +29,7 @@ namespace LD60.Gameplay.Story
             Desk desk,
             IGameSession session,
             IShellService shell,
+            ChapterBehaviours behaviours,
             StoryBook story)
         {
             _bus = bus;
@@ -35,6 +37,7 @@ namespace LD60.Gameplay.Story
             _desk = desk;
             _session = session;
             _shell = shell;
+            _behaviours = behaviours;
             _chapters = story.Chapters;
             _finale = story.Finale;
             _debugStart = story.DebugStart;
@@ -157,6 +160,7 @@ namespace LD60.Gameplay.Story
 
             _inFinale = finale;
             _desk.ResetDay();
+            _bus.Publish(new DayStarted(chapter.Title));
             if (finale)
                 _session.ClearCheckpoint();
             else
@@ -165,7 +169,7 @@ namespace LD60.Gameplay.Story
             Debug.Log(finale
                 ? $"[Story] Finale '{chapter.name}'."
                 : $"[Story] Chapter {index} '{chapter.name}' started. {_context.Describe()}");
-            _runner = new ChapterRunner(chapter, _bus, _context, OnChapterFinished);
+            _runner = new ChapterRunner(chapter, _bus, _context, _behaviours, OnChapterFinished);
             _runner.Begin();
         }
 
