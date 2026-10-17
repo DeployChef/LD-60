@@ -11,12 +11,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcc3e600-cd66-45e3-bc99-4c53a57c2cc1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/AudioFile/{1b5dc94a-04ce-42d3-8e1e-58daded80de7}.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/Event/{bd73703c-edc6-44b0-83bd-d904803965a3}.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/Event/{bd73703c-edc6-44b0-83bd-d904803965a3}.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/indexLayout.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Settings/Build Profiles/Web - Desktop - Development.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/Build Profiles/Web - Desktop - Development.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/LD60.Main.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/LD60.Main.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Startup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/PageGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/PageGrid.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/SequencePlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/SequencePlayer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/LD60.UI.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/LD60.UI.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MainMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MainMenuController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MenuButtonHover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MenuButtonHover.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/PauseMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/PauseMenuController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Data/UI/MenuIntro.playable" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Data/UI/MenuIntro.playable" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +68,7 @@
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;efim&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging efim&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,

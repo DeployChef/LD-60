@@ -13,10 +13,16 @@ namespace LD60.UI
         [SerializeField] private GameObject menu;
         [SerializeField] private Button exitButton;
         [SerializeField] private Button restartButton;
+        [SerializeField] private Button resumeButton;
+        [SerializeField] private Button optionsButton;
+        [SerializeField] private GameObject background;
+        [SerializeField] private GameObject backgroundSound;
+        [SerializeField] private GameObject volume;
 
         private IShellService _shell;
         private InputAction _pause;
         private bool _open;
+        private MenuButtonHover _optionsHover;
 
         [Inject]
         public void Construct(IShellService shell)
@@ -26,9 +32,12 @@ namespace LD60.UI
 
         private void Awake()
         {
+            _optionsHover = optionsButton.GetComponent<MenuButtonHover>();
             _pause = input.FindAction("Game/Pause", true);
             exitButton.onClick.AddListener(OnExitClicked);
             restartButton.onClick.AddListener(OnRestartClicked);
+            resumeButton.onClick.AddListener(OnResumeClicked);
+            optionsButton.onClick.AddListener(OnOptionsClicked);
             SetOpen(false);
         }
 
@@ -49,6 +58,8 @@ namespace LD60.UI
         {
             exitButton.onClick.RemoveListener(OnExitClicked);
             restartButton.onClick.RemoveListener(OnRestartClicked);
+            resumeButton.onClick.RemoveListener(OnResumeClicked);
+            optionsButton.onClick.RemoveListener(OnOptionsClicked);
         }
 
         private void OnPause(InputAction.CallbackContext context)
@@ -59,6 +70,7 @@ namespace LD60.UI
         private void SetOpen(bool open)
         {
             _open = open;
+            SetOptionsOpen(false);
             menu.SetActive(open);
             Time.timeScale = open ? 0f : 1f;
         }
@@ -73,6 +85,24 @@ namespace LD60.UI
         {
             SetOpen(false);
             _shell.RestartFromSaveAsync().Forget();
+        }
+
+        private void OnResumeClicked()
+        {
+            SetOpen(false);
+        }
+
+        private void OnOptionsClicked()
+        {
+            SetOptionsOpen(!volume.activeSelf);
+        }
+
+        private void SetOptionsOpen(bool open)
+        {
+            background.SetActive(!open);
+            backgroundSound.SetActive(open);
+            volume.SetActive(open);
+            _optionsHover?.SetActiveState(open);
         }
     }
 }

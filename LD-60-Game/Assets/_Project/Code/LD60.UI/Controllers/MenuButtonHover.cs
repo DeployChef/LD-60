@@ -19,16 +19,46 @@ namespace LD60.UI
         private Vector3 _normalRotation;
         private Sequence _animation;
         private bool _hovered;
+        private bool _active;
+        private Image _background;
+        private Sprite _normalSprite;
+        private SpriteState _normalSpriteState;
 
         private void Awake()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            if (_button != null)
+                return;
+
             _button = GetComponent<Button>();
+            _background = _button.targetGraphic as Image;
+            if (_background != null)
+                _normalSprite = _background.sprite;
+            _normalSpriteState = _button.spriteState;
             _normalRotation = transform.localEulerAngles;
             _normalRotation.z = Mathf.DeltaAngle(0f, _normalRotation.z);
             _labels = GetComponentsInChildren<TMP_Text>(true);
             _normalColors = new Color[_labels.Length];
             for (var i = 0; i < _labels.Length; i++)
                 _normalColors[i] = _labels[i].color;
+        }
+
+        public void SetActiveState(bool active)
+        {
+            Initialize();
+            _active = active;
+            var state = _normalSpriteState;
+            if (active)
+                state.selectedSprite = state.highlightedSprite;
+            if (_background != null)
+                _background.sprite = active && state.highlightedSprite != null
+                    ? state.highlightedSprite : _normalSprite;
+            _button.spriteState = state;
+            Animate();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -52,9 +82,15 @@ namespace LD60.UI
         private void SetHovered(bool hovered)
         {
             _hovered = hovered;
+            Animate();
+        }
+
+        private void Animate()
+        {
+            var highlighted = (_hovered || _active) && _button.IsInteractable();
             _animation?.Kill();
             var rotation = _normalRotation;
-            if (hovered)
+            if (highlighted)
                 rotation.z = -rotation.z;
 
             _animation = DOTween.Sequence().SetUpdate(true);
@@ -62,7 +98,7 @@ namespace LD60.UI
             for (var i = 0; i < _labels.Length; i++)
             {
                 var label = _labels[i];
-                var color = hovered ? hoverTextColor : _normalColors[i];
+                var color = highlighted ? hoverTextColor : _normalColors[i];
                 _animation.Join(DOTween.To(() => label.color, value => label.color = value,
                     color, duration).SetEase(Ease.OutQuad));
             }
@@ -73,9 +109,13 @@ namespace LD60.UI
             _animation?.Kill();
             _animation = null;
             _hovered = false;
+            _active = false;
             if (_labels == null)
                 return;
 
+            if (_background != null)
+                _background.sprite = _normalSprite;
+            _button.spriteState = _normalSpriteState;
             transform.localEulerAngles = _normalRotation;
             for (var i = 0; i < _labels.Length; i++)
                 if (_labels[i] != null)
