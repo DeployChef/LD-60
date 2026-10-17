@@ -10627,6 +10627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.SequencePlayer
   character: {fileID: 743947340}
   body: {fileID: 743947341}
+  _views: {fileID: 1316376785}
 --- !u!4 &2119274997
 Transform:
   m_ObjectHideFlags: 0

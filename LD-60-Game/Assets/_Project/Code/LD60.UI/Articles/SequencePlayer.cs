@@ -4,15 +4,15 @@ using LD60.Gameplay.Story;
 using UnityEngine;
 
 namespace LD60.UI
-{
+{   
     public sealed class SequencePlayer : MonoBehaviour, ISequencePlayer
     {
         private const float WalkSeconds = 0.75f;
 
         [SerializeField] private Transform character;
         [SerializeField] private SpriteRenderer body;
-
-        private WorkstationViewController _views;
+        [SerializeField] private WorkstationViewController _views;
+        
         private CancellationTokenSource _run;
         private Vector3 _home;
         private Vector3 _away;
@@ -20,17 +20,6 @@ namespace LD60.UI
 
         private void Awake()
         {
-            if (character == null)
-            {
-                var guest = GameObject.Find("Character");
-                if (guest != null)
-                    character = guest.transform;
-            }
-
-            if (body == null && character != null)
-                body = character.GetComponent<SpriteRenderer>();
-
-            _views = FindAnyObjectByType<WorkstationViewController>();
             Park();
         }
 
