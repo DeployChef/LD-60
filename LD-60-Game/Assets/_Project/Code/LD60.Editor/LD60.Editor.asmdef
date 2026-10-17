@@ -6,7 +6,8 @@
         "LD60.Main",
         "LD60.UI",
         "LD60.Gameplay",
-        "VContainer"
+        "VContainer",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

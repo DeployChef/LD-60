@@ -57,13 +57,42 @@ namespace LD60.Gameplay.Context
         public float minimum = 1f;
     }
 
+    [Serializable]
+    public sealed class CapsuleDelivery
+    {
+        public string id;
+        public LD60.Gameplay.Articles.ArticleDefinition[] articles = Array.Empty<LD60.Gameplay.Articles.ArticleDefinition>();
+        [TextArea(2, 6)] public string note;
+
+        public LD60.Gameplay.Articles.ArticleDefinition[] Articles => articles ?? Array.Empty<LD60.Gameplay.Articles.ArticleDefinition>();
+        public string Note => note;
+    }
+
     [CreateAssetMenu(fileName = "Chapter", menuName = "LD60/Chapter")]
     public sealed class ChapterDefinition : ScriptableObject
     {
         [SerializeField] private ChapterEvent[] events = Array.Empty<ChapterEvent>();
         [SerializeField] private NewspaperRule[] rules = Array.Empty<NewspaperRule>();
+        [SerializeField] private CapsuleDelivery[] capsules = Array.Empty<CapsuleDelivery>();
 
         public ChapterEvent[] Events => events ?? Array.Empty<ChapterEvent>();
         public NewspaperRule[] Rules => rules ?? Array.Empty<NewspaperRule>();
+        public CapsuleDelivery[] Capsules => capsules ?? Array.Empty<CapsuleDelivery>();
+
+        public bool TryFindCapsule(string id, out CapsuleDelivery delivery)
+        {
+            var list = Capsules;
+            for (var i = 0; i < list.Length; i++)
+            {
+                if (list[i] != null && string.Equals(list[i].id, id, StringComparison.Ordinal))
+                {
+                    delivery = list[i];
+                    return true;
+                }
+            }
+
+            delivery = null;
+            return false;
+        }
     }
 }

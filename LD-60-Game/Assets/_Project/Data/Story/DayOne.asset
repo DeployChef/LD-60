@@ -19,24 +19,40 @@ MonoBehaviour:
     id: 
     action: 0
     actionId: intro
+    conditionParameter: 
+    conditionMinimum: 0
+    setParameter: 
+    setValue: 0
   - trigger: 1
     seconds: 0
     fill: 1
     id: 
     action: 2
     actionId: morning-drop
+    conditionParameter: 
+    conditionMinimum: 0
+    setParameter: 
+    setValue: 0
   - trigger: 2
     seconds: 12
     fill: 1
     id: 
     action: 1
     actionId: knock
+    conditionParameter: 
+    conditionMinimum: 0
+    setParameter: 
+    setValue: 0
   - trigger: 3
     seconds: 0
     fill: 0.8
     id: 
     action: 1
     actionId: second-guest
+    conditionParameter: 
+    conditionMinimum: 0
+    setParameter: 
+    setValue: 0
   - trigger: 6
     seconds: 0
     fill: 1
@@ -53,6 +69,17 @@ MonoBehaviour:
     id: 
     action: 3
     actionId: day-end
+    conditionParameter: 
+    conditionMinimum: 0
+    setParameter: 
+    setValue: 0
   rules:
   - parameterId: fill
     minimum: 0.8
+  capsules:
+  - id: morning-drop
+    articles:
+    - {fileID: 11400000, guid: 2736ce92b232e1149b00ba1988c480be, type: 2}
+    - {fileID: 11400000, guid: b3e3c36d8f26d7c4d858e485552f0130, type: 2}
+    - {fileID: 11400000, guid: 1fa496e1d8b26454ebf29e9ecac45720, type: 2}
+    note: Fill the page. Do not place an ad beside politics.

@@ -13,6 +13,7 @@ namespace LD60.Main.DI
             builder.RegisterComponentInHierarchy<PauseMenuController>();
             builder.RegisterComponentInHierarchy<StoryBook>();
             builder.RegisterComponentInHierarchy<StoryDebugController>();
+            builder.RegisterComponentInHierarchy<CapsuleSlot>();
             builder.Register<StoryContext>(Lifetime.Singleton);
             builder.Register<Desk>(Lifetime.Singleton);
             builder.RegisterEntryPoint<StoryDriver>().AsSelf();

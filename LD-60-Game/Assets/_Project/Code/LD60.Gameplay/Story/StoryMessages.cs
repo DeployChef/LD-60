@@ -52,4 +52,14 @@ namespace LD60.Gameplay.Story
         }
     }
 
+    public readonly struct CapsuleArrived
+    {
+        public readonly string CapsuleId;
+
+        public CapsuleArrived(string capsuleId)
+        {
+            CapsuleId = capsuleId;
+        }
+    }
+
 }

@@ -131,7 +131,14 @@ namespace LD60.Gameplay.Story
 
         private void OnCapsuleTaken(CapsuleTaken message)
         {
+            var waiting = _current != null
+                && _current.action == StoryActionKind.Capsule
+                && string.Equals(_current.actionId, message.CapsuleId, StringComparison.Ordinal);
             RaiseMatching(StoryTriggerKind.OnCapsuleTaken, message.CapsuleId);
+            if (waiting && _current != null
+                && _current.action == StoryActionKind.Capsule
+                && string.Equals(_current.actionId, message.CapsuleId, StringComparison.Ordinal))
+                FinishCurrent();
         }
 
         private bool RulesMet(float fill)
@@ -210,14 +217,23 @@ namespace LD60.Gameplay.Story
         private void Play(int index)
         {
             _current = _events[index];
-            Mode = _current.action == StoryActionKind.Dialogue
-                ? ChapterMode.Dialogue
-                : ChapterMode.Cutscene;
+            if (_current.action == StoryActionKind.Dialogue)
+                Mode = ChapterMode.Dialogue;
+            else if (_current.action == StoryActionKind.Capsule)
+                Mode = ChapterMode.Work;
+            else
+                Mode = ChapterMode.Cutscene;
 
             if (!string.IsNullOrEmpty(_current.setParameter))
                 _context.SetParameter(_current.setParameter, _current.setValue);
 
             Debug.Log($"[Story] {_current.action} '{_current.actionId}'");
+            if (_current.action == StoryActionKind.Capsule)
+            {
+                _bus.Publish(new CapsuleArrived(_current.actionId));
+                return;
+            }
+
             if (_current.action != StoryActionKind.Summary)
                 FinishCurrent();
         }
