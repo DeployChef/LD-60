@@ -6,6 +6,7 @@ namespace LD60.UI
 {
     public sealed class WorkstationViewController : MonoBehaviour
     {
+        [SerializeField] private InputActionAsset input;
         [SerializeField] private CinemachineBrain brain;
         [SerializeField] private CinemachineCamera windowCamera;
         [SerializeField] private CinemachineCamera tableCamera;
@@ -18,6 +19,7 @@ namespace LD60.UI
         [Tooltip("Draw the bottom (cyan) and top (orange) hover zones when this object is selected. Enable Gizmos in the Scene/Game view.")]
         [SerializeField] private bool showZoneGizmos = true;
 
+        private InputAction _point;
         private bool _showingTable;
 
         public bool IsShowingTable => _showingTable;
@@ -32,14 +34,27 @@ namespace LD60.UI
             }
 
             ShowTable(false);
+            _point = input.FindAction("Game/Point", true);
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            if (Time.timeScale == 0f || !Application.isFocused || Mouse.current == null)
+            _point.performed += OnPoint;
+            _point.Enable();
+        }
+
+        private void OnDisable()
+        {
+            _point.performed -= OnPoint;
+            _point.Disable();
+        }
+
+        private void OnPoint(InputAction.CallbackContext context)
+        {
+            if (Time.timeScale == 0f || !Application.isFocused)
                 return;
 
-            var position = Mouse.current.position.ReadValue();
+            var position = context.ReadValue<Vector2>();
             if (position.x < 0f || position.x >= Screen.width ||
                 position.y < 0f || position.y >= Screen.height)
                 return;

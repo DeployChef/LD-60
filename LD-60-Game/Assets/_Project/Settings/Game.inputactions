@@ -3,6 +3,34 @@
     "name": "Game",
     "maps": [
         {
+            "name": "Menu",
+            "id": "b1c4e8a2-6d3f-4a90-9c17-2e5b8f0a4d61",
+            "actions": [
+                {
+                    "name": "Skip",
+                    "type": "Button",
+                    "id": "c2d5f9b3-7e40-4b01-8d28-3f6c9a1b5e72",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d3e6a0c4-8f51-4c12-9e39-4a7d0b2c6f83",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Game",
             "id": "7fbe10e2-9652-447f-957a-6cb261742602",
             "actions": [
@@ -14,6 +42,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Point",
+                    "type": "Value",
+                    "id": "e4f7b1d5-9062-4d23-af4a-5b8e1c3d7094",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -27,6 +64,138 @@
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f508c2e6-a173-4e34-b05b-6c9f2d4e81a5",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Debug",
+            "id": "a617d3f7-b284-4f45-c16c-7d0a3e5f92b6",
+            "actions": [
+                {
+                    "name": "Fill",
+                    "type": "Button",
+                    "id": "b728e4a8-c395-4056-d27d-8e1b4f6a03c7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Stamp",
+                    "type": "Button",
+                    "id": "c839f5b9-d4a6-4167-e38e-9f2c5a7b14d8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Complete",
+                    "type": "Button",
+                    "id": "d94a06ca-e5b7-4278-f49f-a03d6b8c25e9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Status",
+                    "type": "Button",
+                    "id": "e05b17db-f6c8-4389-a5a0-b14e7c9d36fa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f16c28ec-07d9-449a-b6b1-c25f8d0e47ab",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "027d39fd-18ea-45ab-c7c2-d36a9e1f58bc",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Stamp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "138e4a0e-29fb-46bc-d8d3-e47b0f2a69cd",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Complete",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "249f5b1f-3a0c-47cd-e9e4-f58c1a3b70de",
+                    "path": "<Keyboard>/numpadPlus",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "One Modifier",
+                    "id": "35a06c20-4b1d-48de-faf5-069d2b4c81ef",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "46b17d31-5c2e-49ef-ab06-17ae3c5d92f0",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "57c28e42-6d3f-4af0-bc17-28bf4d6ea301",
+                    "path": "<Keyboard>/equals",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

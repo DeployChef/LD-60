@@ -12,6 +12,7 @@ namespace LD60.UI
         [SerializeField] private InputActionAsset input;
         [SerializeField] private GameObject menu;
         [SerializeField] private Button exitButton;
+        [SerializeField] private Button restartButton;
 
         private IShellService _shell;
         private InputAction _pause;
@@ -27,6 +28,7 @@ namespace LD60.UI
         {
             _pause = input.FindAction("Game/Pause", true);
             exitButton.onClick.AddListener(OnExitClicked);
+            restartButton.onClick.AddListener(OnRestartClicked);
             SetOpen(false);
         }
 
@@ -46,6 +48,7 @@ namespace LD60.UI
         private void OnDestroy()
         {
             exitButton.onClick.RemoveListener(OnExitClicked);
+            restartButton.onClick.RemoveListener(OnRestartClicked);
         }
 
         private void OnPause(InputAction.CallbackContext context)
@@ -64,6 +67,12 @@ namespace LD60.UI
         {
             Time.timeScale = 1f;
             _shell.ReturnToMainMenuAsync().Forget();
+        }
+
+        private void OnRestartClicked()
+        {
+            SetOpen(false);
+            _shell.RestartFromSaveAsync().Forget();
         }
     }
 }
