@@ -26,26 +26,41 @@ namespace LD60.Editor
             var font = FindFont();
             var layer = SortingLayerId("DeskItem");
 
-            var square = BuildForm("ArticleSquare", sprite, material, font, layer, paper, ArticleShape.Square,
+            var dot = BuildForm("ArticleDot", sprite, material, font, layer, paper,
+                new[] { Vector2.zero },
+                Vector2.zero, new Vector2(0.82f, 0.82f),
+                new Vector2(0f, 0.22f), new Vector2(0.92f, 0.28f), 3.2f,
+                new Vector2(0f, -0.16f), new Vector2(0.92f, 0.48f), 2.4f);
+            var line2H = BuildForm("ArticleLine2H", sprite, material, font, layer, paper,
+                new[] { new Vector2(-0.5f, 0f), new Vector2(0.5f, 0f) },
+                new Vector2(-0.5f, 0f), new Vector2(0.82f, 0.82f),
+                new Vector2(0.5f, 0.22f), new Vector2(0.92f, 0.28f), 3.4f,
+                new Vector2(0.5f, -0.16f), new Vector2(0.92f, 0.48f), 2.6f);
+            var line2V = BuildForm("ArticleLine2V", sprite, material, font, layer, paper,
+                new[] { new Vector2(0f, 0.5f), new Vector2(0f, -0.5f) },
+                new Vector2(0f, 0.5f), new Vector2(0.82f, 0.82f),
+                new Vector2(0f, -0.28f), new Vector2(0.92f, 0.28f), 3.4f,
+                new Vector2(0f, -0.68f), new Vector2(0.92f, 0.42f), 2.6f);
+            var line3H = BuildForm("ArticleLine3H", sprite, material, font, layer, paper,
+                new[] { new Vector2(-1f, 0f), new Vector2(0f, 0f), new Vector2(1f, 0f) },
+                new Vector2(-1f, 0f), new Vector2(0.82f, 0.82f),
+                new Vector2(0.5f, 0.22f), new Vector2(1.9f, 0.28f), 3.6f,
+                new Vector2(0.5f, -0.16f), new Vector2(1.9f, 0.48f), 2.8f);
+            var line3V = BuildForm("ArticleLine3V", sprite, material, font, layer, paper,
+                new[] { new Vector2(0f, 1f), new Vector2(0f, 0f), new Vector2(0f, -1f) },
+                new Vector2(0f, 1f), new Vector2(0.82f, 0.82f),
+                new Vector2(0f, 0.22f), new Vector2(0.92f, 0.28f), 3.4f,
+                new Vector2(0f, -0.55f), new Vector2(0.92f, 0.9f), 2.8f);
+            var square = BuildForm("ArticleSquare", sprite, material, font, layer, paper,
                 new[] { new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f) },
                 new Vector2(0f, 0.28f), new Vector2(0.82f, 0.82f),
                 new Vector2(0f, 0.82f), new Vector2(1.9f, 0.34f), 4.5f,
                 new Vector2(0f, -0.42f), new Vector2(1.85f, 0.72f), 3.2f);
-            var zed = BuildForm("ArticleZ", sprite, material, font, layer, paper, ArticleShape.Z,
-                new[] { new Vector2(-1f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, -0.5f), new Vector2(1f, -0.5f) },
-                new Vector2(-0.85f, 0.15f), new Vector2(0.72f, 0.72f),
-                new Vector2(0.35f, 0.5f), new Vector2(1.15f, 0.32f), 3.6f,
-                new Vector2(0.45f, -0.42f), new Vector2(1.2f, 0.48f), 2.6f);
-            var gamma = BuildForm("ArticleGamma", sprite, material, font, layer, paper, ArticleShape.Gamma,
-                new[] { new Vector2(-0.5f, -1f), new Vector2(-0.5f, 0f), new Vector2(-0.5f, 1f), new Vector2(0.5f, -1f) },
-                new Vector2(-0.15f, 0.35f), new Vector2(0.72f, 0.72f),
-                new Vector2(-0.15f, 0.95f), new Vector2(1.5f, 0.32f), 3.6f,
-                new Vector2(0.05f, -0.55f), new Vector2(1.7f, 0.7f), 2.8f);
             var note = BuildNote(sprite, material, font, layer);
 
             var articles = WriteMorningArticles();
-            WireGame(square, zed, gamma, note);
-            BuildLookup(articles, new[] { square, zed, gamma, square, square, square, gamma, zed, square, gamma, zed });
+            WireGame(dot, line2H, line2V, line3H, line3V, square, note);
+            BuildLookup(articles, new[] { square, line3H, line2V, dot, line2H, dot, line3V, line2H, line2V, dot, line3H });
             AssetDatabase.SaveAssets();
             Debug.Log("[Articles] Props, DayOne capsule and ArticleLookup are ready.");
         }
@@ -54,25 +69,25 @@ namespace LD60.Editor
         {
             var morning = MakeArticle("MorningEdition", "morning-edition", ArticleShape.Square, ArticleKind.Report,
                 "Morning Edition", "The city woke to a quiet press and a full inbox.", 0.35f, 0f, 0f, 0f);
-            var council = MakeArticle("CouncilVote", "council-vote", ArticleShape.Z, ArticleKind.Politics,
+            var council = MakeArticle("CouncilVote", "council-vote", ArticleShape.Line3H, ArticleKind.Politics,
                 "Council Vote", "The council meets behind closed doors.", 0f, 0.4f, 0f, 0f, ArticleKind.Ad);
-            var bread = MakeArticle("BreadQueue", "bread-queue", ArticleShape.Gamma, ArticleKind.Social,
+            var bread = MakeArticle("BreadQueue", "bread-queue", ArticleShape.Line2V, ArticleKind.Social,
                 "Bread Queue", "The bakery line starts before dawn.", 0f, 0f, 0.35f, 0f);
-            var soap = MakeArticle("SoapCoupon", "soap-coupon", ArticleShape.Square, ArticleKind.Ad,
+            var soap = MakeArticle("SoapCoupon", "soap-coupon", ArticleShape.Dot, ArticleKind.Ad,
                 "Soap Coupon", "A clean shirt for a clean conscience.", 0f, 0f, 0f, 4f, ArticleKind.Politics);
-            var city = MakeArticle("CityBrief", "city-brief", ArticleShape.Square, ArticleKind.Report,
+            var city = MakeArticle("CityBrief", "city-brief", ArticleShape.Line2H, ArticleKind.Report,
                 "City Brief", "A short note on the morning wires.", 0.3f, 0f, 0f, 0f);
-            var night = MakeArticle("NightWire", "night-wire", ArticleShape.Square, ArticleKind.Report,
+            var night = MakeArticle("NightWire", "night-wire", ArticleShape.Dot, ArticleKind.Report,
                 "Night Wire", "The presses ran after midnight.", 0.25f, 0f, 0f, 0f);
-            var market = MakeArticle("MarketBell", "market-bell", ArticleShape.Gamma, ArticleKind.Social,
+            var market = MakeArticle("MarketBell", "market-bell", ArticleShape.Line3V, ArticleKind.Social,
                 "Market Bell", "The square fills when the bell rings.", 0f, 0f, 0.25f, 0f);
-            var union = MakeArticle("UnionNote", "union-note", ArticleShape.Z, ArticleKind.Politics,
+            var union = MakeArticle("UnionNote", "union-note", ArticleShape.Line2H, ArticleKind.Politics,
                 "Union Note", "The shift asks for a louder vote.", 0f, 0.3f, 0f, 0f, ArticleKind.Ad);
-            var tram = MakeArticle("TramDelay", "tram-delay", ArticleShape.Square, ArticleKind.Social,
+            var tram = MakeArticle("TramDelay", "tram-delay", ArticleShape.Line2V, ArticleKind.Social,
                 "Tram Delay", "The first car is late again.", 0f, 0f, 0.2f, 0f);
-            var dog = MakeArticle("LostDog", "lost-dog", ArticleShape.Gamma, ArticleKind.Report,
+            var dog = MakeArticle("LostDog", "lost-dog", ArticleShape.Dot, ArticleKind.Report,
                 "Lost Dog", "A brown dog, last seen by the bakery.", 0.2f, 0f, 0f, 0f);
-            var harbor = MakeArticle("HarborTax", "harbor-tax", ArticleShape.Z, ArticleKind.Politics,
+            var harbor = MakeArticle("HarborTax", "harbor-tax", ArticleShape.Line3H, ArticleKind.Politics,
                 "Harbor Tax", "The docks argue over a new levy.", 0f, 0.2f, 0f, 0f, ArticleKind.Ad);
 
             var articles = new[] { morning, council, bread, soap, city, night, market, union, tram, dog, harbor };
@@ -94,7 +109,7 @@ namespace LD60.Editor
         }
 
         private static ArticlePiece BuildForm(string name, Sprite sprite, Material material, TMP_FontAsset font, int layer, Color paper,
-            ArticleShape shape, Vector2[] cells, Vector2 pictureAt, Vector2 pictureSize,
+            Vector2[] cells, Vector2 pictureAt, Vector2 pictureSize,
             Vector2 titleAt, Vector2 titleSize, float titleMax, Vector2 bodyAt, Vector2 bodySize, float bodyMax)
         {
             var root = new GameObject(name);
@@ -218,7 +233,7 @@ namespace LD60.Editor
             return article;
         }
 
-        private static void WireGame(ArticlePiece square, ArticlePiece zed, ArticlePiece gamma, NoteSlip note)
+        private static void WireGame(ArticlePiece dot, ArticlePiece line2H, ArticlePiece line2V, ArticlePiece line3H, ArticlePiece line3V, ArticlePiece square, NoteSlip note)
         {
             var scene = EditorSceneManager.GetSceneByName("Game");
             if (!scene.isLoaded)
@@ -244,12 +259,29 @@ namespace LD60.Editor
             if (slot == null)
                 slot = slotObject.AddComponent<CapsuleSlot>();
             var data = new SerializedObject(slot);
+            data.FindProperty("dot").objectReferenceValue = dot;
+            data.FindProperty("line2H").objectReferenceValue = line2H;
+            data.FindProperty("line2V").objectReferenceValue = line2V;
+            data.FindProperty("line3H").objectReferenceValue = line3H;
+            data.FindProperty("line3V").objectReferenceValue = line3V;
             data.FindProperty("square").objectReferenceValue = square;
-            data.FindProperty("zed").objectReferenceValue = zed;
-            data.FindProperty("gamma").objectReferenceValue = gamma;
             data.FindProperty("note").objectReferenceValue = note;
             data.FindProperty("desk").objectReferenceValue = desk;
             data.ApplyModifiedPropertiesWithoutUndo();
+
+            var newspaper = desk.GetComponent<NewspaperDesk>();
+            if (newspaper != null)
+            {
+                var deskData = new SerializedObject(newspaper);
+                deskData.FindProperty("dot").objectReferenceValue = dot;
+                deskData.FindProperty("line2H").objectReferenceValue = line2H;
+                deskData.FindProperty("line2V").objectReferenceValue = line2V;
+                deskData.FindProperty("line3H").objectReferenceValue = line3H;
+                deskData.FindProperty("line3V").objectReferenceValue = line3V;
+                deskData.FindProperty("square").objectReferenceValue = square;
+                deskData.ApplyModifiedPropertiesWithoutUndo();
+            }
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
         }

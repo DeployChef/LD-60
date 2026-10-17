@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LostDog
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: lost-dog
-  shape: 2
+  shape: 0
   kind: 0
   title: Lost Dog
   body: A brown dog, last seen by the bakery.

@@ -16,11 +16,11 @@ namespace LD60.Gameplay.Story
 
     public sealed class ChapterRunner : IDisposable
     {
-        private readonly ChapterBehaviour[] _behaviours;
+        private readonly ChapterAction[] _actions;
         private readonly NewspaperRule[] _rules;
         private readonly IMessageBus _bus;
         private readonly StoryContext _context;
-        private readonly ChapterBehaviours _behavioursFactory;
+        private readonly ChapterActionPlay _playback;
         private readonly Action<ChapterResult> _onFinished;
         private readonly bool[] _fired;
         private readonly Queue<int> _queue = new();
@@ -28,7 +28,7 @@ namespace LD60.Gameplay.Story
         private List<IDisposable> _subscriptions = new();
 
         private ChapterMode? _mode;
-        private ChapterBehaviour _current;
+        private ChapterAction _current;
         private CancellationTokenSource _life;
         private CancellationTokenSource _play;
         private UniTaskCompletionSource _complete;
@@ -42,20 +42,16 @@ namespace LD60.Gameplay.Story
             ChapterDefinition chapter,
             IMessageBus bus,
             StoryContext context,
-            ChapterBehaviours behaviours,
+            ChapterActionPlay playback,
             Action<ChapterResult> onFinished)
         {
-            var ids = chapter.BehaviourIds;
-            _behaviours = new ChapterBehaviour[ids.Length];
-            for (var i = 0; i < ids.Length; i++)
-                _behaviours[i] = behaviours.Create(ids[i]);
-
+            _actions = chapter.Actions;
             _rules = chapter.Rules;
             _bus = bus;
             _context = context;
-            _behavioursFactory = behaviours;
+            _playback = playback;
             _onFinished = onFinished;
-            _fired = new bool[_behaviours.Length];
+            _fired = new bool[_actions.Length];
             _life = new CancellationTokenSource();
             _read.Context = context;
         }
@@ -113,13 +109,13 @@ namespace LD60.Gameplay.Story
 
             _skip = true;
             _play?.Cancel();
-            _behavioursFactory.Cancel();
+            _playback.Cancel();
         }
 
         public void Dispose()
         {
             CancelWorkWait();
-            _behavioursFactory.Cancel();
+            _playback.Cancel();
             _life?.Cancel();
             _life?.Dispose();
             _life = null;
@@ -157,7 +153,7 @@ namespace LD60.Gameplay.Story
             _read.Fill = message.Fill;
             _read.Stamped = true;
             if (!Consider())
-                Debug.Log("[Story] Rules passed and this chapter has no ending behaviour.");
+                Debug.Log("[Story] Rules passed and this chapter has no ending action.");
         }
 
         private bool RulesMet(float fill)
@@ -186,13 +182,13 @@ namespace LD60.Gameplay.Story
         private bool Consider()
         {
             var started = false;
-            for (var i = 0; i < _behaviours.Length; i++)
+            for (var i = 0; i < _actions.Length; i++)
             {
                 if (_ended)
                     break;
 
-                var behaviour = _behaviours[i];
-                if (_fired[i] || behaviour == null || !behaviour.CanPlay(_read))
+                var action = _actions[i];
+                if (_fired[i] || action == null || !action.Matches(_read))
                     continue;
 
                 _fired[i] = true;
@@ -224,17 +220,17 @@ namespace LD60.Gameplay.Story
 
         private async UniTaskVoid Play(int index)
         {
-            var behaviour = _behaviours[index];
-            _current = behaviour;
+            var action = _actions[index];
+            _current = action;
             _skip = false;
             _play?.Dispose();
             _play = CancellationTokenSource.CreateLinkedTokenSource(_life.Token);
             Mode = ChapterMode.Cutscene;
 
-            Debug.Log($"[Story] {behaviour.GetType().Name}");
+            Debug.Log($"[Story] {action.name}");
             try
             {
-                await behaviour.Play(this);
+                await _playback.Play(action, this);
             }
             catch (OperationCanceledException)
             {
@@ -255,6 +251,8 @@ namespace LD60.Gameplay.Story
 
             Mode = ChapterMode.Work;
         }
+
+        public StoryContext Context => _context;
 
         public CancellationToken Token => _play != null ? _play.Token : CancellationToken.None;
 

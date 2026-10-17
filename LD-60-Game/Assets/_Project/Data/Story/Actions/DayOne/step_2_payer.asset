@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: step_2_payer
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 12
+  parameter: 
+  minimum: 0
+  guest: {fileID: 11400000, guid: 61d1773b28c76c64eb6b7349dcc1a1a1, type: 2}
+  steps:
+  - kind: 0
+    emotion: smile
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+  - kind: 1
+    emotion: 
+    text: You kept the city quiet. Take one.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+  - kind: 2
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: The money.
+    optionB: The lost-dog clipping.
+    next: -1
+    nextA: 3
+    nextB: 5
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: money
+    amount: 4
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+  - kind: 1
+    emotion: 
+    text: I'll be back tomorrow.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 7
+    nextA: -1
+    nextB: -1
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: lost-dog
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+  - kind: 1
+    emotion: 
+    text: Print that one. I'll be back tomorrow.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 7
+    nextA: -1
+    nextB: -1
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TramDelay
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: tram-delay
-  shape: 0
+  shape: 2
   kind: 2
   title: Tram Delay
   body: The first car is late again.

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HarborTax
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: harbor-tax
-  shape: 1
+  shape: 3
   kind: 1
   title: Harbor Tax
   body: The docks argue over a new levy.

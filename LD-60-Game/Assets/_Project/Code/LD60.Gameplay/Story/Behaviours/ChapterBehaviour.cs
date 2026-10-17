@@ -12,11 +12,4 @@ namespace LD60.Gameplay.Story
         public bool Stamped;
         public StoryContext Context;
     }
-
-    public abstract class ChapterBehaviour
-    {
-        public abstract bool CanPlay(ChapterRead read);
-
-        public abstract UniTask Play(ChapterRunner chapter);
-    }
 }

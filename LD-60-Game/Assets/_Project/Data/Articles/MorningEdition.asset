@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MorningEdition
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: morning-edition
-  shape: 0
+  shape: 5
   kind: 0
   title: Morning Edition
   body: The city woke to a quiet press and a full inbox.

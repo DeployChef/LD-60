@@ -31,12 +31,12 @@ namespace LD60.Gameplay.Context
     public sealed class ChapterDefinition : ScriptableObject
     {
         [SerializeField] private string title;
-        [SerializeField] private string[] behaviourIds = Array.Empty<string>();
+        [SerializeField] private LD60.Gameplay.Story.ChapterAction[] actions = Array.Empty<LD60.Gameplay.Story.ChapterAction>();
         [SerializeField] private NewspaperRule[] rules = Array.Empty<NewspaperRule>();
         [SerializeField] private CapsuleDelivery[] capsules = Array.Empty<CapsuleDelivery>();
 
         public string Title => string.IsNullOrEmpty(title) ? name : title;
-        public string[] BehaviourIds => behaviourIds ?? Array.Empty<string>();
+        public LD60.Gameplay.Story.ChapterAction[] Actions => actions ?? Array.Empty<LD60.Gameplay.Story.ChapterAction>();
         public NewspaperRule[] Rules => rules ?? Array.Empty<NewspaperRule>();
         public CapsuleDelivery[] Capsules => capsules ?? Array.Empty<CapsuleDelivery>();
 

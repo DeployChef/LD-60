@@ -12,9 +12,12 @@ namespace LD60.UI
 {
     public sealed class CapsuleSlot : MonoBehaviour
     {
+        [SerializeField] private ArticlePiece dot;
+        [SerializeField] private ArticlePiece line2H;
+        [SerializeField] private ArticlePiece line2V;
+        [SerializeField] private ArticlePiece line3H;
+        [SerializeField] private ArticlePiece line3V;
         [SerializeField] private ArticlePiece square;
-        [SerializeField] private ArticlePiece zed;
-        [SerializeField] private ArticlePiece gamma;
         [SerializeField] private NoteSlip note;
         [SerializeField] private Transform desk;
         [SerializeField] private Vector2 tray = new(-6.6f, 2.4f);
@@ -131,8 +134,11 @@ namespace LD60.UI
                 return null;
             switch (article.Shape)
             {
-                case ArticleShape.Z: return zed;
-                case ArticleShape.Gamma: return gamma;
+                case ArticleShape.Dot: return dot;
+                case ArticleShape.Line2H: return line2H;
+                case ArticleShape.Line2V: return line2V;
+                case ArticleShape.Line3H: return line3H;
+                case ArticleShape.Line3V: return line3V;
                 default: return square;
             }
         }

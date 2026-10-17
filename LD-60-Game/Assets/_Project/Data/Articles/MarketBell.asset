@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MarketBell
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: market-bell
-  shape: 2
+  shape: 4
   kind: 2
   title: Market Bell
   body: The square fills when the bell rings.

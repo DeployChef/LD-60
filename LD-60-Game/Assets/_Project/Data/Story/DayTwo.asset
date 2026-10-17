@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DayTwo
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
   title: Day Two
-  behaviourIds:
-  - day-two.capsule
-  - day-two.return
-  - day-two.close
+  actions:
+  - {fileID: 11400000, guid: 91e5af0e7acb88146998a1fbb13ddcd0, type: 2}
+  - {fileID: 11400000, guid: 0d2cd74cbac0a494596a48ae1acba05d, type: 2}
+  - {fileID: 11400000, guid: 62edf672557b5a24ab6b71f232beffa1, type: 2}
   rules:
   - parameterId: fill
     minimum: 0.8

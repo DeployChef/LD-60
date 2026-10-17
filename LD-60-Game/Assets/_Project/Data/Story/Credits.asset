@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Credits
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
   title: Credits
-  behaviourIds:
-  - credits.close
+  actions:
+  - {fileID: 11400000, guid: 05980ce656e6ff349ad77c1e44a333de, type: 2}
   rules: []
+  capsules: []

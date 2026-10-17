@@ -17,9 +17,12 @@ namespace LD60.UI
         [SerializeField] private ArticleTray discard;
         [SerializeField] private ArticleTray save;
         [SerializeField] private TMP_Text stats;
+        [SerializeField] private ArticlePiece dot;
+        [SerializeField] private ArticlePiece line2H;
+        [SerializeField] private ArticlePiece line2V;
+        [SerializeField] private ArticlePiece line3H;
+        [SerializeField] private ArticlePiece line3V;
         [SerializeField] private ArticlePiece square;
-        [SerializeField] private ArticlePiece zed;
-        [SerializeField] private ArticlePiece gamma;
 
         private readonly List<Vector2> _cells = new();
         private Desk _desk;
@@ -168,8 +171,11 @@ namespace LD60.UI
 
             switch (article.Shape)
             {
-                case ArticleShape.Z: return zed;
-                case ArticleShape.Gamma: return gamma;
+                case ArticleShape.Dot: return dot;
+                case ArticleShape.Line2H: return line2H;
+                case ArticleShape.Line2V: return line2V;
+                case ArticleShape.Line3H: return line3H;
+                case ArticleShape.Line3V: return line3V;
                 default: return square;
             }
         }

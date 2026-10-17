@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CouncilVote
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: council-vote
-  shape: 1
+  shape: 3
   kind: 1
   title: Council Vote
   body: The council meets behind closed doors.

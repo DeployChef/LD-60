@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: DayOne
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
   title: Day One
-  behaviourIds:
-  - day-one.capsule
-  - day-one.payer
-  - day-one.full-page
-  - day-one.shot
-  - day-one.close
+  actions:
+  - {fileID: 11400000, guid: afc69015821685840ad2e13a5df42a21, type: 2}
+  - {fileID: 11400000, guid: 49cf5717a7e47a841b154fc4577c1b09, type: 2}
+  - {fileID: 11400000, guid: 0fc90ed61ce43e44a946250b4b483a56, type: 2}
+  - {fileID: 11400000, guid: 68914b192d7abd046b64182066cca8a5, type: 2}
+  - {fileID: 11400000, guid: 4b572925ae6c27e41ae274fdbd4582ad, type: 2}
   rules:
   - parameterId: fill
     minimum: 0.8

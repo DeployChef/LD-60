@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CityBrief
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
   id: city-brief
-  shape: 0
+  shape: 1
   kind: 0
   title: City Brief
   body: A short note on the morning wires.

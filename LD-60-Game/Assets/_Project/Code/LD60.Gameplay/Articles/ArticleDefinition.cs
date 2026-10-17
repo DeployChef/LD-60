@@ -5,9 +5,12 @@ namespace LD60.Gameplay.Articles
 {
     public enum ArticleShape
     {
-        Square,
-        Z,
-        Gamma
+        Dot,
+        Line2H,
+        Line2V,
+        Line3H,
+        Line3V,
+        Square
     }
 
     public enum ArticleKind
