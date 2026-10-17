@@ -26,7 +26,8 @@ namespace LD60.Gameplay.Context
         Sequence,
         Dialogue,
         Capsule,
-        Summary
+        Summary,
+        Ending
     }
 
     [Serializable]
@@ -41,6 +42,12 @@ namespace LD60.Gameplay.Context
         public string id;
         public StoryActionKind action;
         public string actionId;
+        [Tooltip("Empty runs the event unconditionally. Otherwise the context parameter must reach the minimum. money is the money balance.")]
+        public string conditionParameter;
+        public float conditionMinimum;
+        [Tooltip("Context parameter written when the event starts. Empty skips the write.")]
+        public string setParameter;
+        public float setValue;
     }
 
     [Serializable]

@@ -1,6 +1,8 @@
 using LD60.Gameplay.Context;
+using LD60.Main.DI;
 using UnityEditor;
 using UnityEngine;
+using VContainer;
 
 namespace LD60.Editor
 {
@@ -22,14 +24,14 @@ namespace LD60.Editor
                 return;
             }
 
-            var bootstrap = Object.FindAnyObjectByType<StoryBootstrap>();
-            if (bootstrap == null || bootstrap.Context == null)
+            var scope = Object.FindAnyObjectByType<GameLifetimeScope>();
+            if (scope == null || scope.Container == null)
             {
                 Debug.LogWarning("[Story] Story is not running.");
                 return;
             }
 
-            var context = bootstrap.Context;
+            var context = scope.Container.Resolve<StoryContext>();
             preset.OverwriteContext(context.Capture());
             EditorUtility.SetDirty(preset);
             AssetDatabase.SaveAssets();

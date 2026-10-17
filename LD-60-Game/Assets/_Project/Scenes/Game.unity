@@ -2058,8 +2058,7 @@ MonoBehaviour:
   parentReference:
     TypeName: LD60.Main.DI.RootLifetimeScope
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 900220001}
+  autoInjectGameObjects: []
 --- !u!4 &900112575
 Transform:
   m_ObjectHideFlags: 0
@@ -2103,7 +2102,7 @@ GameObject:
   - component: {fileID: 900220003}
   - component: {fileID: 900220004}
   m_Layer: 0
-  m_Name: Story
+  m_Name: StoryBook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2135,9 +2134,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00f9f4a2986647344bd6cc391ae4d224, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.StoryBootstrap
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.StoryBook
   chapters:
   - {fileID: 11400000, guid: 4f8c2a1e9b7d4c65a0e3f6b8d1c24a57, type: 2}
+  finale: {fileID: 11400000, guid: c3a91e7b4d2f48a0b6e5c1d84f0a7b29, type: 2}
   debugStart: {fileID: 0}
   debugKeys: 1
 --- !u!114 &900220004
@@ -2152,6 +2152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b1e0c4a9d7f4e28a5c3b8d01f2e4a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryDebugController
+  input: {fileID: -944628639613478452, guid: 98dffcc5163d46b478ce4dc52c4ddd27, type: 3}
 --- !u!1 &940195826
 GameObject:
   m_ObjectHideFlags: 0
@@ -2929,6 +2930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7307f400e1ee14d82a9cec39098ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.UI::LD60.UI.WorkstationViewController
+  input: {fileID: -944628639613478452, guid: 98dffcc5163d46b478ce4dc52c4ddd27, type: 3}
   brain: {fileID: 1265675792}
   windowCamera: {fileID: 243166454}
   tableCamera: {fileID: 364788968}

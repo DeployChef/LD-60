@@ -5,20 +5,34 @@ using UnityEngine;
 namespace LD60.Gameplay.Context
 {
     [Serializable]
+    public struct StoryParameter
+    {
+        public string id;
+        public float value;
+    }
+
+    [Serializable]
     public sealed class StoryContextData
     {
         public int money;
-        public List<string> flags = new();
+        public List<StoryParameter> parameters = new();
         public List<string> keptArticleIds = new();
 
         public StoryContextData Clone()
         {
-            return new StoryContextData
+            var copy = new StoryContextData
             {
                 money = money,
-                flags = flags != null ? new List<string>(flags) : new List<string>(),
                 keptArticleIds = keptArticleIds != null ? new List<string>(keptArticleIds) : new List<string>()
             };
+
+            if (parameters == null)
+                return copy;
+
+            for (var i = 0; i < parameters.Count; i++)
+                copy.parameters.Add(parameters[i]);
+
+            return copy;
         }
     }
 
@@ -27,7 +41,7 @@ namespace LD60.Gameplay.Context
         private StoryContextData _data = new();
 
         public int Money => _data.money;
-        public IReadOnlyList<string> Flags => _data.flags;
+        public IReadOnlyList<StoryParameter> Parameters => _data.parameters;
         public IReadOnlyList<string> KeptArticleIds => _data.keptArticleIds;
 
         public void Load(StoryContextData snapshot)
@@ -40,17 +54,51 @@ namespace LD60.Gameplay.Context
             return _data.Clone();
         }
 
-        public bool HasFlag(string id)
+        public bool Meets(string parameterId, float minimum)
         {
-            return !string.IsNullOrEmpty(id) && _data.flags.Contains(id);
+            if (string.IsNullOrEmpty(parameterId))
+                return true;
+
+            return GetParameter(parameterId) + 0.0001f >= minimum;
         }
 
-        public void SetFlag(string id)
+        public float GetParameter(string id)
         {
-            if (string.IsNullOrEmpty(id) || _data.flags.Contains(id))
+            if (string.Equals(id, "money", StringComparison.OrdinalIgnoreCase))
+                return _data.money;
+
+            var parameters = _data.parameters;
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                if (string.Equals(parameters[i].id, id, StringComparison.Ordinal))
+                    return parameters[i].value;
+            }
+
+            return 0f;
+        }
+
+        public void SetParameter(string id, float value)
+        {
+            if (string.IsNullOrEmpty(id))
                 return;
 
-            _data.flags.Add(id);
+            if (string.Equals(id, "money", StringComparison.OrdinalIgnoreCase))
+            {
+                _data.money = Mathf.RoundToInt(value);
+                return;
+            }
+
+            var parameters = _data.parameters;
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                if (!string.Equals(parameters[i].id, id, StringComparison.Ordinal))
+                    continue;
+
+                parameters[i] = new StoryParameter { id = id, value = value };
+                return;
+            }
+
+            parameters.Add(new StoryParameter { id = id, value = value });
         }
 
         public void AddMoney(int amount)
@@ -82,7 +130,11 @@ namespace LD60.Gameplay.Context
 
         public string Describe()
         {
-            return $"money={_data.money}, flags=[{string.Join(", ", _data.flags)}], kept=[{string.Join(", ", _data.keptArticleIds)}]";
+            var parts = new string[_data.parameters.Count];
+            for (var i = 0; i < _data.parameters.Count; i++)
+                parts[i] = $"{_data.parameters[i].id}={_data.parameters[i].value}";
+
+            return $"money={_data.money}, parameters=[{string.Join(", ", parts)}], kept=[{string.Join(", ", _data.keptArticleIds)}]";
         }
     }
 }

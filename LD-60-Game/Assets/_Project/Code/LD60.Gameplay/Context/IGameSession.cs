@@ -11,5 +11,7 @@ namespace LD60.Gameplay.Context
         bool TryGetCheckpoint(out int chapterIndex, out StoryContextData context);
 
         void WriteCheckpoint(int chapterIndex, StoryContextData context);
+
+        void ClearCheckpoint();
     }
 }

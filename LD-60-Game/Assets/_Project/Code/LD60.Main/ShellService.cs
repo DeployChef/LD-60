@@ -10,6 +10,7 @@ namespace LD60.Main
         private readonly SceneLoader _scenes = new();
         private readonly DayCheckpointStore _store = new();
         private bool _busy;
+        private bool _showIntro = true;
         private bool _hasCheckpoint;
         private int _chapterIndex;
         private StoryContextData _checkpoint = new();
@@ -20,6 +21,7 @@ namespace LD60.Main
         }
 
         public GameStart Launch { get; private set; } = GameStart.New;
+        public bool ShowIntro => _showIntro;
 
         public bool HasResumableDay => _hasCheckpoint && _chapterIndex > 0;
 
@@ -87,6 +89,7 @@ namespace LD60.Main
                 return;
 
             _busy = true;
+            _showIntro = false;
             try
             {
                 await TransitionAsync(GameScenes.Game, GameScenes.MainMenu);
@@ -97,7 +100,26 @@ namespace LD60.Main
             }
         }
 
-        private void ClearCheckpoint()
+        public async UniTask FinishStoryAsync()
+        {
+            if (_busy)
+                return;
+
+            _busy = true;
+            _showIntro = true;
+            Time.timeScale = 1f;
+            ClearCheckpoint();
+            try
+            {
+                await TransitionAsync(GameScenes.Game, GameScenes.MainMenu);
+            }
+            finally
+            {
+                _busy = false;
+            }
+        }
+
+        public void ClearCheckpoint()
         {
             _hasCheckpoint = false;
             _chapterIndex = 0;

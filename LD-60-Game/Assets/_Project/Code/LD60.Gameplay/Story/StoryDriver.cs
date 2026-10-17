@@ -1,47 +1,56 @@
+using System;
+using Cysharp.Threading.Tasks;
 using LD60.Core;
 using LD60.Core.Bus;
 using LD60.Gameplay.Context;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace LD60.Gameplay.Story
 {
-    public sealed class StoryDriver : System.IDisposable
+    public sealed class StoryDriver : IStartable, IDisposable
     {
         private readonly IMessageBus _bus;
         private readonly StoryContext _context;
         private readonly Desk _desk;
-        private readonly ChapterDefinition[] _chapters;
-        private readonly DayStartPreset _debugStart;
         private readonly IGameSession _session;
+        private readonly IShellService _shell;
+        private readonly ChapterDefinition[] _chapters;
+        private readonly ChapterDefinition _finale;
+        private readonly DayStartPreset _debugStart;
         private ChapterRunner _runner;
         private int _index = -1;
-        private bool _advance;
+        private bool _inFinale;
 
         public StoryDriver(
             IMessageBus bus,
             StoryContext context,
             Desk desk,
-            ChapterDefinition[] chapters,
-            DayStartPreset debugStart,
-            IGameSession session)
+            IGameSession session,
+            IShellService shell,
+            StoryBook story)
         {
             _bus = bus;
             _context = context;
             _desk = desk;
-            _chapters = chapters ?? System.Array.Empty<ChapterDefinition>();
-            _debugStart = debugStart;
             _session = session;
+            _shell = shell;
+            _chapters = story.Chapters;
+            _finale = story.Finale;
+            _debugStart = story.DebugStart;
+            DebugKeys = story.DebugKeys;
         }
 
+        public bool DebugKeys { get; }
         public int ActiveIndex => _index;
 
-        public void Begin()
+        public void Start()
         {
             if (_session.Launch == GameStart.Continue && _session.TryGetCheckpoint(out var index, out var saved))
             {
                 _context.Load(saved);
                 Debug.Log($"[Story] Continue chapter {index}. {_context.Describe()}");
-                BeginChapter(index);
+                Play(index);
                 return;
             }
 
@@ -49,29 +58,12 @@ namespace LD60.Gameplay.Story
             {
                 _context.Load(_debugStart.Context);
                 Debug.Log($"[Story] Debug start at chapter {_debugStart.ChapterIndex}. {_context.Describe()}");
-                BeginChapter(_debugStart.ChapterIndex);
+                Play(_debugStart.ChapterIndex);
                 return;
             }
 
             _context.Load(new StoryContextData());
-            BeginChapter(0);
-        }
-
-        public void Tick()
-        {
-            if (_advance)
-            {
-                _advance = false;
-                Next();
-                return;
-            }
-
-            _runner?.Tick(Time.deltaTime);
-        }
-
-        public void Next()
-        {
-            BeginChapter(_index + 1);
+            Play(0);
         }
 
         public void AddFill(float amount)
@@ -89,16 +81,22 @@ namespace LD60.Gameplay.Story
             _runner?.CompleteCurrent();
         }
 
+        public void LogStatus()
+        {
+            Debug.Log($"[Story] {Describe()}");
+        }
+
         public string Describe()
         {
-            var chapter = _index >= 0 && _index < _chapters.Length && _chapters[_index] != null
-                ? _chapters[_index].name
-                : "none";
+            var chapter = _inFinale
+                ? _finale != null ? _finale.name : "finale"
+                : _index >= 0 && _index < _chapters.Length && _chapters[_index] != null ? _chapters[_index].name : "none";
             var mode = _runner != null ? _runner.Mode.ToString() : "none";
-            var work = _runner != null ? _runner.WorkTime : 0f;
+            var work = _runner != null ? _runner.WorkSeconds : 0;
             var busy = _runner != null && _runner.IsBusy;
             var day = _index >= 0 ? _index + 1 : 0;
-            return $"day {day} ({chapter}), mode {mode}, work {work:0.0}s, busy {busy}, fill {_desk.Fill:0.00}, {_context.Describe()}";
+            var where = _inFinale ? $"finale after day {day} ({chapter})" : $"day {day} ({chapter})";
+            return $"{where}, mode {mode}, work {work}s, busy {busy}, fill {_desk.Fill:0.00}, {_context.Describe()}";
         }
 
         public void Dispose()
@@ -107,43 +105,94 @@ namespace LD60.Gameplay.Story
             _runner = null;
         }
 
-        private void BeginChapter(int index)
+        private void Play(int index)
+        {
+            BeginChapter(index, false);
+        }
+
+        private void BeginChapter(int index, bool finale)
         {
             _runner?.Dispose();
             _runner = null;
 
-            if (_chapters.Length == 0)
+            ChapterDefinition chapter;
+            if (finale)
             {
-                Debug.LogError("[Story] No chapters assigned on StoryBootstrap.");
+                chapter = _finale;
+            }
+            else
+            {
+                if (_chapters.Length == 0)
+                {
+                    Debug.LogError("[Story] No chapters assigned on StoryBook.");
+                    return;
+                }
+
+                if (index >= _chapters.Length)
+                {
+                    Debug.Log("[Story] No more days. Finale.");
+                    BeginChapter(_index, true);
+                    return;
+                }
+
+                if (index < 0)
+                {
+                    Debug.Log("[Story] Chapter index is out of range.");
+                    return;
+                }
+
+                chapter = _chapters[index];
+                _index = index;
+            }
+
+            if (chapter == null)
+            {
+                Debug.LogError(finale
+                    ? "[Story] Ending fired, but no finale chapter is assigned."
+                    : $"[Story] Chapter {index} is not assigned.");
+                if (finale)
+                    Finish();
                 return;
             }
 
-            if (index < 0 || index >= _chapters.Length)
-            {
-                Debug.Log(index > 0 ? "[Story] No more chapters." : "[Story] Chapter index is out of range.");
-                return;
-            }
-
-            var definition = _chapters[index];
-            if (definition == null)
-            {
-                Debug.LogError($"[Story] Chapter {index} is not assigned.");
-                return;
-            }
-
-            _index = index;
+            _inFinale = finale;
             _desk.ResetDay();
-            _session.WriteCheckpoint(index, _context.Capture());
-            Debug.Log($"[Story] Chapter {index} '{definition.name}' started. {_context.Describe()}");
-            _runner = new ChapterRunner(definition, _bus, OnDayFinished);
+            if (finale)
+                _session.ClearCheckpoint();
+            else
+                _session.WriteCheckpoint(_index, _context.Capture());
+
+            Debug.Log(finale
+                ? $"[Story] Finale '{chapter.name}'."
+                : $"[Story] Chapter {index} '{chapter.name}' started. {_context.Describe()}");
+            _runner = new ChapterRunner(chapter, _bus, _context, OnChapterFinished);
             _runner.Begin();
         }
 
-        private void OnDayFinished()
+        private void OnChapterFinished(ChapterResult result)
         {
+            if (_inFinale)
+            {
+                Finish();
+                return;
+            }
+
+            if (result == ChapterResult.Ending)
+            {
+                Debug.Log("[Story] Ending. The next day will not start.");
+                BeginChapter(_index, true);
+                return;
+            }
+
             _context.SetKeptArticles(_desk.KeptArticleIds);
             Debug.Log($"[Story] Day closed. {_context.Describe()}");
-            _advance = true;
+            BeginChapter(_index + 1, false);
+        }
+
+        private void Finish()
+        {
+            Debug.Log("[Story] Finale finished.");
+            _shell.FinishStoryAsync().Forget();
         }
     }
 }

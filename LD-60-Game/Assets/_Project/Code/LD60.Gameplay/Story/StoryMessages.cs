@@ -51,4 +51,5 @@ namespace LD60.Gameplay.Story
             CapsuleId = capsuleId;
         }
     }
+
 }

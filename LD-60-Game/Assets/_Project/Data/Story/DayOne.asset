@@ -41,6 +41,16 @@ MonoBehaviour:
     seconds: 0
     fill: 1
     id: 
+    action: 4
+    actionId: shot
+    conditionParameter: heat
+    conditionMinimum: 1
+    setParameter: 
+    setValue: 0
+  - trigger: 6
+    seconds: 0
+    fill: 1
+    id: 
     action: 3
     actionId: day-end
   rules:
