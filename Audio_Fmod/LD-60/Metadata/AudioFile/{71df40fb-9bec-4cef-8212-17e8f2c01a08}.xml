@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{71df40fb-9bec-4cef-8212-17e8f2c01a08}">
+		<property name="assetPath">
+			<value>LD-60 - Track 7.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>26.157604166666665</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
+		</relationship>
+	</object>
+</objects>
