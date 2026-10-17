@@ -9,7 +9,8 @@
         "Unity.TextMeshPro",
         "Unity.UGUI",
         "Unity.InputSystem",
-        "Unity.Cinemachine"
+        "Unity.Cinemachine",
+        "LD60.Views"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

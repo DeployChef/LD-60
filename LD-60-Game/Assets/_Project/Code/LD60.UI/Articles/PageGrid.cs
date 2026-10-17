@@ -148,10 +148,26 @@ namespace LD60.UI
                 return false;
 
             var other = PieceAt(cell);
+
             if (other == null || other.Article == null)
                 return false;
 
-            return Forbids(article, other.Article.Kind) || Forbids(other.Article, article.Kind);
+            bool firstForbids = Forbids(article, other.Article.Kind);
+            bool secondForbids = Forbids(other.Article, article.Kind);
+
+            if (firstForbids || secondForbids)
+            {
+                Debug.LogWarning(
+                    $"Нельзя разместить '{article.Title}' рядом с '{other.Article.Title}'\n" +
+                    $"Клетка: {cell}\n" +
+                    $"Новая статья запрещает соседа: {firstForbids}\n" +
+                    $"Сосед запрещает новую статью: {secondForbids}"
+                );
+
+                return true;
+            }
+
+            return false;
         }
 
         private static bool Forbids(ArticleDefinition article, ArticleKind kind)
