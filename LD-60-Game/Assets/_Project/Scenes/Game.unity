@@ -1319,7 +1319,7 @@ MonoBehaviour:
     Enabled: 0
     DefaultMode: 2
   DefaultBlend:
-    Style: 1
+    Style: 7
     Time: 0.6666667
     CustomCurve:
       serializedVersion: 2
@@ -1327,7 +1327,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: 6ece6d28bf36f3147a2a2a8a6b4ed00b, type: 2}
 --- !u!20 &1265675793
 Camera:
   m_ObjectHideFlags: 0
