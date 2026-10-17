@@ -16,7 +16,7 @@ MonoBehaviour:
   - From: WindowCamera
     To: TableCamera
     Blend:
-      Style: 5
+      Style: 2
       Time: 0.5
       CustomCurve:
         serializedVersion: 2
