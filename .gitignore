@@ -83,6 +83,9 @@ Thumbs.db
 .vscode/launch.json
 
 # WebGL publish folder is committed. Unity debug leftovers are not.
+# [Bb]uild/ above also matches webgl/Build/, so the player has to be re-included.
+!webgl/Build/
+!webgl/Build/**
 webgl/**/*_BurstDebugInformation_DoNotShip/
 webgl/**/DoNotShip/
 
