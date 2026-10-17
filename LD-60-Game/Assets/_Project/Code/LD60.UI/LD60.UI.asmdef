@@ -9,8 +9,7 @@
         "Unity.TextMeshPro",
         "Unity.UGUI",
         "Unity.InputSystem",
-        "Unity.Cinemachine",
-        "Unity.Localization"
+        "Unity.Cinemachine"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,8 +2,6 @@
     "name": "FMODUnity",
     "references": [
         "Unity.Timeline",
-        "Unity.Addressables",
-        "Unity.ResourceManager",
         "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
