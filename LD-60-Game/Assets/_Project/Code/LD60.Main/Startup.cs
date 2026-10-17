@@ -28,6 +28,8 @@ namespace LD60.Main
             rootScope.Build();
             // WebGL: до меню ждём банки FMOD, сэмплы и первый клик игрока (прелоудер).
             await FmodWebglPreloader.PrepareAsync(destroyCancellationToken);
+            // Громофон: один глобальный инстанс (дочерний ивент Music) + вечный Music.
+            LoudspeakerAudio.EnsureCreated();
             var shell = rootScope.Container.Resolve<IShellService>();
             await shell.StartAsync();
         }

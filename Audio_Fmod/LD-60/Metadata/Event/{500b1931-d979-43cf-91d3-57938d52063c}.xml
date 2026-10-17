@@ -385,11 +385,14 @@
 			<value>10.434791666666667</value>
 		</property>
 		<property name="length">
-			<value>1.0434791666666676</value>
+			<value>4.1738958333333329</value>
 		</property>
 		<property name="commandType">
 			<value>1</value>
 		</property>
+		<relationship name="triggerConditions">
+			<destination>{7275b7bf-e5da-4cdd-ad77-07fef010e728}</destination>
+		</relationship>
 		<relationship name="commandTarget">
 			<destination>{500b1931-d979-43cf-91d3-57938d52063c}</destination>
 		</relationship>
@@ -2006,6 +2009,17 @@
 	<object class="SingleSound" id="{45da9a4f-141c-4e76-9b87-db221d30d357}">
 		<relationship name="audioFile">
 			<destination>{b349c6a2-3c54-4524-8156-1b85177e4b5e}</destination>
+		</relationship>
+	</object>
+	<object class="ParameterCondition" id="{7275b7bf-e5da-4cdd-ad77-07fef010e728}">
+		<property name="minimum">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>1</value>
+		</property>
+		<relationship name="parameter">
+			<destination>{91ea070a-6d33-4819-88be-74f061b89fb3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{bbb5d4a6-f6d3-4a4d-b3af-cfccf05fcb6c}">
