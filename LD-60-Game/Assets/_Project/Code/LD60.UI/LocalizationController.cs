@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -27,7 +28,7 @@ namespace LD60.UI
 
         private void Start()
         {
-            RefreshLanguage(LocalizationSettings.SelectedLocale);
+            StartCoroutine(RefreshWhenReady());
         }
 
         private void OnDisable()
@@ -51,8 +52,20 @@ namespace LD60.UI
             SelectLocale("en");
         }
 
-        private static void SelectLocale(string code)
+        private void SelectLocale(string code)
         {
+            StartCoroutine(SelectLocaleWhenReady(code));
+        }
+
+        private IEnumerator RefreshWhenReady()
+        {
+            yield return LocalizationSettings.InitializationOperation;
+            RefreshLanguage(LocalizationSettings.SelectedLocale);
+        }
+
+        private IEnumerator SelectLocaleWhenReady(string code)
+        {
+            yield return LocalizationSettings.InitializationOperation;
             var locale = LocalizationSettings.AvailableLocales.GetLocale(code);
             if (locale != null)
                 LocalizationSettings.SelectedLocale = locale;
