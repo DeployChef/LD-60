@@ -6,15 +6,13 @@ namespace LD60.UI
 {
     public sealed class DeskDrag : MonoBehaviour
     {
-        private const int LiftOrder = 300;
-        private const int RestBias = 30;
+        private const int LiftOrder = 4000;
         private const float LiftDistance = 0.2f;
 
         private WorkstationViewController _views;
         private NewspaperDesk _board;
         private CinemachineBrain _brain;
-        private Renderer[] _renderers;
-        private int[] _orders;
+        private int _rest;
         private bool _held;
         private Vector3 _grab;
         private Vector3 _home;
@@ -28,7 +26,11 @@ namespace LD60.UI
                 _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
             if (_brain == null)
                 _brain = FindAnyObjectByType<CinemachineBrain>();
-            RememberOrder();
+        }
+
+        public void Hold(int order)
+        {
+            _rest = order;
         }
 
         private void Update()
@@ -70,9 +72,27 @@ namespace LD60.UI
         private void TryGrab(Camera camera, Vector2 screen)
         {
             var ray = camera.ScreenPointToRay(screen);
-            if (!Physics.Raycast(ray, out var hit, 100f))
+            var hits = Physics.RaycastAll(ray, 100f);
+            if (hits.Length == 0)
                 return;
-            if (hit.transform != transform && !hit.transform.IsChildOf(transform))
+
+            DeskDrag top = null;
+            var topOrder = int.MinValue;
+            for (var i = 0; i < hits.Length; i++)
+            {
+                var owner = hits[i].transform.GetComponentInParent<DeskDrag>();
+                if (owner == null)
+                    continue;
+
+                var order = owner.TopOrder();
+                if (order < topOrder)
+                    continue;
+
+                topOrder = order;
+                top = owner;
+            }
+
+            if (top != this)
                 return;
 
             var plane = new Plane(transform.forward, transform.position);
@@ -105,9 +125,20 @@ namespace LD60.UI
         {
             _held = false;
             transform.position += transform.forward * LiftDistance;
-            Lift(false);
             var piece = GetComponent<ArticlePiece>();
-            if (piece == null || _board == null || _board.Settle(piece))
+            if (_board == null)
+            {
+                Lift(false);
+                return;
+            }
+
+            if (piece == null)
+            {
+                _board.Raise(gameObject);
+                return;
+            }
+
+            if (_board.Settle(piece))
                 return;
 
             transform.position = _home;
@@ -115,18 +146,22 @@ namespace LD60.UI
             _board.Settle(piece);
         }
 
-        private void RememberOrder()
+        private int TopOrder()
         {
-            _renderers = GetComponentsInChildren<Renderer>(true);
-            _orders = new int[_renderers.Length];
-            for (var i = 0; i < _renderers.Length; i++)
-                _orders[i] = _renderers[i].sortingOrder;
+            var top = _rest;
+            var renderers = GetComponentsInChildren<Renderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] != null && renderers[i].sortingOrder > top)
+                    top = renderers[i].sortingOrder;
+            }
+
+            return top;
         }
 
         private void Lift(bool held)
         {
-            for (var i = 0; i < _renderers.Length; i++)
-                _renderers[i].sortingOrder = held ? LiftOrder + i : _orders[i] + RestBias;
+            ArticlePiece.ApplyDrawOrder(gameObject, held ? LiftOrder : _rest);
         }
     }
 }

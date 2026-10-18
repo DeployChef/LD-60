@@ -6,10 +6,12 @@ namespace LD60.UI
 {
     public sealed class ArticleTray : MonoBehaviour
     {
-        [SerializeField] private string title = "Discard";
+        [SerializeField] private string title = "Save";
         [SerializeField] private int capacity;
         [SerializeField] private float slotScale = 0.4f;
         [SerializeField] private TMP_Text label;
+
+        public float SlotScale => slotScale;
 
         private readonly List<ArticlePiece> _pieces = new();
 
@@ -86,16 +88,11 @@ namespace LD60.UI
             var height = Mathf.Abs(transform.localScale.y);
             var x = transform.localPosition.x + Random.Range(-width * 0.34f, width * 0.34f);
             var y = transform.localPosition.y + Random.Range(-height * 0.32f, height * 0.32f);
-            var depth = -0.08f - Mathf.Max(0, _pieces.IndexOf(piece)) * 0.015f;
+            var depth = -0.08f;
             piece.transform.SetParent(transform.parent, false);
             piece.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-24f, 24f));
-            piece.transform.localScale = Vector3.one * Random.Range(slotScale * 0.85f, slotScale * 1.25f);
+            piece.transform.localScale = Vector3.one * slotScale;
             piece.transform.localPosition = new Vector3(x, y, depth);
-
-            var renderers = piece.GetComponentsInChildren<Renderer>(true);
-            var order = 36 + Mathf.Max(0, _pieces.IndexOf(piece)) * 6;
-            for (var i = 0; i < renderers.Length; i++)
-                renderers[i].sortingOrder = order + i;
         }
     }
 }

@@ -116,15 +116,17 @@ namespace LD60.UI
                 piece.transform.localPosition = new Vector3(
                     tray.x + UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
                     tray.y + UnityEngine.Random.Range(-spacing, spacing * 0.55f),
-                    -0.08f - i * 0.01f);
+                    -0.12f);
+                desk.GetComponent<NewspaperDesk>()?.PlaceLoose(piece);
             }
 
             if (note != null && !string.IsNullOrEmpty(delivery.Note))
             {
                 var slip = Instantiate(note, desk);
                 slip.Bind(delivery.Note);
-                slip.transform.localPosition = new Vector3(tray.x + 3.4f, tray.y, -0.08f);
+                slip.transform.localPosition = new Vector3(tray.x + 3.4f, tray.y, -0.12f);
                 slip.transform.localRotation = Quaternion.identity;
+                desk.GetComponent<NewspaperDesk>()?.Raise(slip.gameObject);
             }
         }
 

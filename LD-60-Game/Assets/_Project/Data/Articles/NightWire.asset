@@ -18,6 +18,7 @@ MonoBehaviour:
   title: Night Wire
   body: The presses ran after midnight.
   picture: {fileID: 0}
+  pictureLayout: {fileID: 11400000, guid: 2af6751cb1d5530429f459a84bff70d6, type: 2}
   fill: 0.25
   politics: 0
   social: 0

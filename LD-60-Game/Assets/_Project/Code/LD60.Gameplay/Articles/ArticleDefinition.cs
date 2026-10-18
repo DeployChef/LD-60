@@ -30,6 +30,7 @@ namespace LD60.Gameplay.Articles
         [SerializeField] private string title;
         [SerializeField, TextArea(3, 8)] private string body;
         [SerializeField] private Sprite picture;
+        [SerializeField] private ArticlePictureLayout pictureLayout;
         [SerializeField] private float fill;
         [SerializeField] private float politics;
         [SerializeField] private float social;
@@ -42,6 +43,7 @@ namespace LD60.Gameplay.Articles
         public string Title => title;
         public string Body => body;
         public Sprite Picture => picture;
+        public ArticlePictureLayout PictureLayout => pictureLayout;
         public float Fill => fill;
         public float Politics => politics;
         public float Social => social;
