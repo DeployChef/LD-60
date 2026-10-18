@@ -33,7 +33,7 @@ MonoBehaviour:
       HasValue: 0
     Logging:
       Value: 0
-      HasValue: 0
+      HasValue: 1
     SampleRate:
       Value: 0
       HasValue: 0
@@ -47,11 +47,11 @@ MonoBehaviour:
       Value: 0
       HasValue: 0
     RealChannelCount:
-      Value: 0
-      HasValue: 0
+      Value: 16
+      HasValue: 1
     DSPBufferLength:
-      Value: 0
-      HasValue: 0
+      Value: 4096
+      HasValue: 1
     DSPBufferCount:
       Value: 0
       HasValue: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
     CallbackHandler:
       Value: {fileID: 0}
       HasValue: 0
-  OutputTypeName: AUTODETECT
+  OutputTypeName: WEBAUDIO
   threadAffinities:
     Value: []
     HasValue: 0

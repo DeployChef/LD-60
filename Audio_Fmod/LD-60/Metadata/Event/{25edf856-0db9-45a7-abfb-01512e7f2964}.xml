@@ -154,6 +154,9 @@
 		<property name="length">
 			<value>2.0276511156438173</value>
 		</property>
+		<property name="maxVoices">
+			<value>1</value>
+		</property>
 		<relationship name="automators">
 			<destination>{c1b75623-d1b7-4599-9e8f-51f297a7c4a2}</destination>
 		</relationship>
@@ -173,6 +176,9 @@
 		</property>
 		<property name="length">
 			<value>1.0276511156438168</value>
+		</property>
+		<property name="maxVoices">
+			<value>1</value>
 		</property>
 		<relationship name="automators">
 			<destination>{4c4927fd-3754-4e01-8093-3299bd557cee}</destination>
@@ -194,6 +200,9 @@
 	<object class="MultiSound" id="{5fd9fe65-ad54-4881-9697-a7932ac890b1}">
 		<property name="start">
 			<value>12</value>
+		</property>
+		<property name="maxVoices">
+			<value>1</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{46efecf0-8950-4e0f-99f5-e9758621df59}</destination>

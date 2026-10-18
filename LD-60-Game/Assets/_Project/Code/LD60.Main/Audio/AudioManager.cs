@@ -55,6 +55,13 @@ namespace LD60.Main.Audio
 
         public void Play(string soundId)
         {
+            // WebGL: единственный аудио-движок — FMOD (§6.11 инструкции). Второй
+            // движок (Unity AudioSource) поверх FMOD даёт микротреск музыки при
+            // кликах и hover-спаме. UI-звуки в браузере появятся через event:/UI,
+            // когда Валентин добавит туда параметр-кликер (схема SfxAudio).
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+                return;
+
             if (catalog == null || !catalog.TryGet(soundId, out var sound))
                 return;
 

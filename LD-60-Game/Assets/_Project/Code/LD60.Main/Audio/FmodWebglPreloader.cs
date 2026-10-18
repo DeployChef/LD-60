@@ -79,6 +79,9 @@ namespace LD60.Main.Audio
             Stage = PreloadStage.Init;
             Progress01 = 0.05f;
             _ = RuntimeManager.StudioSystem;
+#if !UNITY_EDITOR
+            SilenceFmodNativeSpam();
+#endif
             await UniTask.NextFrame(cancellationToken);
 
             // 1. Банки. Имя банка без расширения: bankId = "Master", "Master.strings".
@@ -189,5 +192,33 @@ namespace LD60.Main.Audio
 
             return text.Length == 0 ? "пусто" : text.ToString().Trim();
         }
+
+#if !UNITY_EDITOR
+        private static FMOD.DEBUG_CALLBACK _fmodDebugSwallow;
+
+        /// <summary>
+        /// В релизном плеере плагин НЕ инициализирует FMOD-логирование
+        /// (RuntimeManager делает это только под UNITY_EDITOR || DEVELOPMENT_BUILD),
+        /// и FMOD печатает ошибки OS-слоя нативно в консоль браузера — спам
+        /// "FMOD_OS_CriticalSection_Enter/Leave: cannot enter NULL critical section".
+        /// Ставим пустой колбэк с уровнем NONE: путь вывода по умолчанию
+        /// отключается, консоль чистая. Ошибки загрузки банков это не глушит —
+        /// плагин кидает их как Unity-исключения (BankLoadException).
+        /// </summary>
+        private static void SilenceFmodNativeSpam()
+        {
+            if (_fmodDebugSwallow != null)
+                return;
+
+            _fmodDebugSwallow = SwallowDebugCallback;
+            FMOD.Debug.Initialize(FMOD.DEBUG_FLAGS.NONE, FMOD.DEBUG_MODE.CALLBACK, _fmodDebugSwallow, null);
+        }
+
+        [AOT.MonoPInvokeCallback(typeof(FMOD.DEBUG_CALLBACK))]
+        private static FMOD.RESULT SwallowDebugCallback(FMOD.DEBUG_FLAGS flags, IntPtr file, int line, IntPtr func, IntPtr message)
+        {
+            return FMOD.RESULT.OK;
+        }
+#endif
     }
 }
