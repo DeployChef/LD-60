@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7f31a5be66ec2534f90b444efef2157e
+guid: ac1e24bc6d365be48a9b13fb10070d4f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2421609084176155996
-    second: DialogueBackground_0
+      213: -2549121124309507319
+    second: DialogueBack7_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,11 +48,11 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 20, y: 20, z: 20, w: 20}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DialogueBackground_0
+      name: DialogueBack7_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1704
-        height: 883
+        width: 370
+        height: 158
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4aa32d04e57b46ed0800000000000000
-      internalID: -2421609084176155996
+      spriteID: 9036610e7d3bf9cd0800000000000000
+      internalID: -2549121124309507319
       vertices: []
       indices: 
       edges: []
@@ -126,7 +126,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      DialogueBackground_0: -2421609084176155996
+      DialogueBack7_0: -2549121124309507319
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

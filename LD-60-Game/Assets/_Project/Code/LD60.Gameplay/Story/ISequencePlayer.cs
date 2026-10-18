@@ -7,7 +7,7 @@ namespace LD60.Gameplay.Story
     public interface IDialogue
     {
         UniTask Say(string text, CancellationToken token);
-        UniTask<int> Choose(string[] options, CancellationToken token);
+        UniTask<int> Choose(string[] options, CancellationToken token, string prompt = null);
         void Hide();
     }
 

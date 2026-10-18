@@ -9,9 +9,14 @@ namespace LD60.UI
 
     public sealed class DeskStamp : MonoBehaviour
     {
+        [SerializeField] private Sprite stampSprite;
+        [SerializeField, Min(0f)] private float markHoldSeconds = 1f;
+
         private Tween _motion;
         private Vector3 _home;
         private Vector3 _homeScale;
+
+        public bool IsBusy => _motion != null && _motion.IsActive();
 
         private void OnDestroy()
         {
@@ -42,6 +47,7 @@ namespace LD60.UI
 
         private Sequence Press(NewspaperDesk board)
         {
+            const float returnDuration = 0.18f;
             var from = transform.position;
             var into = from + board.transform.forward * 0.16f;
             var renderer = GetComponent<SpriteRenderer>();
@@ -52,12 +58,14 @@ namespace LD60.UI
                 {
                     board.LeaveMark(
                         from,
-                        renderer != null ? renderer.sprite : null,
+                        stampSprite != null ? stampSprite : renderer != null ? renderer.sprite : null,
                         renderer != null ? renderer.sharedMaterial : null,
                         transform.localScale,
-                        renderer != null ? renderer.sortingLayerID : 0);
+                        renderer != null ? renderer.sortingLayerID : 0,
+                        stampSprite != null);
                 })
-                .Append(transform.DOMove(_home, 0.18f).SetEase(Ease.OutQuad))
+                .Append(transform.DOMove(_home, returnDuration).SetEase(Ease.OutQuad))
+                .AppendInterval(Mathf.Max(0f, markHoldSeconds - returnDuration))
                 .OnComplete(() =>
                 {
                     Rest(board);

@@ -62,14 +62,20 @@ namespace LD60.UI
             token.ThrowIfCancellationRequested();
         }
 
-        public async UniTask<int> Choose(string[] options, CancellationToken token)
+        public async UniTask<int> Choose(string[] options, CancellationToken token, string prompt = null)
         {
             ShowPanel(true);
+            if (line != null && prompt != null)
+                line.text = prompt;
             SetActive(line, line != null && !string.IsNullOrEmpty(line.text));
             ShowChoices(options);
-            await UniTask.Yield(token);
             try
             {
+                await UniTask.Yield(token);
+                // The click that chose the previous reply must not also choose this one.
+                while (!token.IsCancellationRequested && Mouse.current != null && Mouse.current.leftButton.isPressed)
+                    await UniTask.Yield(token);
+
                 while (!token.IsCancellationRequested)
                 {
                     var mouse = Mouse.current;

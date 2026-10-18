@@ -1151,6 +1151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e91a4b7f2d4e64a8b05d17c6e4a901, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.UI::LD60.UI.DeskStamp
+  stampSprite: {fileID: 21300000, guid: 7ffc9e293612aaa4a8f3057b834349d0, type: 3}
+  markHoldSeconds: 1
 --- !u!114 &9156815599157713940
 MonoBehaviour:
   m_ObjectHideFlags: 0

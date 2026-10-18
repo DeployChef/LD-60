@@ -129,7 +129,8 @@ namespace LD60.UI
             return _chapter.Allows(_desk != null ? _desk.Fill : 0f, out reason);
         }
 
-        public void LeaveMark(Vector3 world, Sprite sprite, Material material, Vector3 size, int layer)
+        public void LeaveMark(Vector3 world, Sprite sprite, Material material, Vector3 size, int layer,
+            bool preserveSpriteColor = false)
         {
             if (sprite == null)
                 return;
@@ -144,7 +145,7 @@ namespace LD60.UI
             var renderer = mark.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
             renderer.sharedMaterial = material;
-            renderer.color = new Color(0.78f, 0.1f, 0.08f, 0.42f);
+            renderer.color = preserveSpriteColor ? Color.white : new Color(0.78f, 0.1f, 0.08f, 0.42f);
             renderer.sortingLayerID = layer;
             renderer.sortingOrder = _draw;
             _draw++;
