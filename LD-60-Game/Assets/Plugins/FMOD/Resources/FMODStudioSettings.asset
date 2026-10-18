@@ -50,11 +50,11 @@ MonoBehaviour:
       Value: 0
       HasValue: 0
     DSPBufferLength:
-      Value: 0
-      HasValue: 0
+      Value: 2048
+      HasValue: 1
     DSPBufferCount:
-      Value: 0
-      HasValue: 0
+      Value: 4
+      HasValue: 1
     Plugins:
       Value: []
       HasValue: 0
@@ -459,7 +459,7 @@ MonoBehaviour:
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 0
-  BankLoadType: 0
+  BankLoadType: 1
   AutomaticSampleLoading: 1
   EncryptionKey: 
   ImportType: 0
@@ -482,7 +482,12 @@ MonoBehaviour:
   - Master.assets
   - Menu
   - Menu.assets
-  BanksToLoad: []
+  BanksToLoad:
+  - Master.assets
+  - Master
+  - Master.strings
+  - Menu.assets
+  - Menu
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
   AndroidUseOBB: 0
