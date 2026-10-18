@@ -43,23 +43,43 @@ namespace LD60.Editor
             var font = FindFont();
             var layer = SortingLayerId("DeskItem");
 
-            var dot = BuildForm("ArticleDot", sprite, material, font, layer, paper, new[] { Vector2.zero });
-            var line2H = BuildForm("ArticleLine2H", sprite, material, font, layer, paper,
+            var dot = LoadOrBuildForm("ArticleDot", sprite, material, font, layer, paper, new[] { Vector2.zero });
+            var line2H = LoadOrBuildForm("ArticleLine2H", sprite, material, font, layer, paper,
                 new[] { new Vector2(-0.5f, 0f), new Vector2(0.5f, 0f) });
-            var line2V = BuildForm("ArticleLine2V", sprite, material, font, layer, paper,
+            var line2V = LoadOrBuildForm("ArticleLine2V", sprite, material, font, layer, paper,
                 new[] { new Vector2(0f, 0.5f), new Vector2(0f, -0.5f) });
-            var line3H = BuildForm("ArticleLine3H", sprite, material, font, layer, paper,
+            var line3H = LoadOrBuildForm("ArticleLine3H", sprite, material, font, layer, paper,
                 new[] { new Vector2(-1f, 0f), new Vector2(0f, 0f), new Vector2(1f, 0f) });
-            var line3V = BuildForm("ArticleLine3V", sprite, material, font, layer, paper,
+            var line3V = LoadOrBuildForm("ArticleLine3V", sprite, material, font, layer, paper,
                 new[] { new Vector2(0f, 1f), new Vector2(0f, 0f), new Vector2(0f, -1f) });
-            var square = BuildForm("ArticleSquare", sprite, material, font, layer, paper,
+            var square = LoadOrBuildForm("ArticleSquare", sprite, material, font, layer, paper,
                 new[] { new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f) });
-            var note = BuildNote(sprite, material, font, layer);
-            var articles = WriteMorningArticles();
-            WireGame(dot, line2H, line2V, line3H, line3V, square, note);
-            BuildLookup(articles, new[] { square, line3H, line2V, dot, line2H, dot, line3V, line2H, line2V, dot, line3H });
+            var banner5x2 = BuildForm("ArticleBanner5x2", sprite, material, font, layer, paper,
+                new[]
+                {
+                    new Vector2(-2f, -0.5f), new Vector2(-1f, -0.5f), new Vector2(0f, -0.5f), new Vector2(1f, -0.5f), new Vector2(2f, -0.5f),
+                    new Vector2(-2f, 0.5f), new Vector2(-1f, 0.5f), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(2f, 0.5f)
+                });
+            var note = LoadOrBuildNote(sprite, material, font, layer);
+            WireGame(dot, line2H, line2V, line3H, line3V, square, banner5x2, note);
             AssetDatabase.SaveAssets();
-            Debug.Log("[Articles] Props, DayOne capsule and ArticleLookup are ready.");
+            Debug.Log("[Articles] Props and ArticleBanner5x2 are ready (existing article prefabs preserved).");
+        }
+
+        private static ArticlePiece LoadOrBuildForm(string name, Sprite sprite, Material material, TMP_FontAsset font, int layer, Color paperColor, Vector2[] cells)
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<ArticlePiece>(FormFolder + "/" + name + ".prefab");
+            if (existing != null)
+                return existing;
+            return BuildForm(name, sprite, material, font, layer, paperColor, cells);
+        }
+
+        private static NoteSlip LoadOrBuildNote(Sprite sprite, Material material, TMP_FontAsset font, int layer)
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<NoteSlip>(FormFolder + "/NoteSlip.prefab");
+            if (existing != null)
+                return existing;
+            return BuildNote(sprite, material, font, layer);
         }
 
         public static ArticleDefinition[] WriteMorningArticles()
@@ -170,20 +190,20 @@ namespace LD60.Editor
             Image picture = null;
             if (slot == 1)
             {
-                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 40f, new Vector2(0f, 0.62f), Vector2.one);
-                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 28f, Vector2.zero, new Vector2(1f, 0.62f));
+                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 24f, new Vector2(0f, 0.62f), Vector2.one);
+                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 18f, Vector2.zero, new Vector2(1f, 0.62f));
             }
             else if (slot == 2)
             {
-                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 36f, new Vector2(0f, 0.72f), Vector2.one);
+                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 24f, new Vector2(0f, 0.72f), Vector2.one);
                 picture = MakePicture(root.transform, sprite, new Vector2(0f, 0.34f), new Vector2(1f, 0.72f));
-                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 26f, Vector2.zero, new Vector2(1f, 0.34f));
+                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 18f, Vector2.zero, new Vector2(1f, 0.34f));
             }
             else
             {
                 picture = MakePicture(root.transform, sprite, new Vector2(0f, 0.58f), Vector2.one);
-                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 36f, new Vector2(0f, 0.38f), new Vector2(1f, 0.58f));
-                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 26f, Vector2.zero, new Vector2(1f, 0.38f));
+                title = MakeLabel(root.transform, "Title", font, FontStyles.Bold, 24f, new Vector2(0f, 0.38f), new Vector2(1f, 0.58f));
+                body = MakeLabel(root.transform, "Body", font, FontStyles.Normal, 18f, Vector2.zero, new Vector2(1f, 0.38f));
             }
 
             var face = root.AddComponent<ArticleFace>();
@@ -356,7 +376,7 @@ namespace LD60.Editor
             return article;
         }
 
-        private static void WireGame(ArticlePiece dot, ArticlePiece line2H, ArticlePiece line2V, ArticlePiece line3H, ArticlePiece line3V, ArticlePiece square, NoteSlip note)
+        private static void WireGame(ArticlePiece dot, ArticlePiece line2H, ArticlePiece line2V, ArticlePiece line3H, ArticlePiece line3V, ArticlePiece square, ArticlePiece banner5x2, NoteSlip note)
         {
             var scene = EditorSceneManager.GetSceneByName("Game");
             if (!scene.isLoaded)
@@ -370,6 +390,13 @@ namespace LD60.Editor
                 if (child != null)
                     Object.DestroyImmediate(child.gameObject);
             }
+
+            var unitSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Blocking/Unit.png");
+            var unitMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/_Project/Art/Blocking/Blocking-Unlit.mat");
+            var deskLayer = SortingLayerId("DeskItem");
+
+            var foodSandwich = EnsureFoodProp(desk, "FoodSandwich", new Vector3(-7.4f, -3.7f, -0.06f), new Vector3(1.2f, 0.9f, 1f), new Color(0.86f, 0.72f, 0.45f, 1f), unitSprite, unitMat, deskLayer);
+            var foodPie = EnsureFoodProp(desk, "FoodPie", new Vector3(-5.9f, -3.7f, -0.06f), new Vector3(1.1f, 0.85f, 1f), new Color(0.78f, 0.52f, 0.28f, 1f), unitSprite, unitMat, deskLayer);
 
             var slotObject = GameObject.Find("MessageBox");
             if (slotObject.GetComponent<BoxCollider>() == null)
@@ -388,6 +415,7 @@ namespace LD60.Editor
             data.FindProperty("line3H").objectReferenceValue = line3H;
             data.FindProperty("line3V").objectReferenceValue = line3V;
             data.FindProperty("square").objectReferenceValue = square;
+            data.FindProperty("banner5x2").objectReferenceValue = banner5x2;
             data.FindProperty("note").objectReferenceValue = note;
             data.FindProperty("desk").objectReferenceValue = desk;
             var pile = desk.Find("Pile");
@@ -405,11 +433,34 @@ namespace LD60.Editor
                 deskData.FindProperty("line3H").objectReferenceValue = line3H;
                 deskData.FindProperty("line3V").objectReferenceValue = line3V;
                 deskData.FindProperty("square").objectReferenceValue = square;
+                deskData.FindProperty("banner5x2").objectReferenceValue = banner5x2;
+                deskData.FindProperty("foodSandwich").objectReferenceValue = foodSandwich;
+                deskData.FindProperty("foodPie").objectReferenceValue = foodPie;
                 deskData.ApplyModifiedPropertiesWithoutUndo();
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
+        }
+
+        private static GameObject EnsureFoodProp(Transform desk, string name, Vector3 localPos, Vector3 localScale, Color color, Sprite sprite, Material mat, int sortingLayer)
+        {
+            var existing = desk.Find(name);
+            var go = existing != null ? existing.gameObject : new GameObject(name);
+            go.transform.SetParent(desk, false);
+            go.transform.localPosition = localPos;
+            go.transform.localRotation = Quaternion.Euler(0f, 0f, name == "FoodSandwich" ? -8f : 6f);
+            go.transform.localScale = localScale;
+            var sr = go.GetComponent<SpriteRenderer>();
+            if (sr == null)
+                sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.sharedMaterial = mat;
+            sr.color = color;
+            sr.sortingLayerID = sortingLayer;
+            sr.sortingOrder = 15;
+            go.SetActive(false);
+            return go;
         }
 
         private static void BuildLookup(ArticleDefinition[] articles, ArticlePiece[] forms)
