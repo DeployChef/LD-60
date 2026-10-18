@@ -11,30 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcc3e600-cd66-45e3-bc99-4c53a57c2cc1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/AudioFile/{1b5dc94a-04ce-42d3-8e1e-58daded80de7}.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.bank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Build/Desktop/Desktop/Master.strings.bank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/Event/{bd73703c-edc6-44b0-83bd-d904803965a3}.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Audio_Fmod/LD-60/Metadata/Event/{bd73703c-edc6-44b0-83bd-d904803965a3}.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/indexLayout.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/Build Profiles/Web - Desktop - Development.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/Build Profiles/Web - Desktop - Development.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/LD60.Main.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/LD60.Main.asmdef" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Startup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/PageGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Articles/PageGrid.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MainMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MainMenuController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MenuButtonHover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/MenuButtonHover.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/PauseMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/PauseMenuController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Data/UI/MenuIntro.playable" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Data/UI/MenuIntro.playable" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/Game.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -42,12 +29,12 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Views/GuestView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_Project/Data/Story/Credits.asset" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_Project/Data/Story/DayOne.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@bf35135da627/Runtime/UniTaskScheduler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/jp.hadashikick.vcontainer@dcf16cda6a65/Runtime/Unity/LifetimeScope.AwakeScheduler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/jp.hadashikick.vcontainer@dcf16cda6a65/Runtime/Unity/LifetimeScope.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/1c/c7dbc6b7/CancellationTokenSource.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8a522b806eac9bb894e6e4c5fe87f353457535e769447e79c6b396beecb5d0/System.Threading.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -58,24 +45,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging efim&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "efim",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.4.0f1\Editor\Unity.exe" />
@@ -97,11 +85,11 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="31504">
       <option name="allowRunningInParallel" value="false" />
       <option name="coreClr" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="31504" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -150,6 +138,19 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs</url>
+          <line>57</line>
+          <properties documentPath="C:\GitUnity\LD-60\LD-60-Game\Assets\_Project\Code\LD60.Main\Audio\FmodWebglPreloader.cs" containingFunctionPresentation="Method 'PrepareAsync'">
+            <startOffsets>
+              <option value="2264" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2296" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
