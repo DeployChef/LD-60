@@ -13,7 +13,6 @@ namespace LD60.UI
 
         private InputAction _skip;
         private bool _playing;
-        private bool _promptShown;
 
         public event Action Finished;
 
@@ -44,9 +43,8 @@ namespace LD60.UI
         {
             gameObject.SetActive(true);
             _playing = true;
-            _promptShown = false;
             if (skipHint != null)
-                skipHint.SetActive(false);
+                skipHint.SetActive(true);
 
             if (director == null || director.playableAsset == null)
             {
@@ -79,14 +77,6 @@ namespace LD60.UI
         {
             if (!_playing)
                 return;
-
-            if (!_promptShown)
-            {
-                _promptShown = true;
-                if (skipHint != null)
-                    skipHint.SetActive(true);
-                return;
-            }
 
             Skip();
         }
