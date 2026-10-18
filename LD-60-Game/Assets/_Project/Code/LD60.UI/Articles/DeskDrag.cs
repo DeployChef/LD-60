@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +20,8 @@ namespace LD60.UI
         private Vector3 _homeScale;
         private Vector3 _lift;
         private float _risen;
-        private Coroutine _shake;
+        private Tween _rise;
+        private Tween _shake;
 
         private void Awake()
         {
@@ -99,11 +100,8 @@ namespace LD60.UI
             if (top != this)
                 return;
 
-            if (_shake != null)
-            {
-                StopCoroutine(_shake);
-                _shake = null;
-            }
+            _shake?.Kill();
+            _rise?.Kill();
 
             var plane = Surface(transform.position);
             if (!plane.Raycast(ray, out var distance))
@@ -117,6 +115,9 @@ namespace LD60.UI
 
             _lift = SurfaceNormal() * LiftDistance;
             _risen = 0f;
+            _rise = DOTween.To(() => _risen, value => _risen = value, 1f, 0.16f)
+                .SetEase(Ease.OutQuad)
+                .SetTarget(this);
             _grab = transform.position - ray.GetPoint(distance);
             _held = true;
             if (piece != null && _views != null)
@@ -132,7 +133,6 @@ namespace LD60.UI
             if (!plane.Raycast(ray, out var distance))
                 return;
 
-            _risen = Mathf.MoveTowards(_risen, 1f, Time.deltaTime / 0.16f);
             var desired = ray.GetPoint(distance) + _grab - _lift * _risen;
             transform.position = KeepOnScreen(camera, desired);
             var piece = GetComponent<ArticlePiece>();
@@ -143,6 +143,7 @@ namespace LD60.UI
         private void Drop()
         {
             _held = false;
+            _rise?.Kill();
             transform.position += _lift * _risen;
             var piece = GetComponent<ArticlePiece>();
             if (piece != null && _views != null)
@@ -173,31 +174,24 @@ namespace LD60.UI
             if (!string.IsNullOrEmpty(reason))
                 _board.Notify(reason, transform.position);
 
-            if (_shake != null)
-                StopCoroutine(_shake);
-            _shake = StartCoroutine(ShakeHome());
-        }
-
-        private IEnumerator ShakeHome()
-        {
-            var piece = GetComponent<ArticlePiece>();
             var origin = transform.position;
             var right = SurfaceTransform().right;
-            var time = 0f;
-            const float length = 0.32f;
-            while (time < length)
-            {
-                time += Time.deltaTime;
-                var fade = 1f - time / length;
-                transform.position = origin + right * (Mathf.Sin(time * 46f) * 0.14f * fade);
-                yield return null;
-            }
-
-            transform.position = _home;
-            transform.localScale = _homeScale;
-            if (piece != null && _board != null && !_board.Settle(piece, out _))
-                _board.PlaceLoose(piece);
-            _shake = null;
+            _shake?.Kill();
+            _shake = DOTween.To(() => 0f, time =>
+                {
+                    var fade = 1f - time;
+                    transform.position = origin + right * (Mathf.Sin(time * 14.72f) * 0.14f * fade);
+                }, 1f, 0.32f)
+                .SetEase(Ease.Linear)
+                .SetTarget(this)
+                .OnComplete(() =>
+                {
+                    transform.position = _home;
+                    transform.localScale = _homeScale;
+                    if (piece != null && _board != null && !_board.Settle(piece, out _))
+                        _board.PlaceLoose(piece);
+                    _shake = null;
+                });
         }
 
         private int TopOrder()

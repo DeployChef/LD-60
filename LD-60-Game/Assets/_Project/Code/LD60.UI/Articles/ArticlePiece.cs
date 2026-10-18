@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using LD60.Gameplay.Articles;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ namespace LD60.UI
 
         public ArticleDefinition Article => article;
 
-        private Coroutine _motion;
+        private Tween _motion;
 
         private void Awake()
         {
@@ -84,8 +84,28 @@ namespace LD60.UI
             if (_motion == null)
                 return;
 
-            StopCoroutine(_motion);
+            _motion.Kill();
             _motion = null;
+        }
+
+        public void PlayLift()
+        {
+            if (!isActiveAndEnabled)
+                return;
+
+            StopMotion();
+            var spin = transform.DOLocalRotateQuaternion(Quaternion.identity, 0.2f).SetEase(Ease.OutQuad);
+            var shadow = transform.Find("Shadow");
+            if (shadow == null)
+            {
+                _motion = spin.SetTarget(this);
+                return;
+            }
+
+            _motion = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(spin)
+                .Join(shadow.DOLocalMove(ShadowOut(), 0.2f).SetEase(Ease.OutQuad));
         }
 
         public void PlayDrop()
@@ -94,7 +114,50 @@ namespace LD60.UI
                 return;
 
             StopMotion();
-            _motion = StartCoroutine(DropMotion());
+            var endPos = transform.localPosition;
+            var endRot = transform.localRotation;
+            var startPos = endPos;
+            startPos.z -= 0.26f;
+            transform.localPosition = startPos;
+            transform.localRotation = Quaternion.Euler(18f, 0f, 0f);
+            var drop = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(transform.DOLocalMove(endPos, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOLocalRotateQuaternion(endRot, 0.32f).SetEase(Ease.OutQuad));
+            var shadow = transform.Find("Shadow");
+            if (shadow != null)
+                drop.Join(shadow.DOLocalMove(ShadowUnder(), 0.32f).SetEase(Ease.OutQuad));
+            _motion = drop;
+        }
+
+        public void PlayDropOnto(Vector3 worldPos, Quaternion worldRot, float worldScale, TweenCallback done)
+        {
+            if (!isActiveAndEnabled)
+            {
+                if (done != null)
+                    done();
+                return;
+            }
+
+            StopMotion();
+            var parent = transform.parent;
+            var endPos = parent != null ? parent.InverseTransformPoint(worldPos) : worldPos;
+            var endRot = parent != null ? Quaternion.Inverse(parent.rotation) * worldRot : worldRot;
+            var startPos = transform.localPosition;
+            startPos.z -= 0.26f;
+            transform.localPosition = startPos;
+            transform.localRotation = Quaternion.Euler(18f, 0f, 0f);
+            var drop = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(transform.DOLocalMove(endPos, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOLocalRotateQuaternion(endRot, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOScale(Vector3.one * worldScale, 0.32f).SetEase(Ease.OutQuad));
+            var shadow = transform.Find("Shadow");
+            if (shadow != null)
+                drop.Join(shadow.DOLocalMove(ShadowUnder(), 0.32f).SetEase(Ease.OutQuad));
+            if (done != null)
+                drop.OnComplete(done);
+            _motion = drop;
         }
 
         public void CopyCells(List<Vector2> centers)
@@ -176,7 +239,7 @@ namespace LD60.UI
             var shadow = new GameObject("Shadow");
             shadow.transform.SetParent(transform, false);
             shadow.transform.localRotation = Quaternion.identity;
-            shadow.transform.localPosition = paper.localPosition + new Vector3(0.07f, -0.08f, 0.03f);
+            shadow.transform.localPosition = paper.localPosition + new Vector3(0f, 0f, 0.03f);
             shadow.transform.localScale = paper.localScale;
             var renderer = shadow.AddComponent<SpriteRenderer>();
             renderer.sprite = source.sprite;
@@ -186,29 +249,22 @@ namespace LD60.UI
             renderer.sortingOrder = source.sortingOrder - 1;
         }
 
-        private IEnumerator DropMotion()
+        private Vector3 ShadowUnder()
         {
-            var endPos = transform.localPosition;
-            var endRot = transform.localRotation;
-            var startPos = endPos;
-            startPos.z -= 0.26f;
-            var startRot = Quaternion.Euler(18f, 0f, 0f) * endRot;
-            transform.localPosition = startPos;
-            transform.localRotation = startRot;
-            var time = 0f;
-            const float length = 0.32f;
-            while (time < length)
-            {
-                time += Time.deltaTime;
-                var t = Mathf.SmoothStep(0f, 1f, time / length);
-                transform.localPosition = Vector3.Lerp(startPos, endPos, t);
-                transform.localRotation = Quaternion.Slerp(startRot, endRot, t);
-                yield return null;
-            }
+            var paper = transform.Find("Paper");
+            var origin = paper != null ? paper.localPosition : Vector3.zero;
+            origin.z += 0.03f;
+            return origin;
+        }
 
-            transform.localPosition = endPos;
-            transform.localRotation = endRot;
-            _motion = null;
+        private Vector3 ShadowOut()
+        {
+            return ShadowUnder() + new Vector3(0.07f, -0.08f, 0f);
+        }
+
+        private void OnDisable()
+        {
+            StopMotion();
         }
 
         private static void Fade(ArticleFace face, float alpha)

@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using DG.Tweening;
 using LD60.Core.Bus;
 using LD60.Gameplay.Articles;
 using LD60.Gameplay.Context;
@@ -32,7 +32,7 @@ namespace LD60.UI
         private StoryContext _context;
         private ChapterDefinition _chapter;
         private TextMeshPro _notice;
-        private float _noticeUntil;
+        private Tween _noticeFade;
         private IDisposable _day;
         private IDisposable _gift;
 
@@ -50,16 +50,9 @@ namespace LD60.UI
 
         private void OnDestroy()
         {
+            _noticeFade?.Kill();
             _day?.Dispose();
             _gift?.Dispose();
-        }
-
-        private void Update()
-        {
-            if (_notice == null || _notice.alpha <= 0f || Time.time < _noticeUntil)
-                return;
-
-            _notice.alpha = Mathf.MoveTowards(_notice.alpha, 0f, Time.deltaTime * 1.4f);
         }
 
         public void Hover(ArticlePiece piece)
@@ -96,7 +89,10 @@ namespace LD60.UI
             _notice.transform.rotation = transform.rotation;
             _notice.text = message ?? string.Empty;
             _notice.alpha = 1f;
-            _noticeUntil = Time.time + 1.8f;
+            _noticeFade?.Kill();
+            _noticeFade = DOTween.To(() => _notice.alpha, value => _notice.alpha = value, 0f, 0.7f)
+                .SetDelay(1.8f)
+                .SetTarget(this);
         }
 
         public void PlaceNote(NoteSlip slip)
@@ -153,7 +149,7 @@ namespace LD60.UI
             renderer.sortingOrder = _draw;
             _draw++;
             mark.AddComponent<StampMark>();
-            StartCoroutine(PressMark(mark.transform));
+            PressMark(mark.transform);
         }
 
         public void CommitStamp()
@@ -171,8 +167,8 @@ namespace LD60.UI
             piece.StopMotion();
             if (piece.transform.parent != transform)
                 piece.transform.SetParent(transform, true);
-            piece.transform.localRotation = Quaternion.identity;
             piece.transform.localScale = Vector3.one;
+            piece.PlayLift();
             Publish();
         }
 
@@ -183,19 +179,40 @@ namespace LD60.UI
                 return true;
 
             EndHover(piece);
+            piece.StopMotion();
             piece.transform.localRotation = Quaternion.identity;
             piece.transform.localScale = Vector3.one;
             var point = CenterOf(piece);
             if (save != null && save.Contains(point))
             {
+                var from = piece.transform.position;
                 if (!save.TryAccept(piece))
                 {
                     reason = "Save is full.";
                     return false;
                 }
 
+                var restPos = piece.transform.localPosition;
+                var restRot = piece.transform.localRotation;
+                var restScale = piece.transform.localScale;
+                var worldPos = piece.transform.position;
+                var worldRot = piece.transform.rotation;
+                var tray = save.transform;
+                piece.transform.SetParent(transform, false);
+                piece.transform.localScale = Vector3.one;
+                piece.transform.localRotation = Quaternion.identity;
+                piece.transform.position = from;
                 Raise(piece.gameObject);
-                piece.PlayDrop();
+                piece.PlayDropOnto(worldPos, worldRot, save.SlotScale, () =>
+                {
+                    if (piece == null)
+                        return;
+
+                    piece.transform.SetParent(tray, false);
+                    piece.transform.localPosition = restPos;
+                    piece.transform.localRotation = restRot;
+                    piece.transform.localScale = restScale;
+                });
                 Publish();
                 return true;
             }
@@ -276,7 +293,10 @@ namespace LD60.UI
 
             var marks = GetComponentsInChildren<StampMark>(true);
             for (var i = 0; i < marks.Length; i++)
+            {
+                DOTween.Kill(marks[i].transform);
                 Destroy(marks[i].gameObject);
+            }
 
             var pieces = GetComponentsInChildren<ArticlePiece>(true);
             for (var i = 0; i < pieces.Length; i++)
@@ -482,24 +502,17 @@ namespace LD60.UI
             return new Vector2(extents.x * Mathf.Abs(scale.x), extents.y * Mathf.Abs(scale.y));
         }
 
-        private IEnumerator PressMark(Transform mark)
+        private static void PressMark(Transform mark)
         {
-            var size = mark != null ? mark.localScale : Vector3.one;
-            var time = 0f;
-            const float length = 0.22f;
-            while (time < length && mark != null)
-            {
-                time += Time.deltaTime;
-                var t = time / length;
-                var scale = t < 0.55f
-                    ? Mathf.Lerp(1.4f, 0.78f, t / 0.55f)
-                    : Mathf.Lerp(0.78f, 1f, (t - 0.55f) / 0.45f);
-                mark.localScale = size * scale;
-                yield return null;
-            }
+            if (mark == null)
+                return;
 
-            if (mark != null)
-                mark.localScale = size;
+            var size = mark.localScale;
+            mark.localScale = size * 1.4f;
+            DOTween.Sequence()
+                .SetTarget(mark)
+                .Append(mark.DOScale(size * 0.78f, 0.12f).SetEase(Ease.InQuad))
+                .Append(mark.DOScale(size, 0.1f).SetEase(Ease.OutQuad));
         }
 
         private Vector3 CenterOf(ArticlePiece piece)

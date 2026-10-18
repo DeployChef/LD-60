@@ -8,7 +8,7 @@ namespace LD60.UI
     {
         [SerializeField] private string title = "Save";
         [SerializeField] private int capacity;
-        [SerializeField] private float slotScale = 0.4f;
+        [SerializeField] private float slotScale = 1.15f;
         [SerializeField] private TMP_Text label;
 
         public float SlotScale => slotScale;
@@ -60,14 +60,11 @@ namespace LD60.UI
 
         public bool Contains(Vector3 world)
         {
-            var sprite = GetComponent<SpriteRenderer>();
-            if (sprite == null || sprite.sprite == null)
+            if (!TryArea(out var min, out var max))
                 return false;
 
             var local = transform.InverseTransformPoint(world);
-            var center = sprite.sprite.bounds.center;
-            var extents = sprite.sprite.bounds.extents;
-            return Mathf.Abs(local.x - center.x) <= extents.x && Mathf.Abs(local.y - center.y) <= extents.y;
+            return local.x >= min.x && local.x <= max.x && local.y >= min.y && local.y <= max.y;
         }
 
         public void Release(ArticlePiece piece)
@@ -109,21 +106,91 @@ namespace LD60.UI
 
         private void Toss(ArticlePiece piece)
         {
-            var sprite = GetComponent<SpriteRenderer>();
-            var extent = sprite != null && sprite.sprite != null
-                ? sprite.sprite.bounds.extents
-                : new Vector3(0.5f, 0.5f, 0f);
             piece.transform.SetParent(transform, false);
-            piece.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-24f, 24f));
+            piece.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-14f, 14f));
             var parentScale = transform.lossyScale;
             piece.transform.localScale = new Vector3(
                 slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.x)),
                 slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.y)),
                 slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.z)));
-            piece.transform.localPosition = new Vector3(
-                Random.Range(-extent.x * 0.55f, extent.x * 0.55f),
-                Random.Range(-extent.y * 0.5f, extent.y * 0.5f),
-                -0.05f);
+
+            if (!TryArea(out var areaMin, out var areaMax))
+            {
+                piece.transform.localPosition = new Vector3(0f, 0f, -0.05f);
+                return;
+            }
+
+            var half = PieceHalf(piece);
+            var min = areaMin + half;
+            var max = areaMax - half;
+            if (min.x > max.x)
+            {
+                var mid = (areaMin.x + areaMax.x) * 0.5f;
+                min.x = mid;
+                max.x = mid;
+            }
+
+            if (min.y > max.y)
+            {
+                var mid = (areaMin.y + areaMax.y) * 0.5f;
+                min.y = mid;
+                max.y = mid;
+            }
+
+            piece.transform.localPosition = new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), -0.05f);
         }
+
+        private Vector2 PieceHalf(ArticlePiece piece)
+        {
+            var paper = piece.transform.Find("Paper");
+            var renderer = paper != null ? paper.GetComponent<SpriteRenderer>() : null;
+            if (renderer == null || renderer.sprite == null)
+                return new Vector2(0.5f, 0.5f);
+
+            var extents = renderer.sprite.bounds.extents;
+            var scale = paper.lossyScale;
+            var tray = transform.lossyScale;
+            var halfX = extents.x * Mathf.Abs(scale.x) / Mathf.Max(0.01f, Mathf.Abs(tray.x));
+            var halfY = extents.y * Mathf.Abs(scale.y) / Mathf.Max(0.01f, Mathf.Abs(tray.y));
+            var angle = piece.transform.localEulerAngles.z * Mathf.Deg2Rad;
+            var cosine = Mathf.Abs(Mathf.Cos(angle));
+            var sine = Mathf.Abs(Mathf.Sin(angle));
+            return new Vector2(halfX * cosine + halfY * sine, halfX * sine + halfY * cosine);
+        }
+
+        private bool TryArea(out Vector2 min, out Vector2 max)
+        {
+            var sprite = GetComponent<SpriteRenderer>();
+            if (sprite == null || sprite.sprite == null)
+            {
+                min = Vector2.zero;
+                max = Vector2.zero;
+                return false;
+            }
+
+            var bounds = sprite.sprite.bounds;
+            min = bounds.min;
+            max = bounds.max;
+            return true;
+        }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            if (!TryArea(out var min, out var max))
+                return;
+
+            var z = -0.02f;
+            var a = transform.TransformPoint(new Vector3(min.x, min.y, z));
+            var b = transform.TransformPoint(new Vector3(max.x, min.y, z));
+            var c = transform.TransformPoint(new Vector3(max.x, max.y, z));
+            var d = transform.TransformPoint(new Vector3(min.x, max.y, z));
+            Gizmos.color = new Color(0.35f, 0.9f, 0.4f, 0.95f);
+            Gizmos.DrawLine(a, b);
+            Gizmos.DrawLine(b, c);
+            Gizmos.DrawLine(c, d);
+            Gizmos.DrawLine(d, a);
+        }
+#endif
     }
 }
