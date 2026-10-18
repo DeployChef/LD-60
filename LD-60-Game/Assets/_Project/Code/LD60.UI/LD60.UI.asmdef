@@ -10,7 +10,8 @@
         "Unity.UGUI",
         "Unity.InputSystem",
         "Unity.Cinemachine",
-        "LD60.Views"
+        "LD60.Views",
+        "FMODUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -36,6 +36,7 @@
 		</relationship>
 		<relationship name="banks">
 			<destination>{ffaa13a2-0882-47b7-89ec-5561b7b5f2bc}</destination>
+			<destination>{22f6e899-41ad-41fa-b38f-06a2a8871eb3}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{af42a85b-d8d0-4761-9584-1001632dddcf}">
@@ -70,7 +71,7 @@
 			<value>3</value>
 		</property>
 		<property name="triggerCooldown">
-			<value>120</value>
+			<value>380</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{0350e048-e55b-45e1-9f78-728780ada095}" />

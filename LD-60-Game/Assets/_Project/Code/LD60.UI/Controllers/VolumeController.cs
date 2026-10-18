@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using LD60.Core.Audio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +15,12 @@ namespace LD60.UI
 
         private IAudioManager _audio;
 
+        private Bus _masterBus;
+        private Bus _sfxBus;
+        private Bus _musicBus;
+        private Bus _uiBus;
+        private Bus _dialogBus;
+
         [Inject]
         public void Construct(IAudioManager audio)
         {
@@ -25,8 +33,16 @@ namespace LD60.UI
             masterSlider.onValueChanged.AddListener(OnMasterChanged);
             sfxSlider.onValueChanged.AddListener(OnSfxChanged);
             musicSlider.onValueChanged.AddListener(OnMusicChanged);
-        }
 
+
+
+
+            _masterBus = RuntimeManager.GetBus("bus:/");
+            _musicBus = RuntimeManager.GetBus("bus:/all_music");
+            _dialogBus = RuntimeManager.GetBus("bus:/dialog_gr");
+            _sfxBus = RuntimeManager.GetBus("bus:/sfx_gr");
+            _uiBus = RuntimeManager.GetBus("bus:/ui");
+        }
         private void OnEnable()
         {
             Refresh();
