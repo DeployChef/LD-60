@@ -17,6 +17,11 @@ namespace LD60.UI
         [SerializeField] private PageGrid page;
         [SerializeField] private ArticleTray save;
         [SerializeField] private float deskScale = 0.75f;
+        [SerializeField] private Vector2 incomingCenter = new(-4.8f, 0.3f);
+        [SerializeField] private float incomingWidth = 1.2f;
+        [SerializeField] private float incomingHeight = 4.8f;
+        [SerializeField] private float horizontalSpread = 0.12f;
+        [SerializeField] private Vector2 notePosition = new(5.7f, 3.35f);
         [SerializeField] private TMP_Text stats;
         [SerializeField] private ArticlePiece dot;
         [SerializeField] private ArticlePiece line2H;
@@ -103,13 +108,7 @@ namespace LD60.UI
             slip.transform.SetParent(transform, false);
             slip.transform.localRotation = Quaternion.identity;
             slip.transform.localScale = Vector3.one;
-            var half = SurfaceHalf();
-            var note = NoteHalf(slip);
-            const float margin = 0.5f;
-            slip.transform.localPosition = new Vector3(
-                -half.x + margin + note.x,
-                half.y - margin - note.y,
-                -0.12f);
+            slip.transform.localPosition = new Vector3(notePosition.x, notePosition.y, -0.12f);
             Raise(slip.gameObject);
         }
 
@@ -461,18 +460,13 @@ namespace LD60.UI
 
         private Vector3 IncomingSpot(int index, int count)
         {
-            var half = SurfaceHalf();
             var columns = count < 3 ? Mathf.Max(1, count) : 3;
             var rows = Mathf.Max(1, Mathf.CeilToInt(count / (float)columns));
             var column = index % columns;
             var row = index / columns;
-            var left = -half.x + 1.15f;
-            var right = -4.15f;
-            var bottom = -half.y + 1.05f;
-            var top = half.y - 2.55f;
-            var x = Mathf.Lerp(left, right, (column + 0.5f) / columns);
-            var y = Mathf.Lerp(top, bottom, (row + 0.5f) / rows);
-            x += UnityEngine.Random.Range(-0.28f, 0.28f);
+            var x = incomingCenter.x + incomingWidth * ((column + 0.5f) / columns - 0.5f);
+            var y = incomingCenter.y + incomingHeight * (0.5f - (row + 0.5f) / rows);
+            x += UnityEngine.Random.Range(-horizontalSpread, horizontalSpread);
             y += UnityEngine.Random.Range(-0.22f, 0.22f);
             return new Vector3(x, y, -0.08f);
         }

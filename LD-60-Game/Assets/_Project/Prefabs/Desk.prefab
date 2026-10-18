@@ -2314,6 +2314,11 @@ MonoBehaviour:
   page: {fileID: 6338704105186278904}
   save: {fileID: 6779458293668383908}
   deskScale: 0.75
+  incomingCenter: {x: -4.8, y: 0.3}
+  incomingWidth: 1.2
+  incomingHeight: 4.8
+  horizontalSpread: 0.12
+  notePosition: {x: 5.7, y: 3.35}
   stats: {fileID: 3179921672708017575}
   dot: {fileID: 8398376816932303169, guid: c2a42fd1090e5b84ea16b349b5247e8e, type: 3}
   line2H: {fileID: 3476868540136927820, guid: aa15ac28c13a9bf43bdef1e2fbc3f482, type: 3}
