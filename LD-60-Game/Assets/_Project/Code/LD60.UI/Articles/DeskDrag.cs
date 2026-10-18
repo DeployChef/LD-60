@@ -100,6 +100,10 @@ namespace LD60.UI
             if (top != this)
                 return;
 
+            var stamp = GetComponent<DeskStamp>();
+            if (stamp != null && stamp.IsBusy)
+                return;
+
             _shake?.Kill();
             _rise?.Kill();
 

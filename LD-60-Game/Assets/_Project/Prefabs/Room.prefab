@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1843307139694954219}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,18 +56,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132645680951239684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.0068067997, w: 0.9999769}
   m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3321578780028484071}
   m_Father: {fileID: 7497813867928564919}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.78}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.2}
-  m_SizeDelta: {x: 6.1, y: 2.45}
+  m_AnchoredPosition: {x: 0.01, y: 1.485}
+  m_SizeDelta: {x: 6.1, y: 1.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1652965294545566579
 MeshRenderer:
@@ -147,8 +147,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279376417
-  m_fontColor: {r: 0.13, g: 0.1, b: 0.07, a: 1}
+    rgba: 4290106073
+  m_fontColor: {r: 0.8490566, g: 0.8234519, b: 0.70888215, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 2212437654217926755}
   - component: {fileID: 1495948013663046881}
   - component: {fileID: 2008839978685153289}
+  - component: {fileID: 6231840467378327213}
   m_Layer: 0
   m_Name: Choice1
   m_TagString: Untagged
@@ -240,14 +241,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2223572240093038871}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.008726535, w: 0.9999619}
+  m_LocalRotation: {x: 0, y: 0, z: 0.008726558, w: 0.999962}
   m_LocalPosition: {x: 0, y: -0.65000004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1507861071242401951}
   m_Father: {fileID: 3618686725267390831}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1}
 --- !u!212 &2212437654217926755
 SpriteRenderer:
   serializedVersion: 2
@@ -297,12 +298,12 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 12
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: bed68302c9e714440ba998e58283a1cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8b455cefdea051f4da5f067110312dc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 6.1, y: 1.02}
+  m_Size: {x: 3.99, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -326,7 +327,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.1, y: 1.02, z: 0.2}
+  m_Size: {x: 3.99, y: 1.02, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2008839978685153289
 MonoBehaviour:
@@ -342,12 +343,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceButton
   background: {fileID: 2212437654217926755}
   label: {fileID: 5393523632058958606}
-  normalSprite: {fileID: 21300000, guid: bed68302c9e714440ba998e58283a1cb, type: 3}
+  normalSprite: {fileID: 21300000, guid: 8b455cefdea051f4da5f067110312dc1, type: 3}
   activeSprite: {fileID: 21300000, guid: e9c63d12070c9694ca152063cf720031, type: 3}
-  normalColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 1, b: 0.78431374, a: 1}
   tilt: 1
   duration: 0.12
+--- !u!114 &6231840467378327213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2223572240093038871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2871779ce7676a46bf7de246f599392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceLayout
+  label: {fileID: 5393523632058958606}
+  padding: {x: 0.35, y: 0.13}
+  minimumSize: {x: 1, y: 1.02}
 --- !u!1 &3033468409479371344
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +389,7 @@ Transform:
   m_GameObject: {fileID: 3033468409479371344}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.10625, y: 0.371875, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -408,8 +424,8 @@ Transform:
   m_GameObject: {fileID: 3870186153849876338}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.56, y: 0.371875, z: 0.75}
-  m_LocalScale: {x: 5.236, y: 7.8539996, z: 1}
+  m_LocalPosition: {x: 4.5, y: 0, z: 0}
+  m_LocalScale: {x: 0.67, y: 0.67, z: 0.67}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 919259294433945788}
@@ -489,7 +505,7 @@ MonoBehaviour:
   body: {fileID: 4274329274345340723}
   offscreenPoint: {fileID: 5776501853935907039}
   windowPoint: {fileID: 2790597106532015499}
-  walkSeconds: 0.75
+  walkSeconds: 0.375
 --- !u!1 &3971683053913006278
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,6 +609,7 @@ GameObject:
   - component: {fileID: 928524384972398693}
   - component: {fileID: 8150146473467126872}
   - component: {fileID: 3612192796888286479}
+  - component: {fileID: 1176056238405112456}
   m_Layer: 0
   m_Name: Choice0
   m_TagString: Untagged
@@ -608,14 +625,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3989279379952764302}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.008726535, w: 0.9999619}
+  m_LocalRotation: {x: 0, y: 0, z: 0.008726558, w: 0.999962}
   m_LocalPosition: {x: 0, y: 0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4634470670734480691}
   m_Father: {fileID: 3618686725267390831}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1}
 --- !u!212 &928524384972398693
 SpriteRenderer:
   serializedVersion: 2
@@ -665,12 +682,12 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 12
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: bed68302c9e714440ba998e58283a1cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8b455cefdea051f4da5f067110312dc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 6.1, y: 1.02}
+  m_Size: {x: 5.0499997, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -694,7 +711,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.1, y: 1.02, z: 0.2}
+  m_Size: {x: 5.0499997, y: 1.02, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3612192796888286479
 MonoBehaviour:
@@ -710,12 +727,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceButton
   background: {fileID: 928524384972398693}
   label: {fileID: 7700740155093481467}
-  normalSprite: {fileID: 21300000, guid: bed68302c9e714440ba998e58283a1cb, type: 3}
+  normalSprite: {fileID: 21300000, guid: 8b455cefdea051f4da5f067110312dc1, type: 3}
   activeSprite: {fileID: 21300000, guid: e9c63d12070c9694ca152063cf720031, type: 3}
-  normalColor: {r: 0.196, g: 0.196, b: 0.196, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 1, b: 0.78431374, a: 1}
   tilt: -1
   duration: 0.12
+--- !u!114 &1176056238405112456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3989279379952764302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2871779ce7676a46bf7de246f599392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceLayout
+  label: {fileID: 7700740155093481467}
+  padding: {x: 0.35, y: 0.13}
+  minimumSize: {x: 1, y: 1.02}
 --- !u!1 &4198826982904507308
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +791,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3321578780028484071}
   - component: {fileID: 7239408171565154983}
+  - component: {fileID: 7513811223801142994}
   m_Layer: 0
   m_Name: Frame
   m_TagString: Untagged
@@ -830,16 +863,31 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 11
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: bed68302c9e714440ba998e58283a1cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ac1e24bc6d365be48a9b13fb10070d4f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 6.6, y: 2.9}
+  m_Size: {x: 6.92, y: 2.1599998}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7513811223801142994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247571551796266942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587677d1145ccfb469127b325d789704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueFrameFitter
+  text: {fileID: 1246659952444424727}
+  padding: {x: 0.41, y: 0.3}
+  minimumHeight: 0.85
 --- !u!1 &4378668324752865504
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,7 +1004,7 @@ Transform:
   m_GameObject: {fileID: 4776789217691632640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14, y: 0, z: 0}
+  m_LocalPosition: {x: -16.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -997,7 +1045,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5.35, y: 0.76}
+  m_SizeDelta: {x: 4.35, y: 0.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1850308404075924922
 MeshRenderer:
@@ -1024,7 +1072,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -7658084548914306377, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
+  - {fileID: -2125737159907589881, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1070,15 +1118,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: I will publish your story.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
-  m_sharedMaterial: {fileID: -7658084548914306377, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
+  m_sharedMaterial: {fileID: -2125737159907589881, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.196, g: 0.196, b: 0.196, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1095,14 +1143,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3.15
+  m_fontSize: 3.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 2.5
-  m_fontSizeMax: 3.15
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_fontSizeMax: 3.5
+  m_fontStyle: 5
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1112,7 +1160,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
@@ -1169,7 +1217,7 @@ Transform:
   m_GameObject: {fileID: 6065945358434245701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.1, y: 0.3, z: 0.45}
+  m_LocalPosition: {x: -3.4, y: 0.3, z: 0.45}
   m_LocalScale: {x: 1, y: 1, z: 0.56}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1226,12 +1274,12 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 6202782683522681647, guid: 420c24db61c916749b62d5618391aa60, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 6865630936962557356, guid: 6ac1c6797699f7b46ae757614e5cd12a, type: 3}
+  m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 7.6, y: 6.2}
+  m_Size: {x: 7.5, y: 6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1362,7 +1410,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5.35, y: 0.76}
+  m_SizeDelta: {x: 3.29, y: 0.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7026597904164545645
 MeshRenderer:
@@ -1389,7 +1437,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -7658084548914306377, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
+  - {fileID: -2125737159907589881, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1435,15 +1483,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: I cannot print this.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
-  m_sharedMaterial: {fileID: -7658084548914306377, guid: cf23e5741079b3441b9ed9dc8889c566, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
+  m_sharedMaterial: {fileID: -2125737159907589881, guid: c8174d25cdf748a418c2c9b4acd32e25, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.196, g: 0.196, b: 0.196, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1460,14 +1508,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3.15
+  m_fontSize: 3.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 2.5
-  m_fontSizeMax: 3.15
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_fontSizeMax: 3.5
+  m_fontStyle: 5
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1477,7 +1525,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}

@@ -115,7 +115,8 @@ namespace LD60.Gameplay.Story
                         break;
                     case VisitStepKind.Choose:
                         Show(guest, step.emotion);
-                        var choice = await _dialogue.Choose(new[] { step.optionA, step.optionB }, chapter.Token);
+                        var choice = await _dialogue.Choose(new[] { step.optionA, step.optionB }, chapter.Token,
+                            string.IsNullOrEmpty(step.text) ? null : step.text);
                         following = choice == 0 ? step.nextA : step.nextB;
                         if (following < 0)
                             following = index + 1;
