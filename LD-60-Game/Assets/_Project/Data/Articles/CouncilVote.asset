@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 1
   title: Council Vote
   body: The council meets behind closed doors.
-  picture: {fileID: 0}
+  picture: {fileID: 9057404421149705323, guid: c56a24ab1f7b9174aac0a51aaee8ebdf, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0
   politics: 0.4

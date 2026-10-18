@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 2
   title: Bread Queue
   body: The bakery line starts before dawn.
-  picture: {fileID: 0}
+  picture: {fileID: 4109586667184472203, guid: cfde7625e92ac6549b2d8cf5fc1e1795, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0
   politics: 0

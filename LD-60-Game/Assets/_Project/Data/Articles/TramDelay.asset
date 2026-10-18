@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 2
   title: Tram Delay
   body: The first car is late again.
-  picture: {fileID: 0}
+  picture: {fileID: 1543055423061314621, guid: 34d5a169d8628cd44b41938872dd4f82, type: 3}
   pictureLayout: {fileID: 11400000, guid: 2af6751cb1d5530429f459a84bff70d6, type: 2}
   fill: 0
   politics: 0
