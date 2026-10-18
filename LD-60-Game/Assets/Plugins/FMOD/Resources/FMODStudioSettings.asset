@@ -478,11 +478,7 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
-  - Desktop/Master
   Banks:
-  - Desktop/Master.assets
-  - Desktop/Menu
-  - Desktop/Menu.assets
   - Master.assets
   - Menu
   - Menu.assets

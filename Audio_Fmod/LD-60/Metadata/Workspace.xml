@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="Workspace" id="{2dbe5434-4914-4080-a3f2-c2fb644a1113}">
 		<property name="builtBanksOutputDirectory">
-			<value>Build/Desktop/Desktop</value>
+			<value>Build/Desktop</value>
 		</property>
 		<property name="builtBanksSeparateAssets">
 			<value>true</value>
