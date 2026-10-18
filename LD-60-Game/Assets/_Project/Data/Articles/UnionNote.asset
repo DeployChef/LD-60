@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 1
   title: Union Note
   body: The shift asks for a louder vote.
-  picture: {fileID: 0}
+  picture: {fileID: 8377612622855384203, guid: d99e3e37e21c6914da7b77e5164a1b2b, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0
   politics: 0.3

@@ -219,8 +219,8 @@ namespace LD60.UI
             if (stats != null)
             {
                 stats.text = "Fill  " + fill.ToString("0.00", CultureInfo.InvariantCulture)
-                    + "\nPolitics  " + politics.ToString("0.00", CultureInfo.InvariantCulture)
-                    + "\nSocial  " + social.ToString("0.00", CultureInfo.InvariantCulture);
+                    + "    |    Politics  " + politics.ToString("0.00", CultureInfo.InvariantCulture)
+                    + "    |    Social  " + social.ToString("0.00", CultureInfo.InvariantCulture);
             }
 
             if (save != null)

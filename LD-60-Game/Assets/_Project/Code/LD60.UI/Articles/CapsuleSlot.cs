@@ -22,6 +22,8 @@ namespace LD60.UI
         [SerializeField] private Transform desk;
         [SerializeField] private Vector2 tray = new(-6.6f, 2.4f);
         [SerializeField] private float spacing = 2.7f;
+        [SerializeField, Min(0f)] private float horizontalSpread = 0.12f;
+        [SerializeField] private Vector2 notePosition = new(5.7f, 3.35f);
 
         private IMessageBus _bus;
         private StoryBook _story;
@@ -114,7 +116,7 @@ namespace LD60.UI
                 piece.Bind(articles[i]);
                 piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-8f, 8f));
                 piece.transform.localPosition = new Vector3(
-                    tray.x + UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
+                    tray.x + UnityEngine.Random.Range(-horizontalSpread, horizontalSpread),
                     tray.y + UnityEngine.Random.Range(-spacing, spacing * 0.55f),
                     -0.12f);
                 desk.GetComponent<NewspaperDesk>()?.PlaceLoose(piece);
@@ -124,7 +126,7 @@ namespace LD60.UI
             {
                 var slip = Instantiate(note, desk);
                 slip.Bind(delivery.Note);
-                slip.transform.localPosition = new Vector3(tray.x + 3.4f, tray.y, -0.12f);
+                slip.transform.localPosition = new Vector3(notePosition.x, notePosition.y, -0.12f);
                 slip.transform.localRotation = Quaternion.identity;
                 desk.GetComponent<NewspaperDesk>()?.Raise(slip.gameObject);
             }
