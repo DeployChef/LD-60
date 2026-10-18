@@ -14,8 +14,8 @@ namespace LD60.UI
     public sealed class NewspaperDesk : MonoBehaviour
     {
         [SerializeField] private PageGrid page;
-        [SerializeField] private ArticleTray discard;
         [SerializeField] private ArticleTray save;
+        [SerializeField] private float deskScale = 0.75f;
         [SerializeField] private TMP_Text stats;
         [SerializeField] private ArticlePiece dot;
         [SerializeField] private ArticlePiece line2H;
@@ -25,6 +25,7 @@ namespace LD60.UI
         [SerializeField] private ArticlePiece square;
 
         private readonly List<Vector2> _cells = new();
+        private int _draw = 48;
         private Desk _desk;
         private StoryBook _story;
         private StoryContext _context;
@@ -55,7 +56,6 @@ namespace LD60.UI
                 return;
 
             page?.Release(piece);
-            discard?.Release(piece);
             save?.Release(piece);
             piece.transform.localRotation = Quaternion.identity;
             piece.transform.localScale = Vector3.one;
@@ -67,37 +67,54 @@ namespace LD60.UI
             if (piece == null || page == null)
                 return true;
 
+            piece.transform.localRotation = Quaternion.identity;
+            piece.transform.localScale = Vector3.one;
             var point = CenterOf(piece);
             if (save != null && save.Contains(point))
             {
                 if (!save.TryAccept(piece))
                     return false;
 
+                Raise(piece.gameObject);
                 Publish();
                 return true;
             }
 
-            if (discard != null && discard.Contains(point))
-            {
-                discard.TryAccept(piece);
-                Publish();
-                return true;
-            }
-
-            piece.transform.localRotation = Quaternion.identity;
-            piece.transform.localScale = Vector3.one;
             if (page.Covers(piece))
             {
                 if (!page.TryPlace(piece))
                     return false;
 
+                Raise(piece.gameObject);
                 Publish();
                 return true;
             }
 
-            piece.transform.localScale = Vector3.one;
+            piece.transform.localScale = Vector3.one * deskScale;
+            Raise(piece.gameObject);
             Publish();
             return true;
+        }
+
+        public void PlaceLoose(ArticlePiece piece)
+        {
+            if (piece == null)
+                return;
+
+            piece.transform.localScale = Vector3.one * deskScale;
+            Raise(piece.gameObject);
+        }
+
+        public void Raise(GameObject item)
+        {
+            if (item == null)
+                return;
+
+            var order = _draw;
+            _draw = ArticlePiece.ApplyDrawOrder(item, order) + 1;
+            var drag = item.GetComponent<DeskDrag>();
+            if (drag != null)
+                drag.Hold(order);
         }
 
         private void OnDay(DayStarted message)
@@ -105,8 +122,6 @@ namespace LD60.UI
             var kept = save != null ? new List<ArticlePiece>(save.Pieces) : new List<ArticlePiece>();
             if (page != null)
                 page.Clear();
-            if (discard != null)
-                discard.Clear();
 
             var pieces = GetComponentsInChildren<ArticlePiece>(true);
             for (var i = 0; i < pieces.Length; i++)
@@ -138,8 +153,8 @@ namespace LD60.UI
             var piece = Instantiate(source, transform);
             piece.Bind(article);
             piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-8f, 8f));
-            piece.transform.localScale = Vector3.one;
             piece.transform.localPosition = new Vector3(-4.6f, 0.2f, -0.12f);
+            PlaceLoose(piece);
         }
 
         private void RestoreKept()
@@ -160,7 +175,8 @@ namespace LD60.UI
 
                 var piece = Instantiate(source, transform);
                 piece.Bind(article);
-                save.TryAccept(piece);
+                if (save.TryAccept(piece))
+                    Raise(piece.gameObject);
             }
         }
 

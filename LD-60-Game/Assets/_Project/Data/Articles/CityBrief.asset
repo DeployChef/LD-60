@@ -18,6 +18,7 @@ MonoBehaviour:
   title: City Brief
   body: A short note on the morning wires.
   picture: {fileID: 0}
+  pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.3
   politics: 0
   social: 0
