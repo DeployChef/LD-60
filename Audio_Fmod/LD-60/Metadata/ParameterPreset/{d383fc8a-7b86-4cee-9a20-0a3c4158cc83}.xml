@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{d383fc8a-7b86-4cee-9a20-0a3c4158cc83}">
+		<property name="name">
+			<value>newspaper</value>
+		</property>
+		<relationship name="folder">
+			<destination>{7f390524-f814-4a2f-89ec-2963220960c9}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{17e6b560-9265-41bb-9a5f-f9c83ef08508}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{17e6b560-9265-41bb-9a5f-f9c83ef08508}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>3</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>typing</value>
+			<value>type</value>
+			<value>none</value>
+		</property>
+		<property name="initialValue">
+			<value>2</value>
+		</property>
+	</object>
+</objects>
