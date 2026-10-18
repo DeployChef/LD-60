@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using LD60.Core.Bus;
@@ -29,6 +30,9 @@ namespace LD60.UI
         private Desk _desk;
         private StoryBook _story;
         private StoryContext _context;
+        private ChapterDefinition _chapter;
+        private TextMeshPro _notice;
+        private float _noticeUntil;
         private IDisposable _day;
         private IDisposable _gift;
 
@@ -50,6 +54,113 @@ namespace LD60.UI
             _gift?.Dispose();
         }
 
+        private void Update()
+        {
+            if (_notice == null || _notice.alpha <= 0f || Time.time < _noticeUntil)
+                return;
+
+            _notice.alpha = Mathf.MoveTowards(_notice.alpha, 0f, Time.deltaTime * 1.4f);
+        }
+
+        public void Hover(ArticlePiece piece)
+        {
+            if (piece == null || page == null)
+                return;
+
+            var issue = page.Inspect(piece);
+            if (!page.Touches())
+            {
+                page.ClearPreview();
+                piece.SetGhost(false);
+                return;
+            }
+
+            page.Paint(issue);
+            piece.SetGhost(true);
+        }
+
+        public void EndHover(ArticlePiece piece)
+        {
+            page?.ClearPreview();
+            if (piece != null)
+                piece.SetGhost(false);
+        }
+
+        public void Notify(string message, Vector3 world)
+        {
+            EnsureNotice();
+            if (_notice == null)
+                return;
+
+            _notice.transform.position = world - transform.forward * 0.25f + transform.up * 0.9f;
+            _notice.transform.rotation = transform.rotation;
+            _notice.text = message ?? string.Empty;
+            _notice.alpha = 1f;
+            _noticeUntil = Time.time + 1.8f;
+        }
+
+        public void PlaceNote(NoteSlip slip)
+        {
+            if (slip == null)
+                return;
+
+            slip.transform.SetParent(transform, false);
+            slip.transform.localRotation = Quaternion.identity;
+            slip.transform.localScale = Vector3.one;
+            var half = SurfaceHalf();
+            var note = NoteHalf(slip);
+            const float margin = 0.5f;
+            slip.transform.localPosition = new Vector3(
+                -half.x + margin + note.x,
+                half.y - margin - note.y,
+                -0.12f);
+            Raise(slip.gameObject);
+        }
+
+        public bool OverPage(Vector3 world)
+        {
+            return page != null && page.ContainsPoint(world);
+        }
+
+        public bool EditionReady(out string reason)
+        {
+            if (_chapter == null)
+            {
+                reason = "There is nothing to stamp.";
+                return false;
+            }
+
+            return _chapter.Allows(_desk != null ? _desk.Fill : 0f, out reason);
+        }
+
+        public void LeaveMark(Vector3 world, Sprite sprite, Material material, Vector3 size, int layer)
+        {
+            if (sprite == null)
+                return;
+
+            var mark = new GameObject("StampMark");
+            mark.transform.SetParent(transform, false);
+            var local = transform.InverseTransformPoint(world);
+            local.z = -0.09f;
+            mark.transform.localPosition = local;
+            mark.transform.localRotation = Quaternion.identity;
+            mark.transform.localScale = size;
+            var renderer = mark.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.sharedMaterial = material;
+            renderer.color = new Color(0.78f, 0.1f, 0.08f, 0.42f);
+            renderer.sortingLayerID = layer;
+            renderer.sortingOrder = _draw;
+            _draw++;
+            mark.AddComponent<StampMark>();
+            StartCoroutine(PressMark(mark.transform));
+        }
+
+        public void CommitStamp()
+        {
+            _desk?.Stamp();
+        }
+
         public void PrepareLift(ArticlePiece piece)
         {
             if (piece == null)
@@ -57,6 +168,7 @@ namespace LD60.UI
 
             page?.Release(piece);
             save?.Release(piece);
+            piece.StopMotion();
             if (piece.transform.parent != transform)
                 piece.transform.SetParent(transform, true);
             piece.transform.localRotation = Quaternion.identity;
@@ -64,30 +176,41 @@ namespace LD60.UI
             Publish();
         }
 
-        public bool Settle(ArticlePiece piece)
+        public bool Settle(ArticlePiece piece, out string reason)
         {
+            reason = null;
             if (piece == null || page == null)
                 return true;
 
+            EndHover(piece);
             piece.transform.localRotation = Quaternion.identity;
             piece.transform.localScale = Vector3.one;
             var point = CenterOf(piece);
             if (save != null && save.Contains(point))
             {
                 if (!save.TryAccept(piece))
+                {
+                    reason = "Save is full.";
                     return false;
+                }
 
                 Raise(piece.gameObject);
+                piece.PlayDrop();
                 Publish();
                 return true;
             }
 
             if (page.Covers(piece))
             {
-                if (!page.TryPlace(piece))
+                var issue = page.Inspect(piece);
+                if (issue != PlaceIssue.None || !page.TryPlace(piece))
+                {
+                    reason = Line(issue);
                     return false;
+                }
 
                 Raise(piece.gameObject);
+                piece.PlayDrop();
                 Publish();
                 return true;
             }
@@ -106,7 +229,27 @@ namespace LD60.UI
                 piece.transform.SetParent(transform, true);
 
             piece.transform.localScale = Vector3.one * deskScale;
+            var local = piece.transform.localPosition;
+            local.z = -0.08f;
+            piece.transform.localPosition = local;
+            piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-12f, 12f));
             Raise(piece.gameObject);
+            piece.PlayDrop();
+        }
+
+        public void Deliver(ArticlePiece piece, int index, int count)
+        {
+            if (piece == null)
+                return;
+
+            if (piece.transform.parent != transform)
+                piece.transform.SetParent(transform, false);
+
+            piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-14f, 14f));
+            piece.transform.localScale = Vector3.one * deskScale;
+            piece.transform.localPosition = IncomingSpot(index, count);
+            Raise(piece.gameObject);
+            piece.PlayDrop();
         }
 
         public void Raise(GameObject item)
@@ -124,8 +267,16 @@ namespace LD60.UI
         private void OnDay(DayStarted message)
         {
             var kept = save != null ? new List<ArticlePiece>(save.Pieces) : new List<ArticlePiece>();
+            _chapter = message.Chapter;
             if (page != null)
+            {
+                page.SetDayRules(_chapter != null ? _chapter.Neighbors : null);
                 page.Clear();
+            }
+
+            var marks = GetComponentsInChildren<StampMark>(true);
+            for (var i = 0; i < marks.Length; i++)
+                Destroy(marks[i].gameObject);
 
             var pieces = GetComponentsInChildren<ArticlePiece>(true);
             for (var i = 0; i < pieces.Length; i++)
@@ -248,6 +399,107 @@ namespace LD60.UI
             }
 
             return ids;
+        }
+
+        private static string Line(PlaceIssue issue)
+        {
+            switch (issue)
+            {
+                case PlaceIssue.Taken: return "That space is taken.";
+                case PlaceIssue.Beside: return "These cannot sit side by side.";
+                default: return "It does not fit there.";
+            }
+        }
+
+        private void EnsureNotice()
+        {
+            if (_notice != null)
+                return;
+
+            var font = stats != null ? stats.font : TMP_Settings.defaultFontAsset;
+            var go = new GameObject("Notice");
+            go.transform.SetParent(transform, false);
+            _notice = go.AddComponent<TextMeshPro>();
+            _notice.font = font;
+            _notice.fontStyle = FontStyles.Bold;
+            _notice.alignment = TextAlignmentOptions.Center;
+            _notice.enableAutoSizing = true;
+            _notice.fontSizeMin = 0.8f;
+            _notice.fontSizeMax = 2.4f;
+            _notice.color = new Color(0.62f, 0.1f, 0.08f, 1f);
+            _notice.rectTransform.sizeDelta = new Vector2(8f, 1.1f);
+            _notice.textWrappingMode = TextWrappingModes.Normal;
+            _notice.overflowMode = TextOverflowModes.Truncate;
+            _notice.raycastTarget = false;
+            _notice.alpha = 0f;
+            var sample = page != null ? page.GetComponentInChildren<SpriteRenderer>() : null;
+            if (sample != null)
+                _notice.sortingLayerID = sample.sortingLayerID;
+            _notice.sortingOrder = 4200;
+        }
+
+        private Vector3 IncomingSpot(int index, int count)
+        {
+            var half = SurfaceHalf();
+            var columns = count < 3 ? Mathf.Max(1, count) : 3;
+            var rows = Mathf.Max(1, Mathf.CeilToInt(count / (float)columns));
+            var column = index % columns;
+            var row = index / columns;
+            var left = -half.x + 1.15f;
+            var right = -4.15f;
+            var bottom = -half.y + 1.05f;
+            var top = half.y - 2.55f;
+            var x = Mathf.Lerp(left, right, (column + 0.5f) / columns);
+            var y = Mathf.Lerp(top, bottom, (row + 0.5f) / rows);
+            x += UnityEngine.Random.Range(-0.28f, 0.28f);
+            y += UnityEngine.Random.Range(-0.22f, 0.22f);
+            return new Vector3(x, y, -0.08f);
+        }
+
+        private Vector2 SurfaceHalf()
+        {
+            var surface = transform.Find("Surface");
+            var renderer = surface != null ? surface.GetComponent<SpriteRenderer>() : null;
+            if (renderer == null || renderer.sprite == null)
+                return new Vector2(9.6f, 5.4f);
+
+            var extents = renderer.sprite.bounds.extents;
+            var scale = surface.lossyScale;
+            var desk = transform.lossyScale;
+            return new Vector2(
+                extents.x * Mathf.Abs(scale.x) / Mathf.Max(0.01f, Mathf.Abs(desk.x)),
+                extents.y * Mathf.Abs(scale.y) / Mathf.Max(0.01f, Mathf.Abs(desk.y)));
+        }
+
+        private static Vector2 NoteHalf(NoteSlip slip)
+        {
+            var renderer = slip.GetComponentInChildren<SpriteRenderer>();
+            if (renderer == null || renderer.sprite == null)
+                return new Vector2(1.25f, 0.72f);
+
+            var extents = renderer.sprite.bounds.extents;
+            var scale = renderer.transform.localScale;
+            return new Vector2(extents.x * Mathf.Abs(scale.x), extents.y * Mathf.Abs(scale.y));
+        }
+
+        private IEnumerator PressMark(Transform mark)
+        {
+            var size = mark != null ? mark.localScale : Vector3.one;
+            var time = 0f;
+            const float length = 0.22f;
+            while (time < length && mark != null)
+            {
+                time += Time.deltaTime;
+                var t = time / length;
+                var scale = t < 0.55f
+                    ? Mathf.Lerp(1.4f, 0.78f, t / 0.55f)
+                    : Mathf.Lerp(0.78f, 1f, (t - 0.55f) / 0.45f);
+                mark.localScale = size * scale;
+                yield return null;
+            }
+
+            if (mark != null)
+                mark.localScale = size;
         }
 
         private Vector3 CenterOf(ArticlePiece piece)

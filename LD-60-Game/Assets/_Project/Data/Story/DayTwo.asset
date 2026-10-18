@@ -20,6 +20,9 @@ MonoBehaviour:
   rules:
   - parameterId: fill
     minimum: 0.8
+  neighbors:
+  - kind: 3
+    other: 1
   capsules:
   - id: day-two-drop
     articles:

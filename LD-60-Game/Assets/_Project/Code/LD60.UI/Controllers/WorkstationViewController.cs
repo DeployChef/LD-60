@@ -21,8 +21,20 @@ namespace LD60.UI
 
         private InputAction _point;
         private bool _showingTable;
+        private bool _lookDown = true;
+        private bool _lookUp = true;
 
         public bool IsShowingTable => _showingTable;
+
+        public void AllowLookDown(bool allow)
+        {
+            _lookDown = allow;
+        }
+
+        public void AllowLookUp(bool allow)
+        {
+            _lookUp = allow;
+        }
 
         private void Awake()
         {
@@ -60,9 +72,9 @@ namespace LD60.UI
                 return;
 
             var height = position.y / Screen.height;
-            if (!_showingTable && height <= bottomZoneHeightPercent * 0.01f)
+            if (_lookDown && !_showingTable && height <= bottomZoneHeightPercent * 0.01f)
                 ShowTable(true);
-            else if (_showingTable && height >= 1f - topZoneHeightPercent * 0.01f)
+            else if (_lookUp && _showingTable && height >= 1f - topZoneHeightPercent * 0.01f)
                 ShowTable(false);
         }
 

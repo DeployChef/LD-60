@@ -14,19 +14,22 @@ namespace LD60.UI
         [SerializeField] private TMP_Text line;
         [SerializeField] private DialogueChoice[] choices = System.Array.Empty<DialogueChoice>();
 
+        private WorkstationViewController _views;
         private CinemachineBrain _brain;
         private bool _open = true;
 
         private void OnDestroy()
         {
             _open = false;
+            if (_views != null)
+                _views.AllowLookDown(true);
         }
 
         private void Awake()
         {
-            var views = FindAnyObjectByType<WorkstationViewController>();
-            if (views != null)
-                _brain = views.GetComponentInChildren<CinemachineBrain>(true);
+            _views = FindAnyObjectByType<WorkstationViewController>();
+            if (_views != null)
+                _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
             Hide();
         }
 
@@ -94,6 +97,8 @@ namespace LD60.UI
         {
             if (panel != null)
                 panel.enabled = show;
+            if (_views != null)
+                _views.AllowLookDown(!show);
         }
 
         private void ShowChoices(string[] options)

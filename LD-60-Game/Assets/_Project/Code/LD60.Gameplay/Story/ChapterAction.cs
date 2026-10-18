@@ -23,7 +23,7 @@ namespace LD60.Gameplay.Story
         [SerializeField] private string parameter;
         [SerializeField] private float minimum;
 
-        protected ChapterWhen When => when;
+        public ChapterWhen When => when;
 
         public virtual bool Matches(ChapterRead read)
         {

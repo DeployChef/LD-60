@@ -160,7 +160,7 @@ namespace LD60.Gameplay.Story
 
             _inFinale = finale;
             _desk.ResetDay();
-            _bus.Publish(new DayStarted(chapter.Title));
+            _bus.Publish(new DayStarted(chapter));
             if (finale)
                 _session.ClearCheckpoint();
             else

@@ -10,13 +10,15 @@ namespace LD60.Gameplay.Story
         private readonly IDialogue _dialogue;
         private readonly Gifts _gifts;
         private readonly IMessageBus _bus;
+        private readonly Desk _desk;
 
-        public ChapterActionPlay(ISequencePlayer player, IDialogue dialogue, Gifts gifts, IMessageBus bus)
+        public ChapterActionPlay(ISequencePlayer player, IDialogue dialogue, Gifts gifts, IMessageBus bus, Desk desk)
         {
             _player = player;
             _dialogue = dialogue;
             _gifts = gifts;
             _bus = bus;
+            _desk = desk;
         }
 
         public void Cancel()
@@ -58,6 +60,17 @@ namespace LD60.Gameplay.Story
             var close = action as CloseAction;
             if (close != null)
             {
+                if (close.When == ChapterWhen.PaperStamped)
+                {
+                    var fill = _desk != null ? _desk.Fill : 0f;
+                    var politics = _desk != null ? _desk.Politics : 0f;
+                    var social = _desk != null ? _desk.Social : 0f;
+                    UnityEngine.Debug.Log($"[Story] Summary. fill={fill:0.00} politics={politics:0.00} social={social:0.00}");
+                    _bus.Publish(new DaySummary(fill, politics, social));
+                    chapter.End(ChapterResult.NextDay);
+                    return;
+                }
+
                 await chapter.WaitUntilCompleted();
                 chapter.End(ChapterResult.NextDay);
                 return;

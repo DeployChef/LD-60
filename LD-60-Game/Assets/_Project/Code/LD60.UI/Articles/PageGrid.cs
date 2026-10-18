@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LD60.Gameplay.Articles;
+using LD60.Gameplay.Context;
 using UnityEngine;
 
 namespace LD60.UI
@@ -11,6 +12,9 @@ namespace LD60.UI
         private readonly List<Vector2> _locals = new();
         private readonly List<Slot> _slots = new();
         private readonly Dictionary<ArticlePiece, List<Transform>> _footprints = new();
+        private readonly List<SpriteRenderer> _painted = new();
+        private readonly List<Color> _paint = new();
+        private NeighborRule[] _day = System.Array.Empty<NeighborRule>();
         private float _pitch = 1f;
 
         public IReadOnlyList<ArticlePiece> Placed => _placed;
@@ -22,8 +26,14 @@ namespace LD60.UI
 
         public void Clear()
         {
+            ClearPreview();
             _footprints.Clear();
             _placed.Clear();
+        }
+
+        public void SetDayRules(NeighborRule[] rules)
+        {
+            _day = rules ?? System.Array.Empty<NeighborRule>();
         }
 
         public void Release(ArticlePiece piece)
@@ -51,27 +61,74 @@ namespace LD60.UI
             return _hits.Count > 0 && inside * 2 >= _hits.Count;
         }
 
+        public PlaceIssue Inspect(ArticlePiece piece)
+        {
+            if (_slots.Count == 0)
+                ReadSlots();
+
+            Collect(piece, _hits);
+            return Judge(piece, _hits);
+        }
+
+        public bool Touches()
+        {
+            for (var i = 0; i < _hits.Count; i++)
+            {
+                if (_hits[i] != null)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool ContainsPoint(Vector3 world)
+        {
+            if (_slots.Count == 0)
+                ReadSlots();
+
+            return Nearest(world, _pitch * 0.65f) != null;
+        }
+
+        public void Paint(PlaceIssue issue)
+        {
+            ClearPreview();
+            var color = issue == PlaceIssue.None
+                ? new Color(0.42f, 0.78f, 0.36f, 1f)
+                : new Color(0.86f, 0.28f, 0.22f, 1f);
+            for (var i = 0; i < _hits.Count; i++)
+            {
+                if (_hits[i] == null)
+                    continue;
+
+                var renderer = _hits[i].GetComponent<SpriteRenderer>();
+                if (renderer == null || _painted.Contains(renderer))
+                    continue;
+
+                _painted.Add(renderer);
+                _paint.Add(renderer.color);
+                renderer.color = color;
+            }
+        }
+
+        public void ClearPreview()
+        {
+            for (var i = 0; i < _painted.Count; i++)
+            {
+                if (_painted[i] != null)
+                    _painted[i].color = _paint[i];
+            }
+
+            _painted.Clear();
+            _paint.Clear();
+        }
+
         public bool TryPlace(ArticlePiece piece)
         {
             if (_slots.Count == 0)
                 ReadSlots();
 
             Collect(piece, _hits);
-            if (_hits.Count == 0)
-                return false;
-
-            for (var i = 0; i < _hits.Count; i++)
-            {
-                if (_hits[i] == null || Occupied(_hits[i], piece))
-                    return false;
-                for (var j = 0; j < i; j++)
-                {
-                    if (_hits[j] == _hits[i])
-                        return false;
-                }
-            }
-
-            if (!NeighborsAllow(piece, _hits))
+            if (Judge(piece, _hits) != PlaceIssue.None)
                 return false;
 
             Snap(piece, _hits[0], _locals[0]);
@@ -204,7 +261,48 @@ namespace LD60.UI
             if (other == null || other.Article == null)
                 return false;
 
+            if (DayForbids(article.Kind, other.Article.Kind))
+                return true;
+
             return Forbids(article, other.Article.Kind) || Forbids(other.Article, article.Kind);
+        }
+
+        private PlaceIssue Judge(ArticlePiece piece, List<Transform> slots)
+        {
+            if (slots.Count == 0)
+                return PlaceIssue.Blocked;
+
+            for (var i = 0; i < slots.Count; i++)
+            {
+                if (slots[i] == null)
+                    return PlaceIssue.Blocked;
+                if (Occupied(slots[i], piece))
+                    return PlaceIssue.Taken;
+                for (var j = 0; j < i; j++)
+                {
+                    if (slots[j] == slots[i])
+                        return PlaceIssue.Blocked;
+                }
+            }
+
+            if (!NeighborsAllow(piece, slots))
+                return PlaceIssue.Beside;
+
+            return PlaceIssue.None;
+        }
+
+        private bool DayForbids(ArticleKind left, ArticleKind right)
+        {
+            for (var i = 0; i < _day.Length; i++)
+            {
+                var rule = _day[i];
+                if (rule == null)
+                    continue;
+                if ((rule.kind == left && rule.other == right) || (rule.kind == right && rule.other == left))
+                    return true;
+            }
+
+            return false;
         }
 
         private Transform Neighbor(Transform slot, Vector2Int step)
@@ -335,5 +433,13 @@ namespace LD60.UI
                 Index = index;
             }
         }
+    }
+
+    public enum PlaceIssue
+    {
+        None,
+        Blocked,
+        Taken,
+        Beside
     }
 }

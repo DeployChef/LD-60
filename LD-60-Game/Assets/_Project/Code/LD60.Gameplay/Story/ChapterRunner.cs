@@ -143,9 +143,9 @@ namespace LD60.Gameplay.Story
             if (Mode != ChapterMode.Work)
                 return;
 
-            if (!RulesMet(message.Fill))
+            if (!ChapterDefinition.Allows(_rules, message.Fill, out var reason))
             {
-                Debug.Log($"[Story] Paper rejected. fill={message.Fill:0.00}");
+                Debug.Log($"[Story] Paper rejected. {reason} fill={message.Fill:0.00}");
                 return;
             }
 
@@ -154,29 +154,6 @@ namespace LD60.Gameplay.Story
             _read.Stamped = true;
             if (!Consider())
                 Debug.Log("[Story] Rules passed and this chapter has no ending action.");
-        }
-
-        private bool RulesMet(float fill)
-        {
-            for (var i = 0; i < _rules.Length; i++)
-            {
-                var rule = _rules[i];
-                if (rule == null)
-                    continue;
-
-                var id = rule.parameterId ?? string.Empty;
-                if (id.Equals("fill", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (fill + 0.0001f < rule.minimum)
-                        return false;
-                    continue;
-                }
-
-                Debug.LogWarning($"[Story] Unknown newspaper rule '{id}'.");
-                return false;
-            }
-
-            return true;
         }
 
         private bool Consider()

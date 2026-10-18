@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using LD60.Gameplay.Articles;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LD60.UI
 {
@@ -13,6 +15,16 @@ namespace LD60.UI
         [SerializeField] private ArticleFace three;
 
         public ArticleDefinition Article => article;
+
+        private Coroutine _motion;
+
+        private void Awake()
+        {
+            if (!Application.isPlaying)
+                return;
+
+            EnsureShadow();
+        }
 
         private void OnEnable()
         {
@@ -50,6 +62,41 @@ namespace LD60.UI
             Show(three, slot == 3, headline, copy, sprite);
         }
 
+        public void SetGhost(bool ghost)
+        {
+            var alpha = ghost ? 0.4f : 1f;
+            var renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                var color = renderers[i].color;
+                var shadow = renderers[i].gameObject.name == "Shadow";
+                color.a = shadow ? (ghost ? 0.16f : 0.42f) : alpha;
+                renderers[i].color = color;
+            }
+
+            Fade(one, alpha);
+            Fade(two, alpha);
+            Fade(three, alpha);
+        }
+
+        public void StopMotion()
+        {
+            if (_motion == null)
+                return;
+
+            StopCoroutine(_motion);
+            _motion = null;
+        }
+
+        public void PlayDrop()
+        {
+            if (!isActiveAndEnabled)
+                return;
+
+            StopMotion();
+            _motion = StartCoroutine(DropMotion());
+        }
+
         public void CopyCells(List<Vector2> centers)
         {
             centers.Clear();
@@ -78,13 +125,13 @@ namespace LD60.UI
                 if (renderer.GetComponent<TMPro.TextMeshPro>() != null)
                     continue;
 
-                renderer.sortingOrder = order;
+                renderer.sortingOrder = renderer.gameObject.name == "Shadow" ? order : order + 1;
                 layer = renderer.sortingLayerID;
                 drawn = true;
             }
 
             if (drawn)
-                order++;
+                order += 2;
 
             for (var i = 0; i < renderers.Length; i++)
             {
@@ -114,6 +161,66 @@ namespace LD60.UI
                 order++;
 
             return order;
+        }
+
+        private void EnsureShadow()
+        {
+            if (transform.Find("Shadow") != null)
+                return;
+
+            var paper = transform.Find("Paper");
+            var source = paper != null ? paper.GetComponent<SpriteRenderer>() : null;
+            if (source == null || source.sprite == null)
+                return;
+
+            var shadow = new GameObject("Shadow");
+            shadow.transform.SetParent(transform, false);
+            shadow.transform.localRotation = Quaternion.identity;
+            shadow.transform.localPosition = paper.localPosition + new Vector3(0.07f, -0.08f, 0.03f);
+            shadow.transform.localScale = paper.localScale;
+            var renderer = shadow.AddComponent<SpriteRenderer>();
+            renderer.sprite = source.sprite;
+            renderer.sharedMaterial = source.sharedMaterial;
+            renderer.color = new Color(0.05f, 0.04f, 0.03f, 0.42f);
+            renderer.sortingLayerID = source.sortingLayerID;
+            renderer.sortingOrder = source.sortingOrder - 1;
+        }
+
+        private IEnumerator DropMotion()
+        {
+            var endPos = transform.localPosition;
+            var endRot = transform.localRotation;
+            var startPos = endPos;
+            startPos.z -= 0.26f;
+            var startRot = Quaternion.Euler(18f, 0f, 0f) * endRot;
+            transform.localPosition = startPos;
+            transform.localRotation = startRot;
+            var time = 0f;
+            const float length = 0.32f;
+            while (time < length)
+            {
+                time += Time.deltaTime;
+                var t = Mathf.SmoothStep(0f, 1f, time / length);
+                transform.localPosition = Vector3.Lerp(startPos, endPos, t);
+                transform.localRotation = Quaternion.Slerp(startRot, endRot, t);
+                yield return null;
+            }
+
+            transform.localPosition = endPos;
+            transform.localRotation = endRot;
+            _motion = null;
+        }
+
+        private static void Fade(ArticleFace face, float alpha)
+        {
+            if (face == null)
+                return;
+
+            var group = face.GetComponent<CanvasGroup>();
+            if (group == null)
+                group = face.gameObject.AddComponent<CanvasGroup>();
+            group.alpha = alpha;
+            group.blocksRaycasts = false;
         }
 
         private static void Show(ArticleFace face, bool on, string headline, string copy, Sprite sprite)

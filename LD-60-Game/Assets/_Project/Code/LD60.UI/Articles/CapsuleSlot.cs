@@ -106,33 +106,39 @@ namespace LD60.UI
         private void LayOut(CapsuleDelivery delivery)
         {
             var articles = delivery.Articles;
+            var board = desk.GetComponent<NewspaperDesk>();
+            var spawned = new System.Collections.Generic.List<ArticlePiece>();
             for (var i = 0; i < articles.Length; i++)
             {
                 var source = Form(articles[i]);
                 if (source == null || articles[i] == null)
                     continue;
 
-                var spot = pile != null ? pile : desk;
-                var piece = Instantiate(source, spot);
+                var piece = Instantiate(source, desk);
                 piece.Bind(articles[i]);
-                piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-8f, 8f));
-                piece.transform.localPosition = new Vector3(
-                    UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
-                    UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
-                    -0.02f);
-                desk.GetComponent<NewspaperDesk>()?.PlaceLoose(piece);
+                spawned.Add(piece);
+            }
+
+            for (var i = 0; i < spawned.Count; i++)
+            {
+                if (board != null)
+                    board.Deliver(spawned[i], i, spawned.Count);
+                else
+                    spawned[i].transform.localPosition = new Vector3(
+                        -7.2f + (i % 3) * spacing * 0.7f,
+                        2.2f - (i / 3) * spacing * 0.85f,
+                        -0.08f);
             }
 
             if (note != null && !string.IsNullOrEmpty(delivery.Note))
             {
-                var spot = pile != null ? pile : desk;
-                var slip = Instantiate(note, spot);
+                var slip = Instantiate(note, desk);
                 slip.Bind(delivery.Note);
-                slip.transform.localPosition = new Vector3(3.4f, 0f, -0.02f);
-                slip.transform.localRotation = Quaternion.identity;
-                if (slip.transform.parent != desk)
-                    slip.transform.SetParent(desk, true);
-                desk.GetComponent<NewspaperDesk>()?.Raise(slip.gameObject);
+                var board = desk.GetComponent<NewspaperDesk>();
+                if (board != null)
+                    board.PlaceNote(slip);
+                else
+                    slip.transform.localPosition = new Vector3(-7.8f, 4.1f, -0.12f);
             }
         }
 
