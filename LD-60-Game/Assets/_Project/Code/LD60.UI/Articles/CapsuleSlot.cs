@@ -25,6 +25,7 @@ namespace LD60.UI
 
         private IMessageBus _bus;
         private StoryBook _story;
+        private NewspaperDesk _board;
         private WorkstationViewController _views;
         private CinemachineBrain _brain;
         private SpriteRenderer _renderer;
@@ -33,10 +34,11 @@ namespace LD60.UI
         private string _pending;
 
         [Inject]
-        public void Construct(IMessageBus bus, StoryBook story)
+        public void Construct(IMessageBus bus, StoryBook story, NewspaperDesk board)
         {
             _bus = bus;
             _story = story;
+            _board = board;
             _arrived?.Dispose();
             _arrived = _bus.Subscribe<CapsuleArrived>(OnArrived);
         }
@@ -106,7 +108,6 @@ namespace LD60.UI
         private void LayOut(CapsuleDelivery delivery)
         {
             var articles = delivery.Articles;
-            var board = desk.GetComponent<NewspaperDesk>();
             var spawned = new System.Collections.Generic.List<ArticlePiece>();
             for (var i = 0; i < articles.Length; i++)
             {
@@ -121,8 +122,8 @@ namespace LD60.UI
 
             for (var i = 0; i < spawned.Count; i++)
             {
-                if (board != null)
-                    board.Deliver(spawned[i], i, spawned.Count);
+                if (_board != null)
+                    _board.Deliver(spawned[i], i, spawned.Count);
                 else
                     spawned[i].transform.localPosition = new Vector3(
                         -7.2f + (i % 3) * spacing * 0.7f,
@@ -134,9 +135,8 @@ namespace LD60.UI
             {
                 var slip = Instantiate(note, desk);
                 slip.Bind(delivery.Note);
-                var board = desk.GetComponent<NewspaperDesk>();
-                if (board != null)
-                    board.PlaceNote(slip);
+                if (_board != null)
+                    _board.PlaceNote(slip);
                 else
                     slip.transform.localPosition = new Vector3(-7.8f, 4.1f, -0.12f);
             }
