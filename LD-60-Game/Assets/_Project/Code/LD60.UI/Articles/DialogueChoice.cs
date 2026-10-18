@@ -9,5 +9,6 @@ namespace LD60.UI
         public GameObject root;
         public TMPro.TMP_Text label;
         public Collider collider;
+        public DialogueChoiceButton view;
     }
 }
