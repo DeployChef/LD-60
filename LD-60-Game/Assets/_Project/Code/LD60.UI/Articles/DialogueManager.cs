@@ -18,6 +18,15 @@ namespace LD60.UI
         private CinemachineBrain _brain;
         private bool _open = true;
 
+        private void Update()
+        {
+            var mouse = Mouse.current;
+            var hovered = mouse != null && Time.timeScale > 0f ? HitChoice(mouse.position.ReadValue()) : -1;
+            for (var i = 0; i < choices.Length; i++)
+                if (choices[i]?.view != null)
+                    choices[i].view.SetHovered(i == hovered);
+        }
+
         private void OnDestroy()
         {
             _open = false;
@@ -56,7 +65,7 @@ namespace LD60.UI
         public async UniTask<int> Choose(string[] options, CancellationToken token)
         {
             ShowPanel(true);
-            SetActive(line, false);
+            SetActive(line, line != null && !string.IsNullOrEmpty(line.text));
             ShowChoices(options);
             await UniTask.Yield(token);
             try
@@ -90,6 +99,8 @@ namespace LD60.UI
 
             ShowPanel(false);
             SetActive(line, false);
+            if (line != null)
+                line.text = string.Empty;
             HideChoices();
         }
 
