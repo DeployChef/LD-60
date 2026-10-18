@@ -56,7 +56,7 @@
 			<destination>{7c0a9ae8-36d0-4bd3-a7ea-3fb29caabed3}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{49a74e69-773f-4c09-be7c-072ebf541416}</destination>
+			<destination>{fa70fa34-e7c0-4c8f-95a1-61fa5a7059cc}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{e025104c-cb21-4789-b2db-72b1cfbbf4f3}">
@@ -92,6 +92,7 @@
 	<object class="MultiSound" id="{d8b75073-c567-4600-992e-8fe9223cad14}">
 		<relationship name="sounds">
 			<destination>{847a1a8a-e33b-4bfb-8ba5-09788cdd65cb}</destination>
+			<destination>{aadcb6a9-44c2-4553-ab19-dc2c92c4070c}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{7f731317-6395-4acc-b776-faf7e8a227a3}">
@@ -127,6 +128,14 @@
 			<destination>{b7ec7c3a-d1ff-44a8-a620-1eb49b0ba81d}</destination>
 		</relationship>
 	</object>
+	<object class="CommandSound" id="{aadcb6a9-44c2-4553-ab19-dc2c92c4070c}">
+		<property name="commandType">
+			<value>2</value>
+		</property>
+		<relationship name="commandTarget">
+			<destination>{f389c934-ef8c-48ef-b2e5-bc7d8cb4730e}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{afb3b8f2-02bc-447d-9a60-4add31942dcd}" />
 	<object class="MixerBusFader" id="{b2c47567-545a-4b57-9eb5-d68ff6ca1298}" />
 	<object class="ADSRModulator" id="{937f7ec7-6953-4f7d-b03f-1e6f340a5b84}">
@@ -140,10 +149,10 @@
 			<value>237.17952</value>
 		</property>
 		<property name="peakValue">
-			<value>1.15555573</value>
+			<value>8.66666794</value>
 		</property>
 		<property name="holdTime">
-			<value>0</value>
+			<value>44.8717918</value>
 		</property>
 		<property name="decayTime">
 			<value>461.538452</value>

@@ -62,10 +62,13 @@
 			<destination>{0f08f414-14e4-469c-862e-cca97d665aa2}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{49a74e69-773f-4c09-be7c-072ebf541416}</destination>
+			<destination>{0e73aec6-eb03-4542-886a-f9babb8d8dcc}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{d6be39fb-0645-4c64-8201-6c27bd3f267f}">
+		<property name="isPersistent">
+			<value>true</value>
+		</property>
 		<property name="maxVoices">
 			<value>1</value>
 		</property>
