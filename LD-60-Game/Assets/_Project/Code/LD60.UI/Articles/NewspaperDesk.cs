@@ -57,6 +57,8 @@ namespace LD60.UI
 
             page?.Release(piece);
             save?.Release(piece);
+            if (piece.transform.parent != transform)
+                piece.transform.SetParent(transform, true);
             piece.transform.localRotation = Quaternion.identity;
             piece.transform.localScale = Vector3.one;
             Publish();
@@ -90,8 +92,7 @@ namespace LD60.UI
                 return true;
             }
 
-            piece.transform.localScale = Vector3.one * deskScale;
-            Raise(piece.gameObject);
+            PlaceLoose(piece);
             Publish();
             return true;
         }
@@ -100,6 +101,9 @@ namespace LD60.UI
         {
             if (piece == null)
                 return;
+
+            if (piece.transform.parent != transform)
+                piece.transform.SetParent(transform, true);
 
             piece.transform.localScale = Vector3.one * deskScale;
             Raise(piece.gameObject);
@@ -246,19 +250,15 @@ namespace LD60.UI
             return ids;
         }
 
-        private Vector2 CenterOf(ArticlePiece piece)
+        private Vector3 CenterOf(ArticlePiece piece)
         {
             piece.CopyCells(_cells);
             if (_cells.Count == 0)
-                return piece.transform.localPosition;
+                return piece.transform.position;
 
-            var sum = Vector2.zero;
+            var sum = Vector3.zero;
             for (var i = 0; i < _cells.Count; i++)
-            {
-                var world = piece.transform.TransformPoint(_cells[i]);
-                var local = transform.InverseTransformPoint(world);
-                sum += new Vector2(local.x, local.y);
-            }
+                sum += piece.transform.TransformPoint(_cells[i]);
 
             return sum / _cells.Count;
         }

@@ -390,6 +390,9 @@ namespace LD60.Editor
             data.FindProperty("square").objectReferenceValue = square;
             data.FindProperty("note").objectReferenceValue = note;
             data.FindProperty("desk").objectReferenceValue = desk;
+            var pile = desk.Find("Pile");
+            if (pile != null)
+                data.FindProperty("pile").objectReferenceValue = pile;
             data.ApplyModifiedPropertiesWithoutUndo();
 
             var newspaper = desk.GetComponent<NewspaperDesk>();

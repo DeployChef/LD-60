@@ -17,6 +17,23 @@ namespace LD60.UI
 
         public IReadOnlyList<ArticlePiece> Pieces => _pieces;
 
+        private void Awake()
+        {
+            var sprite = GetComponent<SpriteRenderer>();
+            if (sprite == null || sprite.sprite == null)
+                return;
+
+            var box = GetComponent<BoxCollider>();
+            if (box == null)
+                box = gameObject.AddComponent<BoxCollider>();
+
+            var scale = transform.lossyScale;
+            var size = sprite.sprite.bounds.size;
+            size.z = 0.4f / Mathf.Max(0.01f, Mathf.Abs(scale.z));
+            box.center = sprite.sprite.bounds.center;
+            box.size = size;
+        }
+
         public void Clear()
         {
             _pieces.Clear();
@@ -41,17 +58,25 @@ namespace LD60.UI
             return piece != null && _pieces.Contains(piece);
         }
 
-        public bool Contains(Vector2 deskPoint)
+        public bool Contains(Vector3 world)
         {
-            var center = (Vector2)transform.localPosition;
-            var half = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y)) * 0.5f;
-            return Mathf.Abs(deskPoint.x - center.x) <= half.x && Mathf.Abs(deskPoint.y - center.y) <= half.y;
+            var sprite = GetComponent<SpriteRenderer>();
+            if (sprite == null || sprite.sprite == null)
+                return false;
+
+            var local = transform.InverseTransformPoint(world);
+            var center = sprite.sprite.bounds.center;
+            var extents = sprite.sprite.bounds.extents;
+            return Mathf.Abs(local.x - center.x) <= extents.x && Mathf.Abs(local.y - center.y) <= extents.y;
         }
 
         public void Release(ArticlePiece piece)
         {
             if (piece == null)
                 return;
+
+            if (piece.transform.parent == transform && transform.parent != null)
+                piece.transform.SetParent(transform.parent, true);
 
             _pieces.Remove(piece);
             RefreshLabel();
@@ -84,15 +109,21 @@ namespace LD60.UI
 
         private void Toss(ArticlePiece piece)
         {
-            var width = Mathf.Abs(transform.localScale.x);
-            var height = Mathf.Abs(transform.localScale.y);
-            var x = transform.localPosition.x + Random.Range(-width * 0.34f, width * 0.34f);
-            var y = transform.localPosition.y + Random.Range(-height * 0.32f, height * 0.32f);
-            var depth = -0.08f;
-            piece.transform.SetParent(transform.parent, false);
+            var sprite = GetComponent<SpriteRenderer>();
+            var extent = sprite != null && sprite.sprite != null
+                ? sprite.sprite.bounds.extents
+                : new Vector3(0.5f, 0.5f, 0f);
+            piece.transform.SetParent(transform, false);
             piece.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-24f, 24f));
-            piece.transform.localScale = Vector3.one * slotScale;
-            piece.transform.localPosition = new Vector3(x, y, depth);
+            var parentScale = transform.lossyScale;
+            piece.transform.localScale = new Vector3(
+                slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.x)),
+                slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.y)),
+                slotScale / Mathf.Max(0.01f, Mathf.Abs(parentScale.z)));
+            piece.transform.localPosition = new Vector3(
+                Random.Range(-extent.x * 0.55f, extent.x * 0.55f),
+                Random.Range(-extent.y * 0.5f, extent.y * 0.5f),
+                -0.05f);
         }
     }
 }

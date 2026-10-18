@@ -17,6 +17,7 @@ namespace LD60.UI
         private Vector3 _grab;
         private Vector3 _home;
         private Vector3 _homeScale;
+        private Vector3 _lift;
 
         private void Awake()
         {
@@ -95,7 +96,7 @@ namespace LD60.UI
             if (top != this)
                 return;
 
-            var plane = new Plane(transform.forward, transform.position);
+            var plane = Surface(transform.position);
             if (!plane.Raycast(ray, out var distance))
                 return;
 
@@ -105,26 +106,27 @@ namespace LD60.UI
             if (piece != null && _board != null)
                 _board.PrepareLift(piece);
 
+            _lift = SurfaceNormal() * LiftDistance;
             _grab = transform.position - ray.GetPoint(distance);
             _held = true;
-            transform.position = _home - transform.forward * LiftDistance;
+            transform.position = _home - _lift;
             Lift(true);
         }
 
         private void Move(Camera camera, Vector2 screen)
         {
             var ray = camera.ScreenPointToRay(screen);
-            var plane = new Plane(transform.forward, _home);
+            var plane = Surface(_home);
             if (!plane.Raycast(ray, out var distance))
                 return;
 
-            transform.position = ray.GetPoint(distance) + _grab - transform.forward * LiftDistance;
+            transform.position = ray.GetPoint(distance) + _grab - _lift;
         }
 
         private void Drop()
         {
             _held = false;
-            transform.position += transform.forward * LiftDistance;
+            transform.position += _lift;
             var piece = GetComponent<ArticlePiece>();
             if (_board == null)
             {
@@ -157,6 +159,21 @@ namespace LD60.UI
             }
 
             return top;
+        }
+
+        private Transform SurfaceTransform()
+        {
+            return _board != null ? _board.transform : transform;
+        }
+
+        private Vector3 SurfaceNormal()
+        {
+            return SurfaceTransform().forward;
+        }
+
+        private Plane Surface(Vector3 through)
+        {
+            return new Plane(SurfaceNormal(), through);
         }
 
         private void Lift(bool held)
