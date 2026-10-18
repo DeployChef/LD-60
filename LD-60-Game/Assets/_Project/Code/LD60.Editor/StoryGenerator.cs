@@ -4,6 +4,8 @@ using System.IO;
 using LD60.Gameplay.Articles;
 using LD60.Gameplay.Context;
 using LD60.Gameplay.Story;
+using LD60.UI;
+using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -25,6 +27,7 @@ namespace LD60.Editor
         private static Dictionary<string, ArticleDefinition> _articles;
         private static Dictionary<string, string> _articlePaths;
         private static Dictionary<ArticleKind, int> _kindCounters;
+        private static Dictionary<string, (Sprite sprite, ArticlePictureLayout layout)> _preservedCustomPictures;
         private static Dictionary<string, GuestDefinition> _guests;
         private static ArticlePictureLayout _layoutNoPic;
         private static ArticlePictureLayout _layoutPicMid;
@@ -44,9 +47,11 @@ namespace LD60.Editor
             Debug.Log("[StoryGenerator] [Step 1/7] Checking Article Prefabs & Desk Props...");
             ArticleSetup.Build();
 
-            // 2. Clean old story chapters/actions and any legacy unnumbered root articles
-            Debug.Log("[StoryGenerator] [Step 2/7] Cleaning old Story Chapters/Actions and legacy root Articles...");
-            CleanStoryAndLegacyRootArticles();
+            // 2. Cache any custom pictures assigned by the user, then clean old story/article folders
+            _defaultArticleSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Blocking/Unit.png");
+            CacheCustomArticleSprites();
+            Debug.Log("[StoryGenerator] [Step 2/7] Cleaning old Story Chapters/Actions and Article folders...");
+            CleanAllAssetsIncludingKindFolders(keepGuests: true);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
@@ -64,7 +69,6 @@ namespace LD60.Editor
             _layoutNoPic = EnsureLayout("Picture1", 1);
             _layoutPicMid = EnsureLayout("Picture2", 2);
             _layoutPicTop = EnsureLayout("Picture3", 3);
-            _defaultArticleSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Blocking/Unit.png");
             Debug.Log($"[StoryGenerator] Layouts ready: Picture1 (slot 1), Picture2 (slot 2), Picture3 (slot 3). Default placeholder sprite: {(_defaultArticleSprite != null ? _defaultArticleSprite.name : "NULL")}");
 
             // 5. Generate Guests
@@ -101,7 +105,7 @@ namespace LD60.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            // 9. Verify every generated asset on disk
+            // 9. Verify every generated asset on disk AND check TextMeshPro layout fit
             VerifyGeneratedStory(chapters);
 
             Debug.Log($"[StoryGenerator] === GENERATION COMPLETE: {_guests.Count} Guests, {_articles.Count} Articles across 4 Kind folders, {chapters.Length} Chapters wired into Game.unity! ===");
@@ -112,11 +116,30 @@ namespace LD60.Editor
         {
             Debug.Log("[StoryGenerator] === CLEANING ALL STORY & ARTICLE ASSETS ===");
             Selection.activeObject = null;
-            CleanAllAssetsIncludingKindFolders();
+            CleanAllAssetsIncludingKindFolders(keepGuests: false);
             WireStoryBookInScene(Array.Empty<ChapterDefinition>());
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[StoryGenerator] === CLEAN COMPLETE: Removed all generated Chapters, Actions, Guests, and Articles. ===");
+        }
+
+        private static void CacheCustomArticleSprites()
+        {
+            _preservedCustomPictures = new Dictionary<string, (Sprite sprite, ArticlePictureLayout layout)>(StringComparer.Ordinal);
+            if (!Directory.Exists(ArticlesFolder))
+                return;
+
+            var guids = AssetDatabase.FindAssets("t:ArticleDefinition", new[] { ArticlesFolder });
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var art = AssetDatabase.LoadAssetAtPath<ArticleDefinition>(path);
+                if (art != null && !string.IsNullOrEmpty(art.Id) && art.Picture != null && art.Picture != _defaultArticleSprite)
+                    _preservedCustomPictures[art.Id] = (art.Picture, art.PictureLayout);
+            }
+
+            if (_preservedCustomPictures.Count > 0)
+                Debug.Log($"[StoryGenerator][Cache] Preserved {_preservedCustomPictures.Count} custom article pictures before rebuilding folders.");
         }
 
         private static void CleanStoryAndLegacyRootArticles()
@@ -143,15 +166,15 @@ namespace LD60.Editor
                 }
             }
 
-            Debug.Log($"[StoryGenerator][Clean] Removed {removed} old story/root assets prior to regeneration.");
+            Debug.Log($"[StoryGenerator][Clean] Removed {removed} old story/root assets.");
         }
 
-        private static void CleanAllAssetsIncludingKindFolders()
+        private static void CleanAllAssetsIncludingKindFolders(bool keepGuests)
         {
             CleanStoryAndLegacyRootArticles();
 
             var removed = 0;
-            if (Directory.Exists(GuestsFolder))
+            if (!keepGuests && Directory.Exists(GuestsFolder))
             {
                 var guestFiles = Directory.GetFiles(GuestsFolder, "*.asset", SearchOption.TopDirectoryOnly);
                 foreach (var file in guestFiles)
@@ -167,7 +190,7 @@ namespace LD60.Editor
                     removed++;
             }
 
-            Debug.Log($"[StoryGenerator][Clean] Removed {removed} guest assets and ArticleKind folders.");
+            Debug.Log($"[StoryGenerator][Clean] Cleaned {removed} ArticleKind folders{(keepGuests ? "" : " and guest assets")}.");
         }
 
         private static bool DeleteAssetIfExists(string path)
@@ -358,544 +381,552 @@ namespace LD60.Editor
                 [ArticleKind.Ad] = 0
             };
 
-            // === SPECIAL ARTICLES (10) ===
+            // =====================================================================
+            // SPECIAL / GUEST ARTICLES (10)
+            // =====================================================================
             AddArticle("fish-whisper", ArticleShape.Line2H, ArticleKind.Report, 0,
-                "Rumors at the Old Pier",
-                "Night fishermen claim a giant pike surfaced in the backwater, cursed out the boatmen, and dragged their nets under. Officials blame cheap moonshine.",
+                "Old Pier Rumors",
+                "Night boatmen say a giant pike surfaced in the bay and dragged nets down.",
                 0f, 1f, 0f);
 
             AddArticle("deputy-bribe", ArticleShape.Line2H, ArticleKind.Politics, 2,
-                "A Word from Councilor Crowley",
-                "\"My sacred duty is the welfare of our people. So long as I hold office, no worker shall go without a crust of bread and a fatherly word.\"",
+                "Kind Words",
+                "\"No worker shall lack warm bread and a kind word.\"",
                 2f, 0f, 0f);
 
-            AddArticle("official-seal", ArticleShape.Dot, ArticleKind.Politics, 1,
-                "Exemplary Order in the Mills",
-                "A Ministry of Public Decency inspection confirmed that strike rumors are pure fabrication. Weavers work in warmth, joy, and patriotic song.",
+            AddArticle("official-seal", ArticleShape.Line2H, ArticleKind.Politics, 2,
+                "Mill Order",
+                "Strike rumors are false. Weavers work in warm mills.",
                 2f, 0f, 0f);
 
             AddArticle("speakeasy-ad", ArticleShape.Line2H, ArticleKind.Ad, 2,
-                "The Lily Tea Club",
-                "Cozy evening conversations behind heavy velvet drapes. Special amber refreshments reserved for distinguished members. Ask the doorman for the password.",
+                "Lily Club",
+                "Cozy talks and amber drinks behind velvet drapes.",
                 0f, 0f, 50f);
 
             AddArticle("anon-accounts", ArticleShape.Line2H, ArticleKind.Politics, 2,
-                "Secret City Hall Accounts",
-                "Municipal gold is bleeding abroad through shell companies owned by private printing house proprietors. Authorities are covering up the embezzlement.",
+                "Gold Leaks",
+                "City gold bleeds abroad through secret shell firms.",
                 2f, 1f, 0f);
 
             AddArticle("fish-ultimatum", ArticleShape.Line3H, ArticleKind.Report, 2,
-                "Ultimatum of the Deep",
-                "\"A total ban on hooks, lures, and bottom tackle! Any citizen spotted with a fishing rod on the embankment is hereby declared a personal enemy of the Underwater Brotherhood!\"",
+                "Deep Ultimatum",
+                "\"A total ban on hooks and nets! Anyone with a fishing rod on the pier is an enemy of the Deep!\"",
                 0f, 2f, 0f);
 
             AddArticle("wanted-mask", ArticleShape.Line3V, ArticleKind.Politics, 2,
-                "Wanted: Enemy of the State",
-                "The Military Command offers 10,000 rubles for the agitator in the white porcelain mask. Harboring the fugitive or concealing evidence is punishable by firing squad.",
+                "Wanted Traitor",
+                "10,000 rubles for the agitator in the white mask. Harboring the fugitive means firing squad.",
                 3f, 0f, 0f);
 
             AddArticle("execution-list", ArticleShape.Line3V, ArticleKind.Politics, 2,
-                "Secret Execution Lists",
-                "A typed roster of 120 innocent citizens taken to the firing range over the past six months, bearing the personal signatures of the Commandant and the printing house owners.",
+                "Firing Roster",
+                "A typed list of 120 innocent citizens shot at the range, signed by the Boss and the Command.",
                 3f, 2f, 0f);
 
             AddArticle("anon-truth", ArticleShape.Banner5x2, ArticleKind.Social, 3,
-                "CONFESSION OF THE EXECUTED EDITOR: \"I LIVE, AND THE CITY SHALL BE FREE!\"",
-                "\"Citizens! Workers, soldiers, mothers! I speak to you from the grave. The Command's executioners shot me in the face, yet the bullet passed through, leaving only the scar of their shame. They thought they buried the truth in a lime pit—but the truth has returned to this front page!\n\nThe print shop owners and the Military Command sold our city for foreign gold bars. They starved your children and threw your brothers into the Foundry cells. Their hour is over! Rise as one! Seize the stations, surround the Command headquarters, and do not fear their machine guns. This is our final issue—and our first free word!\"",
+                "CONFESSION OF THE EXECUTED EDITOR: \"I LIVE!\"",
+                "\"Citizens! Workers, soldiers, mothers! The Command's executioners shot me in the face and dumped me in a lime pit—yet the truth has returned to this front page! The print shop bosses and the Generals sold our city for foreign gold. Rise as one, seize the stations, and claim your freedom!\"",
                 0f, 10f, 0f);
 
             AddArticle("order-curfew", ArticleShape.Banner5x2, ArticleKind.Politics, 3,
-                "EMERGENCY DECREE OF THE MILITARY COMMAND: \"IRON ORDER AND STATE OF SIEGE\"",
-                "\"In the name of the Supreme Military Council and in fulfillment of our sacred duty to the Nation! Following the exposure of a foreign plot and armed sedition by hired anarchists, Martial Law is hereby declared across the capital effective 18:00.\n\nAny gathering exceeding two persons on streets or squares shall be dispersed immediately by live machine-gun fire without warning. Anyone caught bearing arms, seditious leaflets, or sheltering fugitives is declared a traitor to the State and shall be executed on the spot within the hour. Remain indoors and preserve iron calm!\"",
+                "EMERGENCY DECREE: \"IRON ORDER AND STATE OF SIEGE\"",
+                "\"In the name of the Supreme Military Council! Following the exposure of an armed anarchist plot, Martial Law is declared effective 18:00. Any street gathering of more than two persons shall be dispersed by live machine-gun fire without warning. Remain indoors and preserve iron calm!\"",
                 10f, 0f, 0f);
 
-            // === POLITICS ARTICLES (8) ===
+            // =====================================================================
+            // POLITICS ARTICLES
+            // =====================================================================
             AddArticle("curfew-extension", ArticleShape.Square, ArticleKind.Politics, 3,
-                "State of Emergency",
-                "Curfew has been moved up to six o'clock in the evening. Stepping outdoors without a special military pass is strictly forbidden under penalty of detention.",
+                "Curfew Extended",
+                "Curfew moves to six in the evening. Stepping outside without a military pass carries immediate arrest.",
                 3f, 0f, 0f);
 
             AddArticle("curfew-talk", ArticleShape.Line3V, ArticleKind.Politics, 0,
-                "Night Patrols Reinforced",
-                "The Military Commandant has urged law-abiding citizens to refrain from evening walks after the factory whistle. The city remains under vigilant watch.",
+                "Night Patrols",
+                "The Commandant urges citizens to avoid evening walks after the factory whistle. Patrols are doubled.",
                 3f, 0f, 0f);
 
             AddArticle("decree-order", ArticleShape.Line3V, ArticleKind.Politics, 0,
-                "Public Decency Decree",
-                "City Hall reminds residents that any public gathering of more than three people without an approved brass band is deemed an unlawful assembly.",
+                "Decency Decree",
+                "City Hall reminds all residents that any gathering over three people without a permit is unlawful.",
                 3f, 0f, 0f);
 
             AddArticle("deputy-piety", ArticleShape.Line3V, ArticleKind.Politics, 0,
-                "Benefactor Crowley",
-                "City Councilor Crowley personally donated a crate of rusks to the municipal orphanage. The children wept with joy and sang praises to the city father.",
+                "Kind Crowley",
+                "Councilor Crowley donated a crate of rusks to the city orphanage. The children sang praises to him.",
                 3f, 0f, 0f);
 
             AddArticle("dictator-death", ArticleShape.Line3V, ArticleKind.Politics, 2,
-                "Official Bulletin of Mourning",
-                "The heart of the Father of the Nation has ceased to beat. The Provisional Military Committee declares national mourning and calls for iron calm.",
+                "State Mourning",
+                "The Father of the Nation has passed away. The Military Council declares mourning and demands calm.",
                 3f, 0f, 0f);
 
             AddArticle("military-guns", ArticleShape.Line3V, ArticleKind.Politics, 2,
-                "Armored Train at Central Station",
-                "The armored train 'Punisher' has pulled onto the main platform. Heavy artillery turrets are trained on the working-class districts as steam billows from every boiler.",
+                "Armored Train",
+                "The armored train 'Punisher' stands at Central Station with heavy guns aimed at the worker districts.",
                 3f, 0f, 0f);
 
             AddArticle("parade-prep", ArticleShape.Line3V, ArticleKind.Politics, 0,
-                "Loyalty Review Preparations",
-                "Next Sunday the main square will host a grand review of workers' devotion to the Leader. Attendance by all factory shops with banners is strictly mandatory.",
+                "Loyalty Parade",
+                "Sunday's square hosts a grand review of devotion to the Leader. Factory attendance is mandatory.",
                 2f, 0f, 0f);
 
             AddArticle("shoe-minister", ArticleShape.Line3V, ArticleKind.Politics, 0,
-                "Ministerial Inspection",
-                "The Minister of Light Industry personally inspected the soles of factory workers. Galosh production was declared exemplary and steadily rising.",
+                "Galosh Check",
+                "The Light Industry Minister inspected factory boots. Galosh output was declared exemplary today.",
                 3f, 0f, 0f);
 
-            // === AD ARTICLES (14) ===
+            // =====================================================================
+            // AD ARTICLES
+            // =====================================================================
             AddArticle("ammunition-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "Schultz's Hardware",
-                "Hunting shells, buckshot, heavy steel door chains, and deadbolts. Clearance sale on remaining warehouse stock.",
+                "Steel Locks",
+                "Buckshot, heavy door chains, and deadbolts. Clearance sale today.",
                 0f, 0f, 25f);
 
             AddArticle("balsam-ad", ArticleShape.Line2H, ArticleKind.Ad, 2,
-                "Dr. Spiegel's Balsam",
-                "A miraculous herbal tincture in pure grain spirit. Cures rheumatism, aching joints, and profound melancholy of the soul.",
+                "Pure Balsam",
+                "Herbal drops in spirit. Cures joints and dark moods.",
                 0f, 0f, 25f);
 
-            AddArticle("boots-ad", ArticleShape.Dot, ArticleKind.Ad, 1,
-                "\"Marsh-Walker\" Waders",
-                "Reliable protection against autumn slush, salt water, and sudden bites from river fauna. Heavy-duty vulcanized rubber.",
+            AddArticle("boots-ad", ArticleShape.Line2V, ArticleKind.Ad, 2,
+                "Rubber Boots",
+                "Heavy vulcanized waders. Defense against slush and bay bites.",
                 0f, 0f, 15f);
 
-            AddArticle("brilliantine-ad", ArticleShape.Dot, ArticleKind.Ad, 1,
-                "\"Casanova\" Brilliantine",
-                "Impeccable shine and iron-hold hair parting through gale-force winds, hasty departures, and sudden house searches. French fragrance.",
+            AddArticle("brilliantine-ad", ArticleShape.Line2V, ArticleKind.Ad, 2,
+                "Hair Pomade",
+                "Iron-hold parting through gale winds and sudden house raids.",
                 0f, 0f, 10f);
 
             AddArticle("candle-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "Stearin Candles",
-                "Bright, steady flame for dark nights. Smokeless and draft-resistant. Sold wholesale at the shop by the bridge.",
+                "Wax Candles",
+                "Bright smokeless flame for dark nights. Sold wholesale by the pier.",
                 0f, 0f, 20f);
 
             AddArticle("funeral-ad", ArticleShape.Line3H, ArticleKind.Ad, 0,
-                "\"Tranquility\" Funeral Parlor",
-                "Oak and pine coffins with ventilation. Spring-wagon delivery to the cemetery. Generous discounts for Printers' Union members.",
+                "Tranquility Parlors",
+                "Oak and pine coffins with spring-wagon delivery. Generous discounts for Printers' Union members.",
                 0f, 0f, 15f);
 
             AddArticle("hospital-ad", ArticleShape.Square, ArticleKind.Ad, 0,
-                "\"Mountain Air\" Sanatorium",
-                "Treatment for nervous exhaustion, chronic insomnia, and political anxiety far from factory smoke. Complete peace guaranteed.",
+                "Mountain Sanatorium",
+                "Treatment for nervous exhaustion, insomnia, and political anxiety far from factory smoke. Peace assured.",
                 0f, 0f, 30f);
 
             AddArticle("lottery-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "\"Last Chance\" Lottery",
-                "Grand prize: a first-class steamer ticket to Stockholm! Try your luck while the borders are still open.",
+                "Big Lottery",
+                "Grand prize: a steamer ticket to Stockholm! Try your luck today.",
                 0f, 0f, 10f);
 
             AddArticle("pawnshop-ad", ArticleShape.Line2H, ArticleKind.Ad, 0,
                 "Goldman's Pawnshop",
-                "We buy silverware, furs, chronometers, and gold dental bridges. Immediate cash in hand; absolute discretion assured.",
+                "We buy silver, furs, watches, and gold teeth. Immediate cash and total discretion.",
                 0f, 0f, 15f);
 
             AddArticle("roach-trap-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "\"Quiet Sleep\" Powder",
-                "Exterminates cockroaches, bedbugs, and nosy tenement neighbors. Odorless and instant.",
+                "Quiet Powder",
+                "Exterminates roaches, bedbugs, and nosy neighbors. Odorless and instant.",
                 0f, 0f, 10f);
 
             AddArticle("smokes-ad", ArticleShape.Line2H, ArticleKind.Ad, 0,
-                "\"Northern\" Cigarettes",
-                "Real tobacco for strong spirits. Native smoke warms the lungs in any weather.",
+                "Northern Cigarettes",
+                "Real strong tobacco for bold spirits. Native smoke warms the lungs in any storm.",
                 0f, 0f, 5f);
 
             AddArticle("soap-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "\"Purity\" Soap",
-                "Scrubs away stubborn soot, fuel oil, and printer's ink until it squeaks. The choice of every conscientious worker.",
+                "Purity Soap",
+                "Scrubs away soot, fuel oil, and printer's ink until it squeaks.",
                 0f, 0f, 10f);
 
             AddArticle("tonic-ad", ArticleShape.Line2H, ArticleKind.Ad, 0,
-                "\"Vigor\" Drops",
-                "A proven remedy for night shifts, clerks, and those who cannot afford to sleep. Approved by the Municipal Apothecary Board.",
+                "Vigor Drops",
+                "A proven remedy for night shifts, clerks, and those who cannot afford to sleep.",
                 0f, 0f, 15f);
 
             AddArticle("whiskey-stock", ArticleShape.Line2H, ArticleKind.Ad, 0,
-                "Highland Warming",
-                "Strong aged Scotch from private cellars. Final shipment before border closures.",
+                "Aged Scotch",
+                "Strong aged Scotch from private cellars. Final crates before frost.",
                 0f, 0f, 20f);
 
-            // === REPORTAGE ARTICLES (30, keeping Russian/French/Chinese in original language!) ===
-            AddArticle("archive-break", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Night Break-In at the Archives",
-                "An unknown intruder in a white porcelain mask broke into the Command's restricted archives and stole case files of convicted journalists.",
+            // =====================================================================
+            // REPORTAGE ARTICLES (Keeping Russian / French / Chinese in original!)
+            // =====================================================================
+            AddArticle("archive-break", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Archive Break-In",
+                "A man in a white mask broke into Command archives and stole files on journalists.",
                 1f, 1f, 0f);
 
-            AddArticle("cactus-blossom", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Botanical Garden in Bloom",
-                "A rare Mexican cereus has bloomed in the municipal conservatory. The flower smells of rotten herring, yet the line of visitors stretches two blocks.",
+            AddArticle("cactus-blossom", ArticleShape.Line2H, ArticleKind.Report, 2,
+                "Rare Cactus",
+                "A rare cactus bloomed today. It smells of herring.",
                 0f, 1f, 0f);
 
             AddArticle("chess-brawl", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "Scandal at the Chess Cup",
-                "The Waterworks Chess Championship final ended in a brawl with carved queens after a disputed check in the endgame. The arbiter escaped via the fire exit.",
+                "Chess Brawl",
+                "The chess final ended in a brawl. The judge fled.",
                 0f, 1f, 0f);
 
-            AddArticle("china-cricket-arena", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "上海斗蟋王：四十七场不败神话",
-                "昨夜城隍庙蟋蟀争霸赛落幕，来自闸北的青头大将军力克群雄，勇夺四十七连胜。赢家获赠精雕紫檀小轿一顶，全场看客欢声雷动，盘口赌金破万两。",
+            AddArticle("china-cricket-arena", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "上海斗蟋王四十七连胜",
+                "昨夜城隍庙蟋蟀争霸赛落幕，闸北青头大将军勇夺四十七连胜，赢家获赠紫檀小轿，全场欢声雷动。",
                 0f, 1f, 0f);
 
-            AddArticle("china-flying-tea", ArticleShape.Dot, ArticleKind.Report, 1,
-                "云雾仙茶：悬空三寸不沾尘",
-                "云南古刹僧侣采得高山绝壁云雾茶。沸水初注，碧绿叶片宛如游龙腾空，凌空三寸飘浮不沉，香透十里古道，惊为天地灵秀。",
+            AddArticle("china-flying-tea", ArticleShape.Line2H, ArticleKind.Report, 2,
+                "云南古刹云雾仙茶",
+                "古刹僧侣采得高山云雾茶，沸水初注，碧叶凌空飘浮不沉，清香透十里。",
                 0f, 1f, 0f);
 
-            AddArticle("city-clock", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Town Hall Clock Stopped",
-                "The main municipal chimes stopped at a quarter to midnight. Clockmakers claim a heavy steel fishhook jammed the gears.",
+            AddArticle("city-clock", ArticleShape.Line2V, ArticleKind.Report, 2,
+                "Clock Jam",
+                "Town Hall chimes stopped at midnight. A fishhook jammed gears.",
                 0f, 1f, 0f);
 
             AddArticle("cyborg-dog", ArticleShape.Square, ArticleKind.Report, 3,
-                "Cyber-Poodle at the Chemical Plant",
-                "Sensation of the week! The missing poodle Barnaby appeared outside the chemical plant labs sporting a glowing red lens in place of his right eye and bit through a steel safe.",
+                "Cyber-Poodle Sighted",
+                "Missing poodle Barnaby appeared outside the chemical plant with a glowing red lens eye and bit through a steel safe.",
                 0f, 2f, 0f);
 
             AddArticle("elephant-beer", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "Jumbo the Elephant Found Drunk",
-                "The escaped elephant was discovered at the Old Municipal Brewery. Jumbo drank a vat of hopped wort and has been snoring blissfully on the barley sacks for three days.",
+                "Drunk Jumbo",
+                "Jumbo drank a vat of wort and sleeps on malt sacks.",
                 0f, 1f, 0f);
 
             AddArticle("elephant-escape", ArticleShape.Square, ArticleKind.Report, 0,
-                "Menagerie Escape",
-                "Jumbo the Ceylon elephant has walked out of the city zoo. Management asks residents not to tease the animal with umbrellas and to report tracks to the police.",
+                "Elephant Escapes Zoo",
+                "Jumbo the Ceylon elephant walked out of the city menagerie. Citizens are asked not to tease him with umbrellas.",
                 0f, 1f, 0f);
 
             AddArticle("elephant-job", ArticleShape.Line2H, ArticleKind.Report, 0,
-                "New Full-Time Employee",
-                "The brewery board officially hired Jumbo the elephant as Chief Malt Taster for his phenomenal sense of smell. Salary: one bucket of molasses per day.",
+                "Jumbo Hired",
+                "The brewery hired Jumbo as Malt Taster for a daily bucket of molasses.",
                 0f, 1f, 0f);
 
             AddArticle("found-dog-1", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Strange Poodle Near Chemical Plant",
-                "Workers' quarter residents spotted the missing poodle. The dog does not bark, emits a monotonous static crackle, and stares at telegraph poles.",
+                "Odd Poodle",
+                "Workers saw the lost poodle by the plant. It crackles like a radio.",
                 0f, 1f, 0f);
 
-            AddArticle("france-baguette-strike", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "La Grande Crise de la Baguette",
-                "Les boulangers parisiens sont descendus dans la rue ce matin pour exiger une loi fixant la longueur légale de la baguette à exactement 65 centimètres. Les terrasses de café applaudissent sous une pluie de miettes.",
+            AddArticle("france-baguette-strike", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Crise du Pain",
+                "Les boulangers parisiens manifestent pour fixer la baguette à 65 centimètres.",
                 0f, 1f, 0f);
 
-            AddArticle("france-snail-race", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Scandale au Grand Prix de l'Escargot",
-                "La grande course annuelle d'escargots de Bourgogne a été suspendue après des soupçons de dopage au beurre persillé. Le champion en titre, l'escargot 'Éclair', a pulvérisé le record mondial en rampant 30 centimètres en une heure.",
+            AddArticle("france-snail-race", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Prix de l'Escargot",
+                "La course d'escargots est suspendue après un soupçon de dopage au beurre.",
                 0f, 1f, 0f);
 
             AddArticle("harbor-patrol", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Harbor Patrols Tightened",
-                "The Coast Guard has stepped up night inspections of fishing launches. Dockers whisper of a mysterious unlit motorboat slipping through the fog.",
+                "Bay Patrols",
+                "Coast Guard boats patrol at night. Dockers saw an unlit launch.",
                 1f, 1f, 0f);
 
             AddArticle("inventor-boom", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "Explosion on Garden Street",
-                "Tests of inventor Finch's engine ended with a woodshed and a neighbor's henhouse launched into the sky. Finch is unharmed and gathering peelings for a second attempt.",
+                "Shed Blast",
+                "Finch's motor test blew his woodshed into the sky.",
                 0f, 1f, 0f);
 
             AddArticle("inventor-engine", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Potato-Peel Engine",
-                "Self-taught inventor Finch has built a power motor running on fermented potato peelings. The Patent Office has asked for time to deliberate.",
+                "Peel Engine",
+                "Mechanic Finch built a motor run on potato peels. Clerks marveled.",
                 0f, 1f, 0f);
 
-            AddArticle("london-pigeon-strike", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Pigeons Picket Trafalgar Square",
-                "Flocks of Trafalgar pigeons have refused to take flight today, demanding high-grade oats instead of stale breadcrumbs. Traffic around Nelson's Column remains utterly paralyzed.",
+            AddArticle("london-pigeon-strike", ArticleShape.Line2H, ArticleKind.Report, 2,
+                "Idle Pigeons",
+                "Trafalgar pigeons refuse to fly without fresh oats.",
                 0f, 1f, 0f);
 
-            AddArticle("london-tea-spill", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "The Great Thames Tea Spillage",
-                "A merchant barge carrying three hundred crates of Earl Grey capsized beneath Tower Bridge. The Thames has turned into a steaming tea parlor; gentlemen in top hats were spotted dipping biscuits directly into the river.",
+            AddArticle("london-tea-spill", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Thames Tea Spillage",
+                "A barge with 300 crates of Earl Grey capsized at Tower Bridge, turning the Thames into hot tea.",
                 0f, 1f, 0f);
 
-            AddArticle("lost-dog", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Missing Poodle",
-                "A gray poodle answering to 'Barnaby' was lost near the Factory Embankment. Finder is kindly asked to return him for a generous reward.",
+            AddArticle("lost-dog", ArticleShape.Line2H, ArticleKind.Report, 2,
+                "Lost Poodle",
+                "Gray poodle Barnaby lost by the pier. High reward.",
                 0f, 1f, 0f);
 
             AddArticle("mask-graffiti", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Brazen Graffiti on Tribunal Wall",
-                "An indelible stencil of a white mask and the words 'They Did Not Bury Me' appeared on the granite facade of the Tribunal. Authorities are hunting the vandal.",
+                "Wall Stencil",
+                "A white mask and 'I Live' appeared on the Tribunal granite wall.",
                 1f, 1f, 0f);
 
             AddArticle("port-escape", ArticleShape.Line3H, ArticleKind.Report, 0,
                 "Panic in the Harbor",
-                "Private motorboats are hastily departing the port basin. The Coast Guard has ceased checking vessel papers.",
+                "Private motorboats are hastily departing the port basin. Coast Guards have stopped checking papers.",
                 0f, 1f, 0f);
 
             AddArticle("radio-dog-final", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Secret of the Cyber-Poodle",
-                "Experts confirmed that the recovered poodle was a classified intelligence lab prototype designed for covert audio recording inside City Hall offices.",
+                "Spy Poodle",
+                "Experts confirm the cyber-poodle was built to bug City Hall offices.",
                 1f, 1f, 0f);
 
             AddArticle("radio-silence", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "The Airwaves Fall Silent",
-                "All state radio stations in the capital have ceased broadcasting. The only voice left in the city is this newspaper page.",
+                "Dead Waves",
+                "All radio towers went silent today. Only this paper's voice remains.",
                 0f, 1f, 0f);
 
-            AddArticle("russia-bear-chess", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "ЧП на Красной площади: Медведь обыграл министра в шахматы и потребовал водки",
-                "В самом сердце заснеженной первопрестольной, в трактире у Спасских ворот, ручной цирковой медведь Потап Иванович устроил дипломатический фурор. Зайдя погреться под звуки балалайки, косолапый сел за столик товарища министра путей сообщения и за пять минут поставил ему беспощадный мат ферзём.\n\nОтказываясь принимать поздравления пустыми аплодисментами, победитель с грозным рыком хлопнул мохнатой лапой по столу и жестом указал на запотевший хрустальный графин сорокоградусной «Столичной» и тарелку с солёными груздями. Министр признал безоговорочное поражение и лично оплатил счёт за счёт казны под бурные здравицы завсегдатаев.",
+            AddArticle("russia-bear-chess", ArticleShape.Square, ArticleKind.Report, 3,
+                "Медведь обыграл министра",
+                "В трактире у Спасских ворот цирковой медведь Потап за пять минут поставил мат министру и потребовал графин «Столичной» с груздями.",
                 0f, 1f, 0f);
 
-            AddArticle("russia-ice-cream", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Сибирский циклон над Москвой: Пломбир на лютом морозе",
-                "Несмотря на рекордную пургу, завалившую сугробами Кремль, очередь у ГУМа за классическим сливочным пломбиром вытянулась через всю Красную площадь. Москвичи в тулупах и валенках хрустят вафельными стаканчиками при минус сорока пяти, уверяя иностранных послов, что «ледяное лакомство идеально согревает русскую душу между глотками чая из самовара».",
+            AddArticle("russia-ice-cream", ArticleShape.Square, ArticleKind.Report, 3,
+                "Пломбир в пургу",
+                "Даже в лютый мороз и пургу очередь у ГУМа за пломбиром вытянулась через всю площадь.",
                 0f, 1f, 0f);
 
             AddArticle("torn-nets", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "Havoc on the Embankment",
-                "The fishermen's night catch was ruined: nets were shredded to ribbons by heavy claws. Webbed three-toed tracks were found in the wet sand.",
+                "Torn Nets",
+                "Night nets torn by claws. Webbed tracks in the mud.",
                 0f, 1f, 0f);
 
-            AddArticle("usa-giant-pie", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Five-Story Apple Pie Feeds Manhattan",
-                "Broadway pastry chefs have unveiled a colossal 40-foot apple pie. A steam crane was dispatched to slice the crust, while bystanders armed with shovels devoured cinnamon-spiced portions in minutes.",
+            AddArticle("usa-giant-pie", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Giant Apple Pie",
+                "Broadway bakers baked a 40-foot pie. A steam crane sliced crust for the crowd.",
                 0f, 1f, 0f);
 
-            AddArticle("usa-prohibition-pipes", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "Bootlegger Mistake Floods 5th Ward",
-                "A clandestine distillery mistakenly connected its bourbon pipeline to the municipal water main. Residents of the 5th Ward report that taps are running 90-proof Kentucky mash; plumbers are barred from entering by enthusiastic locals.",
+            AddArticle("usa-prohibition-pipes", ArticleShape.Line3H, ArticleKind.Report, 2,
+                "Bourbon in Pipes",
+                "Bootleggers linked a whiskey pipe to the water main. Taps now run pure bourbon.",
                 0f, 1f, 0f);
 
-            AddArticle("weather-fog", ArticleShape.Dot, ArticleKind.Report, 1,
-                "Fog Over the Bay",
-                "Navigation in the municipal port has been suspended due to heavy mist. Boatmen report strange splashing sounds from the deep channel.",
+            AddArticle("weather-fog", ArticleShape.Line2H, ArticleKind.Report, 2,
+                "Harbor Fog",
+                "Thick mist halts ships. Strange splashes in the bay.",
                 0f, 1f, 0f);
 
             AddArticle("weather-hopeless", ArticleShape.Line2H, ArticleKind.Report, 0,
-                "Weather Forecast",
-                "Tomorrow brings lingering damp drizzle, a biting nor'easter, and a general decline in morale. Barometric pressure is sinking through the floorboards.",
+                "Bleak Skies",
+                "Tomorrow brings cold drizzle, biting wind, and fast-falling barometers.",
                 0f, 1f, 0f);
 
-            // === SOCIAL ARTICLES (16) ===
+            // =====================================================================
+            // SOCIAL ARTICLES
+            // =====================================================================
             AddArticle("blackout-city", ArticleShape.Square, ArticleKind.Social, 3,
-                "City Plunges into Darkness",
-                "The municipal power station has cut the current: workers demand immediate payment of back wages. Streets are lit by protest bonfires.",
+                "City in Darkness",
+                "The power plant cut the current as workers demand back pay. Streets are lit by protest bonfires.",
                 1f, 3f, 0f);
 
             AddArticle("bread-queue-riot", ArticleShape.Square, ArticleKind.Social, 0,
-                "Clash at the Flour Depot",
-                "A crowd of residents broke through the gates of the flour distribution depot after three days without deliveries. Mounted police dispersed the gathering with batons.",
+                "Flour Depot Clash",
+                "Hungry crowds broke through the flour depot gates after three days without bread. Police charged with batons.",
                 1f, 3f, 0f);
 
             AddArticle("bread-ration", ArticleShape.Square, ArticleKind.Social, 0,
-                "Flour Rationing Introduced",
-                "The City Council has regulated bread sales: no more than half a loaf per person. Citizens are urged to remain calm in the queues.",
+                "Flour Rationing",
+                "The Council capped bread sales at half a loaf per person. Citizens are urged to stay calm in queues.",
                 1f, 2f, 0f);
 
             AddArticle("coal-shortage", ArticleShape.Line3H, ArticleKind.Social, 0,
-                "Frost in the Tenement Barracks",
-                "Deliveries of steam coal to central boiler houses are delayed. Residents are advised to sleep in overcoats and seal window vents with old newspapers.",
+                "Frost in the Barracks",
+                "Coal deliveries to boiler houses are delayed. Residents sleep in coats and seal windows with paper.",
                 0f, 2f, 0f);
 
             AddArticle("factory-hunger", ArticleShape.Line3V, ArticleKind.Social, 0,
                 "Hunger Rations",
-                "Daily bread rations have been cut to a quarter-loaf. Women and children are holding silent pickets outside the Command gates.",
+                "Bread rations are cut to a quarter-loaf. Women and children hold silent pickets at the gates.",
                 1f, 3f, 0f);
 
             AddArticle("foundry-shift", ArticleShape.Square, ArticleKind.Social, 0,
-                "Record Shift at the Foundry",
-                "The second shift of the open-hearth furnace exceeded its cast-iron quota. The workers' committee has requested soap and hot meals for the night shift.",
+                "Foundry Quota Met",
+                "The second furnace shift beat its cast-iron quota. Workers asked for soap and hot soup for the night crew.",
                 0f, 3f, 0f);
 
             AddArticle("hospital-rumor", ArticleShape.Line3H, ArticleKind.Social, 0,
-                "Motorcade at the Special Clinic",
-                "At midnight yesterday, the city's top medical professors were rushed to the government clinic. Third-floor windows burned until dawn.",
+                "Midnight Motorcade",
+                "At midnight top medical professors were rushed to the state clinic. Third-floor lights burned till dawn.",
                 1f, 2f, 0f);
 
             AddArticle("love-ad-1", ArticleShape.Dot, ArticleKind.Social, 0,
-                "Personal: The Blue Beret",
-                "\"To the lady in the blue beret who dropped her glove by the depot switch on Tram No. 4! Conductor Oliver has lost all peace of mind and awaits you at the terminus.\"",
+                "Blue Beret",
+                "Lady in blue from Tram 4! Oliver awaits your glove.",
                 0f, 1f, 0f);
 
             AddArticle("love-ad-2", ArticleShape.Dot, ArticleKind.Social, 0,
-                "Reply to Conductor Oliver",
-                "\"Oliver, I threw that glove out on purpose so you would leave me alone. Stop ringing your tram bell under my windows at two in the morning!\"",
+                "Reply: No!",
+                "Oliver, stop ringing your tram bell at 2 AM!",
                 0f, 1f, 0f);
 
             AddArticle("love-ad-3", ArticleShape.Line2H, ArticleKind.Social, 0,
-                "Wedding on the Rails",
-                "Conductor Oliver and the lady in the blue beret have finally reached an understanding. The ceremony will take place aboard Tram Car No. 4 at the park loop.",
+                "Tram Wedding",
+                "Conductor Oliver and the lady in blue will wed aboard Tram 4 at noon.",
                 0f, 2f, 0f);
 
             AddArticle("peace-talks", ArticleShape.Line3H, ArticleKind.Social, 0,
-                "Appeal of the City's Mothers",
-                "Women from the factory districts stepped into no-man's-land between the barricades and the machine-gun nests, pleading with soldiers not to fire on their sons.",
+                "Mothers' Plea",
+                "Factory mothers stepped between the barricades and machine guns, begging soldiers not to shoot.",
                 0f, 2f, 0f);
 
             AddArticle("riot-fires", ArticleShape.Square, ArticleKind.Social, 3,
-                "Barricades on the Avenue",
-                "Workers' militias are raising barricades from overturned tram cars. Units of the municipal garrison are refusing orders to fire on fellow citizens.",
+                "Street Barricades",
+                "Workers are raising barricades from overturned trams. Garrison units refuse orders to fire on citizens.",
                 2f, 3f, 0f);
 
             AddArticle("strike-barricades", ArticleShape.Line3V, ArticleKind.Social, 0,
-                "Storming of Government House",
-                "Workers' detachments have reached the gates of the government quarter. Soldiers are hanging white bedsheets from barracks windows.",
+                "Palace Stormed",
+                "Worker detachments reached Government House. Soldiers hang white sheets from barracks windows.",
                 1f, 3f, 0f);
 
             AddArticle("strike-rumor", ArticleShape.Square, ArticleKind.Social, 0,
-                "Shift Walkout at the Textile Mill",
-                "Weavers refused to man their looms over the lack of kerosene and bread rations. Management promises to resolve the issue with warm shawls.",
+                "Mill Walkout",
+                "Textile weavers left their looms over missing bread and kerosene. Bosses promise warm shawls instead.",
                 1f, 3f, 0f);
 
             AddArticle("train-station-rush", ArticleShape.Line3H, ArticleKind.Social, 0,
-                "Panic at Central Station",
-                "Tickets for all westbound trains are sold out two weeks in advance. Gendarmes are holding back fleeing ministry officials by force.",
+                "Station Panic",
+                "Westbound train tickets are sold out for weeks. Gendarmes hold back fleeing ministry officials.",
                 0f, 2f, 0f);
 
             AddArticle("turnip-fire", ArticleShape.Line3H, ArticleKind.Social, 0,
-                "Fire at the Produce Depot",
-                "Last night the turnip warehouse at the Central Produce Depot burned to the ground. Officials assure the public that rutabaga reserves will last until winter.",
+                "Produce Depot Fire",
+                "The central turnip warehouse burned down last night. Officials claim rutabaga stocks will last.",
                 0f, 2f, 0f);
 
-            // === CITY CHRONICLE & CLASSIFIED FILLERS (to ensure ~26-28 cells per day so the full 25-cell page can be filled with 1-2 spare clippings) ===
-            // Day 1 extras (11 cells)
+            // =====================================================================
+            // DAILY CHRONICLE & CLASSIFIED FILLERS (at most 1 crisp Dot per day!)
+            // =====================================================================
+            // Day 1 extras
             AddArticle("tram-schedule", ArticleShape.Line3V, ArticleKind.Report, 0,
-                "Winter Tram Timetable",
-                "Line No. 4 and Line No. 7 will run at forty-minute intervals due to worn copper cables along the riverfront.",
+                "Tram Delays",
+                "Lines 4 and 7 run at forty-minute intervals due to worn copper cables along the riverfront.",
                 0f, 1f, 0f);
             AddArticle("harbor-dredging", ArticleShape.Square, ArticleKind.Report, 0,
-                "Dredging in the Outer Basin",
-                "Steam dredgers worked all morning clearing silt near Pier 3. Fishermen complained of churning black mud and sulfur odors.",
+                "Basin Dredging",
+                "Steam dredgers cleared black silt near Pier 3 all morning. Fishermen complained of sulfur fumes.",
                 0f, 1f, 0f);
             AddArticle("bakery-notice", ArticleShape.Line2H, ArticleKind.Social, 0,
-                "Municipal Bakery No. 2",
-                "Rye loaves will be issued against yellow coupons starting at seven in the morning. Bring your own wrapping paper.",
+                "Bakery No. 2",
+                "Rye loaves issued on yellow coupons from 7 AM. Bring wrapping paper.",
                 0f, 1f, 0f);
-            AddArticle("galosh-repair", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "Vulcan Rubber Workshop",
-                "We patch galoshes, hot-water bottles, and raincoats while you wait. Corner of Foundry Lane.",
+            AddArticle("galosh-repair", ArticleShape.Dot, ArticleKind.Ad, 0,
+                "Rubber Patch",
+                "Galoshes and coats patched fast on Foundry Lane.",
                 0f, 0f, 5f);
 
-            // Day 2 extras (8 cells)
-            AddArticle("night-watch-roster", ArticleShape.Line3H, ArticleKind.Report, 0,
-                "Courtyard Watch Duty",
-                "House committees must post two night watchmen with whistles at every archway from dusk until the morning factory siren.",
-                1f, 0f, 0f);
+            // Day 2 extras
             AddArticle("chimney-sweep-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "Master Chimney Sweep",
-                "Soot cleared from flues and cast-iron stoves without dust. Official certificate from the Fire Brigade.",
+                "Flue Sweep",
+                "Soot cleared from flues and stoves without dust. Certified service.",
                 0f, 0f, 5f);
-            AddArticle("library-hours", ArticleShape.Line3V, ArticleKind.Social, 0,
-                "Reading Room Heated",
-                "The Municipal Library announces that the main reading hall will remain heated until eight in the evening on Tuesdays and Thursdays.",
+            AddArticle("library-hours", ArticleShape.Dot, ArticleKind.Social, 0,
+                "Warm Hall",
+                "City Library reading room heated till 8 PM.",
                 0f, 1f, 0f);
 
-            // Day 3 extras (9 cells)
+            // Day 3 extras
             AddArticle("bridge-repairs", ArticleShape.Square, ArticleKind.Report, 0,
-                "Drawbridge Inspection",
-                "Engineers tightened the counterweights on the Old Iron Bridge. Heavy drays are advised to cross in single file.",
+                "Bridge Inspection",
+                "Engineers tightened counterweights on the Old Iron Bridge. Heavy drays must cross in single file.",
                 0f, 1f, 0f);
             AddArticle("sewing-machines-ad", ArticleShape.Line3H, ArticleKind.Ad, 0,
-                "\"Singer & Sons\" Repairs",
-                "Foot-treadle belts, bobbins, and heavy needles for leather and canvas. Cash or barter accepted.",
+                "Singer & Sons Repair",
+                "Treadle belts, bobbins, and heavy needles for leather and canvas. Cash or food barter accepted.",
                 0f, 0f, 10f);
-            AddArticle("lost-keys", ArticleShape.Line2V, ArticleKind.Report, 0,
-                "Lost: Brass Key Ring",
-                "A ring of seven warehouse keys was dropped near the tram depot. Return to the gatekeeper for a hot meal.",
-                0f, 1f, 0f);
 
-            // Day 4 extras (11 cells)
+            // Day 4 extras
             AddArticle("boiler-inspection", ArticleShape.Square, ArticleKind.Report, 0,
-                "Steam Boiler Pressure Tests",
-                "District inspectors are checking basement boilers across the Old Quarter. Residents should ignore loud hissing from the grates.",
+                "Boiler Pressure Test",
+                "Inspectors are checking basement steam boilers across the Old Quarter. Ignore loud hissing from grates.",
                 0f, 1f, 0f);
             AddArticle("streetcar-detour", ArticleShape.Line3H, ArticleKind.Report, 0,
-                "Square Closed to Traffic",
-                "Omnibuses and carts are diverted around Cathedral Square today due to pavement relaying and military drills.",
+                "Cathedral Detour",
+                "Carts and trams are diverted around Cathedral Square today due to paving work and troop drills.",
                 1f, 0f, 0f);
-            AddArticle("typewriter-ribbon-ad", ArticleShape.Line2H, ArticleKind.Ad, 0,
-                "\"Remington\" Ink Ribbons",
-                "Fresh black and violet ribbons for all office typewriters. Carbon paper in packs of fifty.",
+            AddArticle("typewriter-ribbon-ad", ArticleShape.Dot, ArticleKind.Ad, 0,
+                "Ink Ribbons",
+                "Fresh black and violet ribbons for typewriters.",
                 0f, 0f, 10f);
-            AddArticle("fish-market-prices", ArticleShape.Line2V, ArticleKind.Social, 0,
-                "Empty Stalls at Fish Row",
-                "Only salted smelt and dried roach reached the market tables this morning. Fishwives blame the harbor fog.",
-                0f, 1f, 0f);
 
-            // Day 5 extras (12 cells)
+            // Day 5 extras
             AddArticle("waterworks-notice", ArticleShape.Square, ArticleKind.Social, 0,
                 "Boil All Tap Water",
-                "The Municipal Waterworks advises boiling drinking water for ten minutes following repairs to the river intake grates.",
+                "The Waterworks advises boiling drinking water for ten minutes following repairs to river intake grates.",
                 0f, 2f, 0f);
             AddArticle("scrap-metal-drive", ArticleShape.Line3H, ArticleKind.Politics, 0,
-                "Scrap Iron for the State",
-                "Schoolchildren collected four tons of rusted bedsteads and railings for the state foundry furnaces.",
+                "Scrap Iron Drive",
+                "Schoolchildren collected four tons of rusted iron bedsteads and railings for the state foundry.",
                 2f, 0f, 0f);
-            AddArticle("kerosene-lamps-ad", ArticleShape.Line3V, ArticleKind.Ad, 0,
-                "\"Bright Star\" Kerosene Wicks",
-                "Replacement glass chimneys and braided cotton wicks for table lamps. No soot, half the oil consumption.",
+            AddArticle("kerosene-lamps-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
+                "Lamp Wicks",
+                "Glass chimneys and cotton wicks for lamps. No soot, half the oil.",
                 0f, 0f, 10f);
-            AddArticle("lost-briefcase", ArticleShape.Line2H, ArticleKind.Report, 0,
-                "Lost: Leather Portfolio",
-                "A brown leather folder containing accounting ledgers was left in a cab near City Hall. No questions asked upon return.",
+            AddArticle("lost-briefcase", ArticleShape.Dot, ArticleKind.Report, 0,
+                "Lost Folio",
+                "Brown leather ledger left in a cab near City Hall.",
                 1f, 0f, 0f);
 
-            // Day 6 extras (9 cells)
+            // Day 6 extras
             AddArticle("harbor-foghorn", ArticleShape.Square, ArticleKind.Report, 0,
-                "Lighthouse Horn Malfunction",
-                "The steam foghorn on the North Breakwater sounded continuously for छह hours last night after its valve froze shut.",
+                "Foghorn Malfunction",
+                "The steam horn on North Breakwater wailed for six hours last night after its valve froze shut.",
                 0f, 1f, 0f);
-            AddArticle("military-band-rehearsal", ArticleShape.Line3H, ArticleKind.Report, 0,
-                "Brass Band on the Parade Ground",
-                "The Garrison Regiment band rehearsed marches for four hours in the rain. Nearby windows rattled from the tubas.",
+            AddArticle("military-band-rehearsal", ArticleShape.Line2H, ArticleKind.Report, 0,
+                "Garrison Brass Band",
+                "The regiment band rehearsed marches for four hours in the rain. Nearby windows rattled.",
                 1f, 0f, 0f);
             AddArticle("canned-sprats-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "\"Baltic Pearl\" Canned Sprats",
-                "Smoked sprats in pure mustard oil. Tin cans keep for five years in any cellar.",
+                "Tin Sprats",
+                "Smoked sprats in mustard oil. Tins keep five years in any cellar.",
                 0f, 0f, 10f);
 
-            // Day 7 extras (10 cells)
+            // Day 7 extras
             AddArticle("checkpoint-passes", ArticleShape.Square, ArticleKind.Politics, 0,
-                "New Stamp Required on Passes",
-                "All night-shift factory certificates must bear the triangular purple stamp of the District Commandant by Friday.",
+                "New Pass Stamp",
+                "All night-shift factory certificates must bear the purple triangular stamp of the Commandant by Friday.",
                 2f, 0f, 0f);
             AddArticle("telegraph-delays", ArticleShape.Line3V, ArticleKind.Report, 0,
-                "Private Telegrams Suspended",
-                "The Central Telegraph Office is accepting only official government dispatches until line maintenance is completed.",
+                "Wire Delays",
+                "The Central Telegraph accepts only official state dispatches until line repairs are done.",
                 1f, 1f, 0f);
-            AddArticle("suitcases-ad", ArticleShape.Line3H, ArticleKind.Ad, 0,
-                "Leather Trunks & Valises",
-                "Reinforced brass corners, double locks, and waterproof canvas covers. Ideal for sudden long-distance travel.",
+            AddArticle("suitcases-ad", ArticleShape.Line2H, ArticleKind.Ad, 0,
+                "Leather Valises",
+                "Brass corners, double locks, and waterproof covers. Ideal for sudden departures.",
                 0f, 0f, 15f);
+            AddArticle("lost-keys", ArticleShape.Dot, ArticleKind.Report, 0,
+                "Lost Keys",
+                "Seven brass depot keys dropped by the tram loop.",
+                0f, 1f, 0f);
 
-            // Day 8 extras (7 cells)
+            // Day 8 extras
             AddArticle("generator-curfew", ArticleShape.Square, ArticleKind.Report, 0,
-                "Emergency Generators at Print Shop",
-                "Essential municipal presses and telegraph relays have switched to backup diesel dynamos during the district power cuts.",
+                "Backup Dynamos",
+                "Municipal presses and telegraph relays have switched to diesel generators during district power cuts.",
                 0f, 1f, 0f);
-            AddArticle("foreign-consulate-closed", ArticleShape.Line3V, ArticleKind.Report, 0,
-                "Consulate Gates Locked",
-                "The Northern Trade Mission has lowered its flag and shuttered its windows. Visa applicants were turned away at dawn.",
+            AddArticle("foreign-consulate-closed", ArticleShape.Line2V, ArticleKind.Report, 0,
+                "Envoys Flee",
+                "The Trade Mission lowered its flag and locked its gates.",
                 1f, 1f, 0f);
+            AddArticle("night-watch-roster", ArticleShape.Dot, ArticleKind.Report, 0,
+                "Yard Watch",
+                "Two watchmen with whistles must guard every arch.",
+                1f, 0f, 0f);
 
-            // Day 9 extras (9 cells)
+            // Day 9 extras
             AddArticle("garrison-patrols", ArticleShape.Square, ArticleKind.Politics, 0,
-                "Armored Cars at the Bridges",
-                "Double sentries and sandbag emplacements have been set up at all three river crossings. Pedestrians are searched.",
+                "Bridges Cordoned",
+                "Armored cars and sandbag nests guard all three river crossings. Pedestrians and parcels are searched.",
                 2f, 0f, 0f);
-            AddArticle("bank-withdrawals-halted", ArticleShape.Line3V, ArticleKind.Social, 0,
-                "Savings Bank Shutters Windows",
-                "The Municipal Savings Bank has suspended cash withdrawals until further notice. Depositors remain gathered on the steps.",
+            AddArticle("bank-withdrawals-halted", ArticleShape.Line2V, ArticleKind.Social, 0,
+                "Bank Shut",
+                "The Savings Bank halted cash payouts. Crowds pack the stone steps.",
                 0f, 2f, 0f);
-            AddArticle("boarding-planks-ad", ArticleShape.Line2V, ArticleKind.Ad, 0,
-                "Seasoned Pine Planks",
-                "Heavy timber boards and iron nails for boarding up ground-floor shopwindows. Delivery by handcart.",
+            AddArticle("boarding-planks-ad", ArticleShape.Dot, ArticleKind.Ad, 0,
+                "Pine Planks",
+                "Heavy timber boards and nails for shop windows.",
                 0f, 0f, 15f);
 
-            // Day 10 extras (6 cells, designed to fit cleanly in the 5x3 space around the 5x2 Banner!)
+            // Day 10 extras
             AddArticle("abandoned-posts", ArticleShape.Square, ArticleKind.Report, 0,
-                "Checkpoints Left Unmanned",
-                "Several sandbagged sentry boxes along Foundry Avenue stood empty at daybreak, with brazier coals still smoldering.",
+                "Empty Sentry Boxes",
+                "Several sandbagged checkpoints along Foundry Avenue stood unmanned at dawn with braziers still warm.",
                 0f, 1f, 0f);
-            AddArticle("empty-streets-dawn", ArticleShape.Line2H, ArticleKind.Report, 0,
-                "Silence Before Dawn",
-                "Not a single tram bell rang this morning. The entire city waits behind shuttered windows for the morning paper.",
+            AddArticle("empty-streets-dawn", ArticleShape.Dot, ArticleKind.Report, 0,
+                "Silent Dawn",
+                "No trams rang today. The city awaits the paper.",
                 0f, 1f, 0f);
 
             Debug.Log($"[StoryGenerator][Articles] Summary by Kind folder: Report={_kindCounters[ArticleKind.Report]}, Politics={_kindCounters[ArticleKind.Politics]}, Social={_kindCounters[ArticleKind.Social]}, Ad={_kindCounters[ArticleKind.Ad]} (Total={_articles.Count}).");
@@ -918,11 +949,12 @@ namespace LD60.Editor
             var defaultLayout = picValue <= 0 ? _layoutNoPic : (picValue == 3 ? _layoutPicTop : _layoutPicMid);
             var defaultSprite = picValue > 0 ? _defaultArticleSprite : null;
 
-            // Preserve custom sprite & layout if the user already assigned a custom image to this asset
-            var preservedCustomSprite = !isNew && article.Picture != null && article.Picture != _defaultArticleSprite;
-            var spriteToUse = preservedCustomSprite ? article.Picture : defaultSprite;
-            var layoutToUse = preservedCustomSprite && article.PictureLayout != null && article.PictureLayout.Slot != 1
-                ? article.PictureLayout
+            // Restore custom sprite & layout if the user had assigned one to this article ID
+            (Sprite sprite, ArticlePictureLayout layout) customPic = default;
+            var preservedCustomSprite = _preservedCustomPictures != null && _preservedCustomPictures.TryGetValue(id, out customPic) && customPic.sprite != null;
+            var spriteToUse = preservedCustomSprite ? customPic.sprite : defaultSprite;
+            var layoutToUse = preservedCustomSprite && customPic.layout != null && customPic.layout.Slot != 1
+                ? customPic.layout
                 : defaultLayout;
 
             // Set fields directly in C# memory BEFORE CreateAsset so disk serialization is never empty
@@ -1051,7 +1083,7 @@ namespace LD60.Editor
                 new[] { (ArticleKind.Ad, ArticleKind.Politics) },
                 actions.ToArray(),
                 ("morning-drop-2", "Fill at least 72% of the page (18/25 cells). Keep Ads away from Politics.",
-                    new[] { "balsam-ad", "deputy-piety", "archive-break", "weather-fog", "foundry-shift", "soap-ad", "elephant-escape", "russia-ice-cream", "night-watch-roster", "chimney-sweep-ad", "library-hours" }),
+                    new[] { "balsam-ad", "deputy-piety", "archive-break", "weather-fog", "foundry-shift", "soap-ad", "elephant-escape", "russia-ice-cream", "chimney-sweep-ad", "library-hours" }),
                 ("guest-stash-2", "Hand-delivered by guests.",
                     new[] { "deputy-bribe" })
             );
@@ -1089,12 +1121,12 @@ namespace LD60.Editor
             AddIdleActions(folder, actions);
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
-            // 26 cells in morning-drop-3 (1.04) + 1 cell in guest-stash-3 = 27 cells (1.08), required = 0.72 (18 cells)
+            // 26 cells in morning-drop-3 (1.04) + 2 cells in guest-stash-3 = 28 cells (1.12), required = 0.72 (18 cells)
             return CreateChapter("Day3", "Day 3: Still Waters", 0.72f,
                 new[] { (ArticleKind.Politics, ArticleKind.Social) },
                 actions.ToArray(),
                 ("morning-drop-3", "Fill at least 72% of the page (18/25 cells). Directive: never place Politics next to Social pieces.",
-                    new[] { "found-dog-1", "torn-nets", "decree-order", "strike-rumor", "tonic-ad", "love-ad-1", "weather-hopeless", "france-snail-race", "bridge-repairs", "sewing-machines-ad", "lost-keys" }),
+                    new[] { "found-dog-1", "torn-nets", "decree-order", "strike-rumor", "tonic-ad", "love-ad-1", "weather-hopeless", "france-snail-race", "bridge-repairs", "sewing-machines-ad" }),
                 ("guest-stash-3", "Hand-delivered by guests.",
                     new[] { "official-seal" })
             );
@@ -1153,7 +1185,7 @@ namespace LD60.Editor
                 new[] { (ArticleKind.Ad, ArticleKind.Politics) },
                 actions.ToArray(),
                 ("morning-drop-4", "Fill at least 80% of the page (20/25 cells). Keep Ads away from Politics.",
-                    new[] { "mask-graffiti", "bread-queue-riot", "curfew-talk", "pawnshop-ad", "inventor-engine", "brilliantine-ad", "usa-giant-pie", "boiler-inspection", "streetcar-detour", "typewriter-ribbon-ad", "fish-market-prices" }),
+                    new[] { "mask-graffiti", "bread-queue-riot", "curfew-talk", "pawnshop-ad", "inventor-engine", "brilliantine-ad", "usa-giant-pie", "boiler-inspection", "streetcar-detour", "typewriter-ribbon-ad" }),
                 ("guest-stash-4", "Hand-delivered by guests.",
                     new[] { "speakeasy-ad" })
             );
@@ -1274,7 +1306,7 @@ namespace LD60.Editor
             actions.Add(MakeEnding(folder, "98_fish_shot_ending", ChapterWhen.PaperStamped, 1f, "fish_angry", 1f));
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
-            // 25 cells in morning-drop-6 (1.00) + 3 cells in guest-stash-6 = 28 cells (1.12), required = 0.80 (20 cells)
+            // 26 cells in morning-drop-6 (1.04) + 3 cells in guest-stash-6 = 29 cells (1.16), required = 0.80 (20 cells)
             return CreateChapter("Day6", "Day 6: Something Fishy", 0.80f,
                 new[] { (ArticleKind.Ad, ArticleKind.Politics) },
                 actions.ToArray(),
@@ -1335,12 +1367,12 @@ namespace LD60.Editor
             actions.Add(MakeEnding(folder, "98_late_arrest_ending", ChapterWhen.PaperStamped, 1f, "heat", 3f));
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
-            // 25 cells in morning-drop-7 (1.00) + 3 cells in guest-stash-7 = 28 cells (1.12), required = 0.80 (20 cells)
+            // 26 cells in morning-drop-7 (1.04) + 3 cells in guest-stash-7 = 29 cells (1.16), required = 0.80 (20 cells)
             return CreateChapter("Day7", "Day 7: Ghost Hunt", 0.80f,
                 new[] { (ArticleKind.Ad, ArticleKind.Politics) },
                 actions.ToArray(),
                 ("morning-drop-7", "Fill at least 80% of the page (20/25 cells). Never mix Ads with Politics.",
-                    new[] { "hospital-rumor", "curfew-extension", "lottery-ad", "inventor-boom", "chess-brawl", "france-baguette-strike", "checkpoint-passes", "telegraph-delays", "suitcases-ad" }),
+                    new[] { "hospital-rumor", "curfew-extension", "lottery-ad", "inventor-boom", "chess-brawl", "france-baguette-strike", "checkpoint-passes", "telegraph-delays", "suitcases-ad", "lost-keys" }),
                 ("guest-stash-7", "Hand-delivered by guests.",
                     new[] { "wanted-mask" })
             );
@@ -1402,12 +1434,12 @@ namespace LD60.Editor
             AddIdleActions(folder, actions);
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
-            // 25 cells in morning-drop-8 (1.00) + 3 cells in guest-stash-8 = 28 cells (1.12), required = 0.88 (22 cells)
+            // 26 cells in morning-drop-8 (1.04) + 3 cells in guest-stash-8 = 29 cells (1.16), required = 0.88 (22 cells)
             return CreateChapter("Day8", "Day 8: Behind the Mask", 0.88f,
                 new[] { (ArticleKind.Ad, ArticleKind.Politics) },
                 actions.ToArray(),
                 ("morning-drop-8", "Fill at least 88% of the page (22/25 cells). Tension is at the breaking point. Lock your office door.",
-                    new[] { "blackout-city", "train-station-rush", "radio-dog-final", "candle-ad", "elephant-job", "funeral-ad", "usa-prohibition-pipes", "generator-curfew", "foreign-consulate-closed" }),
+                    new[] { "blackout-city", "train-station-rush", "radio-dog-final", "candle-ad", "elephant-job", "funeral-ad", "usa-prohibition-pipes", "generator-curfew", "foreign-consulate-closed", "night-watch-roster" }),
                 ("guest-stash-8", "Hand-delivered by guests.",
                     new[] { "execution-list" })
             );
@@ -1891,22 +1923,79 @@ namespace LD60.Editor
         {
             var emptyArticles = 0;
             var missingArticles = 0;
-            foreach (var kvp in _articlePaths)
+            var overflowingArticles = 0;
+
+            var shapePrefabs = new Dictionary<ArticleShape, string>
             {
-                var id = kvp.Key;
-                var path = kvp.Value;
-                var reloaded = AssetDatabase.LoadAssetAtPath<ArticleDefinition>(path);
-                if (reloaded == null)
+                { ArticleShape.Dot, "Assets/_Project/Prefabs/Articles/ArticleDot.prefab" },
+                { ArticleShape.Line2H, "Assets/_Project/Prefabs/Articles/ArticleLine2H.prefab" },
+                { ArticleShape.Line2V, "Assets/_Project/Prefabs/Articles/ArticleLine2V.prefab" },
+                { ArticleShape.Line3H, "Assets/_Project/Prefabs/Articles/ArticleLine3H.prefab" },
+                { ArticleShape.Line3V, "Assets/_Project/Prefabs/Articles/ArticleLine3V.prefab" },
+                { ArticleShape.Square, "Assets/_Project/Prefabs/Articles/ArticleSquare.prefab" },
+                { ArticleShape.Banner5x2, "Assets/_Project/Prefabs/Articles/ArticleBanner5x2.prefab" }
+            };
+
+            var tempInstances = new Dictionary<ArticleShape, GameObject>();
+            try
+            {
+                foreach (var kv in shapePrefabs)
                 {
-                    missingArticles++;
-                    Debug.LogError($"[StoryGenerator][Verify] FAILED to load article '{id}' at '{path}'!");
-                    continue;
+                    var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(kv.Value);
+                    if (prefab != null)
+                        tempInstances[kv.Key] = UnityEngine.Object.Instantiate(prefab);
                 }
 
-                if (string.IsNullOrWhiteSpace(reloaded.Title) || string.IsNullOrWhiteSpace(reloaded.Body) || reloaded.Fill <= 0f || reloaded.PictureLayout == null)
+                foreach (var kvp in _articlePaths)
                 {
-                    emptyArticles++;
-                    Debug.LogError($"[StoryGenerator][Verify] EMPTY/INVALID fields on article '{id}' at '{path}': Title='{reloaded.Title}', BodyLen={(reloaded.Body != null ? reloaded.Body.Length : 0)}, Fill={reloaded.Fill}, Layout={(reloaded.PictureLayout != null ? reloaded.PictureLayout.name : "NULL")}");
+                    var id = kvp.Key;
+                    var path = kvp.Value;
+                    var reloaded = AssetDatabase.LoadAssetAtPath<ArticleDefinition>(path);
+                    if (reloaded == null)
+                    {
+                        missingArticles++;
+                        Debug.LogError($"[StoryGenerator][Verify] FAILED to load article '{id}' at '{path}'!");
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(reloaded.Title) || string.IsNullOrWhiteSpace(reloaded.Body) || reloaded.Fill <= 0f || reloaded.PictureLayout == null)
+                    {
+                        emptyArticles++;
+                        Debug.LogError($"[StoryGenerator][Verify] EMPTY/INVALID fields on article '{id}' at '{path}': Title='{reloaded.Title}', BodyLen={(reloaded.Body != null ? reloaded.Body.Length : 0)}, Fill={reloaded.Fill}, Layout={(reloaded.PictureLayout != null ? reloaded.PictureLayout.name : "NULL")}");
+                        continue;
+                    }
+
+                    if (tempInstances.TryGetValue(reloaded.Shape, out var instance) && instance != null)
+                    {
+                        var slot = reloaded.PictureLayout != null ? reloaded.PictureLayout.Slot : 1;
+                        var faceName = slot == 3 ? "Face3" : slot == 2 ? "Face2" : "Face1";
+                        var faceTransform = instance.transform.Find(faceName);
+                        var face = faceTransform != null ? faceTransform.GetComponent<ArticleFace>() : null;
+                        if (face != null)
+                        {
+                            face.gameObject.SetActive(true);
+                            var testSprite = slot >= 2 ? (reloaded.Picture != null ? reloaded.Picture : _defaultArticleSprite) : null;
+                            face.Apply(reloaded.Title, reloaded.Body, testSprite);
+                            var texts = face.GetComponentsInChildren<TMPro.TMP_Text>(true);
+                            foreach (var t in texts)
+                            {
+                                t.ForceMeshUpdate(true);
+                                if (t.isTextOverflowing)
+                                {
+                                    overflowingArticles++;
+                                    Debug.LogWarning($"[StoryGenerator][Verify][Overflow] Article '{id}' ({reloaded.Shape}, {faceName}) overflows {t.gameObject.name}! TextLen={t.text.Length}, FontSize={t.fontSize:F1} (min={t.fontSizeMin:F1}), Rect={t.rectTransform.rect.width:F1}x{t.rectTransform.rect.height:F1}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                foreach (var inst in tempInstances.Values)
+                {
+                    if (inst != null)
+                        UnityEngine.Object.DestroyImmediate(inst);
                 }
             }
 
@@ -1930,10 +2019,10 @@ namespace LD60.Editor
                 }
             }
 
-            if (emptyArticles == 0 && missingArticles == 0 && brokenCapsuleRefs == 0)
-                Debug.Log($"[StoryGenerator][Verify] SUCCESS: Verified all {_articlePaths.Count} articles on disk and {chapters.Length} chapters — 0 empty articles, 0 missing files, 0 broken capsule references!");
+            if (emptyArticles == 0 && missingArticles == 0 && brokenCapsuleRefs == 0 && overflowingArticles == 0)
+                Debug.Log($"[StoryGenerator][Verify] SUCCESS: Verified all {_articlePaths.Count} articles on disk and {chapters.Length} chapters — 0 empty articles, 0 missing files, 0 broken capsule references, 0 overflowing texts!");
             else
-                Debug.LogError($"[StoryGenerator][Verify] FAILED: emptyArticles={emptyArticles}, missingArticles={missingArticles}, brokenCapsuleRefs={brokenCapsuleRefs}.");
+                Debug.LogWarning($"[StoryGenerator][Verify] SUMMARY: emptyArticles={emptyArticles}, missingArticles={missingArticles}, brokenCapsuleRefs={brokenCapsuleRefs}, overflowingArticles={overflowingArticles}.");
         }
     }
 }
