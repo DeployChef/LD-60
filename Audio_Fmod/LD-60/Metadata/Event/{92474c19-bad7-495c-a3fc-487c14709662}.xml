@@ -116,6 +116,7 @@
 			<destination>{5f194567-76cb-40e5-a470-0a59c875912a}</destination>
 			<destination>{b43f48bf-630f-4ff0-b089-61c5351dfe6e}</destination>
 			<destination>{ad1c96d8-4ed0-4b23-8944-54013e5ec4fe}</destination>
+			<destination>{39443a5e-60db-48bc-8d0c-3d06bb7d1d05}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{0446917c-281d-416b-ad9c-8e23db98dbca}">
@@ -190,6 +191,14 @@
 			<destination>{0621abe0-f229-4a6f-aaa7-d511b3707dd3}</destination>
 			<destination>{49a4f1f7-bc38-46cf-b896-594b1d197fc8}</destination>
 			<destination>{aba8d83b-879f-4740-8742-255f3a9ff7bd}</destination>
+		</relationship>
+	</object>
+	<object class="CommandSound" id="{39443a5e-60db-48bc-8d0c-3d06bb7d1d05}">
+		<property name="commandType">
+			<value>2</value>
+		</property>
+		<relationship name="commandTarget">
+			<destination>{92474c19-bad7-495c-a3fc-487c14709662}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{602bdd1d-77ae-4035-a70d-d69afd4fb2cd}" />
