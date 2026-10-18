@@ -3,6 +3,26 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script>
+      // Фильтр спама FMOD_OS_CriticalSection: FMOD печатает его нативным printf
+      // из webgl.wasm в обход FMOD-логирования — глушим на уровне console.
+      (function () {
+        function patch(original) {
+          return function () {
+            for (var i = 0; i < arguments.length; i++) {
+              if (typeof arguments[i] === "string" &&
+                  arguments[i].indexOf("FMOD_OS_CriticalSection") !== -1) {
+                return;
+              }
+            }
+            original.apply(console, arguments);
+          };
+        }
+        console.log = patch(console.log.bind(console));
+        console.warn = patch(console.warn.bind(console));
+        console.error = patch(console.error.bind(console));
+      })();
+    </script>
     <title>Unity Web Player | LD-60-Game</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
