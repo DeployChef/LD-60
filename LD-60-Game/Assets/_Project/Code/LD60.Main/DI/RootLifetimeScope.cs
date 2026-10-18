@@ -1,6 +1,7 @@
 using LD60.Core;
 using LD60.Core.Audio;
 using LD60.Core.Bus;
+using LD60.Gameplay.Context;
 using LD60.Main.Audio;
 using VContainer;
 using VContainer.Unity;
@@ -11,7 +12,7 @@ namespace LD60.Main.DI
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<ShellService>(Lifetime.Singleton).As<IShellService>();
+            builder.Register<ShellService>(Lifetime.Singleton).As<IShellService>().As<IGameSession>();
             builder.Register<MessageBus>(Lifetime.Singleton).As<IMessageBus>();
             builder.RegisterComponentInHierarchy<AudioManager>().As<IAudioManager>();
             builder.Register<AudioService>(Lifetime.Singleton);

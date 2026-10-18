@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: DayTwo
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: Day Two
+  actions:
+  - {fileID: 11400000, guid: 91e5af0e7acb88146998a1fbb13ddcd0, type: 2}
+  - {fileID: 11400000, guid: 0d2cd74cbac0a494596a48ae1acba05d, type: 2}
+  - {fileID: 11400000, guid: 62edf672557b5a24ab6b71f232beffa1, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.8
+  capsules:
+  - id: day-two-drop
+    articles:
+    - {fileID: 11400000, guid: 2736ce92b232e1149b00ba1988c480be, type: 2}
+    - {fileID: 11400000, guid: 7325df259e72061468f26b81242caaf9, type: 2}
+    - {fileID: 11400000, guid: b8e9f4166d5e8e6499d13ac977f2676b, type: 2}
+    - {fileID: 11400000, guid: 1fa496e1d8b26454ebf29e9ecac45720, type: 2}
+    - {fileID: 11400000, guid: 6d3d15e427167b143b45825bab88dc9d, type: 2}
+    - {fileID: 11400000, guid: 0e37fac9e7b24a34180b20b97637fa34, type: 2}
+    note: Same rule. Fill the page. Keep the ad away from politics.

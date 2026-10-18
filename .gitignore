@@ -112,3 +112,6 @@ Desktop.ini
 
 # Local Codex project/concept notes
 /wiki/AI/
+
+# Кэш редактора FMOD в Unity (производный, регенерируется Refresh Banks)
+LD-60-Game/Assets/Plugins/FMOD/Cache/
