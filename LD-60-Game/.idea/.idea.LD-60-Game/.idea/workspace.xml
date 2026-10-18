@@ -12,8 +12,9 @@
   <component name="ChangeListManager">
     <list default="true" id="bcc3e600-cd66-45e3-bc99-4c53a57c2cc1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/VolumeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/VolumeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/LD60.UI.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/LD60.UI.asmdef" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
