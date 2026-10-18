@@ -30,6 +30,8 @@ namespace LD60.Main
             await FmodWebglPreloader.PrepareAsync(destroyCancellationToken);
             // Громофон: один глобальный инстанс (дочерний ивент Music) + вечный Music.
             LoudspeakerAudio.EnsureCreated();
+            // SFX: вечный контейнер, клики параметром newspaper (тест — клавиша E).
+            SfxAudio.EnsureCreated();
             var shell = rootScope.Container.Resolve<IShellService>();
             await shell.StartAsync();
         }
