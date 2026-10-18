@@ -7,6 +7,8 @@
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
+!Audio_Fmod/LD-60/Build/
+!Audio_Fmod/LD-60/Build/**
 [Bb]uilds/
 [Ll]ogs/
 [Uu]ser[Ss]ettings/

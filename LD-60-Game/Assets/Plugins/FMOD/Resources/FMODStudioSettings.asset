@@ -454,7 +454,7 @@ MonoBehaviour:
   HasSourceProject: 0
   HasPlatforms: 0
   sourceProjectPath: 
-  sourceBankPath: ../Audio_Fmod/LD-60/Build/Desktop/Desktop
+  sourceBankPath: ../Audio_Fmod/LD-60/Build/Desktop
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -478,8 +478,14 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
+  - Desktop/Master
   Banks:
+  - Desktop/Master.assets
+  - Desktop/Menu
+  - Desktop/Menu.assets
+  - Master.assets
   - Menu
+  - Menu.assets
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
