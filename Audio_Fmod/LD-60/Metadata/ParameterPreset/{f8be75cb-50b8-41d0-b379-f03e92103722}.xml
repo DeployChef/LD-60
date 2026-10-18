@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{f8be75cb-50b8-41d0-b379-f03e92103722}">
+		<property name="name">
+			<value>персонажи </value>
+		</property>
+		<relationship name="folder">
+			<destination>{7f390524-f814-4a2f-89ec-2963220960c9}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{7eba7975-fafc-4135-bdf1-740b110f3ebf}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{7eba7975-fafc-4135-bdf1-740b110f3ebf}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>7</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>бабка</value>
+			<value>чиновница</value>
+			<value>чикист</value>
+			<value>чиновник толстенький</value>
+			<value>анонимус маска</value>
+			<value>анонимус без маски</value>
+			<value>РЫБОЧЕЛ</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{12ed2918-ff05-4c68-a2f7-19a342b3a632}">
+		<property name="name">
+			<value>набор слов </value>
+		</property>
+		<relationship name="folder">
+			<destination>{7f390524-f814-4a2f-89ec-2963220960c9}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{0589c15a-db18-44b6-afae-110c82f4fbfe}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{0589c15a-db18-44b6-afae-110c82f4fbfe}">
+		<property name="parameterType">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

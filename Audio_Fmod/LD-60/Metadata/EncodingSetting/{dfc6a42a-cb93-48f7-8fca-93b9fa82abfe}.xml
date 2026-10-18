@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.03.00">
 	<object class="EncodingSetting" id="{dfc6a42a-cb93-48f7-8fca-93b9fa82abfe}">
-		<property name="encodingFormat">
-			<value>3</value>
-		</property>
 		<property name="quality">
 			<value>37</value>
 		</property>
-		<property name="sampleRate">
-			<value>27500</value>
+		<property name="loadingMode">
+			<value>1</value>
 		</property>
 		<relationship name="platform">
 			<destination>{d0fd91da-259f-47ec-9295-6d266b441d75}</destination>
