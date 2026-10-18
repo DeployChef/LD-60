@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 2212437654217926755}
   - component: {fileID: 1495948013663046881}
   - component: {fileID: 2008839978685153289}
+  - component: {fileID: 6231840467378327213}
   m_Layer: 0
   m_Name: Choice1
   m_TagString: Untagged
@@ -302,7 +303,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 6.1, y: 1.02}
+  m_Size: {x: 3.99, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -326,7 +327,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.1, y: 1.02, z: 0.2}
+  m_Size: {x: 3.99, y: 1.02, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2008839978685153289
 MonoBehaviour:
@@ -348,6 +349,21 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 1, b: 0.78431374, a: 1}
   tilt: 1
   duration: 0.12
+--- !u!114 &6231840467378327213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2223572240093038871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2871779ce7676a46bf7de246f599392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceLayout
+  label: {fileID: 5393523632058958606}
+  padding: {x: 0.35, y: 0.13}
+  minimumSize: {x: 1, y: 1.02}
 --- !u!1 &3033468409479371344
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,6 +609,7 @@ GameObject:
   - component: {fileID: 928524384972398693}
   - component: {fileID: 8150146473467126872}
   - component: {fileID: 3612192796888286479}
+  - component: {fileID: 1176056238405112456}
   m_Layer: 0
   m_Name: Choice0
   m_TagString: Untagged
@@ -670,7 +687,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 6.1, y: 1.02}
+  m_Size: {x: 5.0499997, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -694,7 +711,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.1, y: 1.02, z: 0.2}
+  m_Size: {x: 5.0499997, y: 1.02, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3612192796888286479
 MonoBehaviour:
@@ -716,6 +733,21 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 1, b: 0.78431374, a: 1}
   tilt: -1
   duration: 0.12
+--- !u!114 &1176056238405112456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3989279379952764302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2871779ce7676a46bf7de246f599392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.DialogueChoiceLayout
+  label: {fileID: 7700740155093481467}
+  padding: {x: 0.35, y: 0.13}
+  minimumSize: {x: 1, y: 1.02}
 --- !u!1 &4198826982904507308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,7 +1045,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5.35, y: 0.76}
+  m_SizeDelta: {x: 4.35, y: 0.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1850308404075924922
 MeshRenderer:
@@ -1128,7 +1160,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
@@ -1378,7 +1410,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5.35, y: 0.76}
+  m_SizeDelta: {x: 3.29, y: 0.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7026597904164545645
 MeshRenderer:
@@ -1493,7 +1525,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
