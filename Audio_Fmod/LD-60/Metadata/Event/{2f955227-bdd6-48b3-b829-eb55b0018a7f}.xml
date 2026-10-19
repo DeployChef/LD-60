@@ -175,6 +175,9 @@
 		<property name="maxVoices">
 			<value>25</value>
 		</property>
+		<property name="volume">
+			<value>-8</value>
+		</property>
 		<property name="looping">
 			<value>true</value>
 		</property>
