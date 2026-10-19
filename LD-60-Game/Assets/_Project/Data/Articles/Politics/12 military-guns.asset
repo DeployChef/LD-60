@@ -18,10 +18,11 @@ MonoBehaviour:
   title: Armored Train
   body: An armored train pulled onto Track 1 at dawn with its turret turned toward
     the mill district.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: -3313063025085506010, guid: bd390ad5ebf4ee34481c56b6b1960ec7, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 3
   social: 0
   money: 0
   forbiddenNeighbors: 
+  forbiddenArticles: []

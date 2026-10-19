@@ -18,10 +18,11 @@ MonoBehaviour:
   title: Trams Tipped Over
   body: Crowds pried up cobblestones on Market Street and pushed two tram cars sideways
     across the bridge road.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: -5020566343712083234, guid: 44e6a244f9f90e84fa0a59b1f1093fde, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.16
   politics: 2
   social: 3
   money: 0
   forbiddenNeighbors: 
+  forbiddenArticles: []
