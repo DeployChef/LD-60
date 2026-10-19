@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Buddy
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
   displayName: Buddy
-  voice: 5
+  voice: 1
   emotions:
   - key: default
     sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
