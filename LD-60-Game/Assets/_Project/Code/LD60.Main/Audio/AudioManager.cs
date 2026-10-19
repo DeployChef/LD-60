@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using FMOD.Studio;
+using FMODUnity;
 using LD60.Core.Audio;
 using UnityEngine;
 
@@ -19,6 +22,12 @@ namespace LD60.Main.Audio
         private float _master = 1f;
         private float _sfx = 1f;
         private float _music = 1f;
+        private Bus _masterBus;
+        private Bus _musicBus;
+        private Bus _sfxBus;
+        private Bus _dialogBus;
+        private Bus _uiBus;
+        private bool _fmodReady;
 
         public float MasterVolume => _master;
         public float SfxVolume => _sfx;
@@ -32,11 +41,36 @@ namespace LD60.Main.Audio
             AudioListener.volume = _master;
         }
 
+        private void Start()
+        {
+            InitializeFmodVolumes().Forget();
+        }
+
+        private async UniTask InitializeFmodVolumes()
+        {
+            // Root audio starts before the banks, especially in WebGL.
+            var cancelled = await UniTask.WaitUntil(
+                    () => RuntimeManager.IsInitialized && RuntimeManager.HasBankLoaded("Master"),
+                    cancellationToken: this.GetCancellationTokenOnDestroy())
+                .SuppressCancellationThrow();
+            if (cancelled)
+                return;
+
+            _masterBus = RuntimeManager.GetBus("bus:/");
+            _musicBus = RuntimeManager.GetBus("bus:/all_music");
+            _sfxBus = RuntimeManager.GetBus("bus:/sfx_gr");
+            _dialogBus = RuntimeManager.GetBus("bus:/dialog_gr");
+            _uiBus = RuntimeManager.GetBus("bus:/ui");
+            _fmodReady = true;
+            ApplyFmodVolumes();
+        }
+
         public void SetMasterVolume(float volume)
         {
             _master = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(MasterKey, _master);
             AudioListener.volume = _master;
+            ApplyFmodVolumes();
         }
 
         public void SetSfxVolume(float volume)
@@ -44,6 +78,7 @@ namespace LD60.Main.Audio
             _sfx = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(SfxKey, _sfx);
             ApplyPlaying();
+            ApplyFmodVolumes();
         }
 
         public void SetMusicVolume(float volume)
@@ -51,6 +86,19 @@ namespace LD60.Main.Audio
             _music = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(MusicKey, _music);
             ApplyPlaying();
+            ApplyFmodVolumes();
+        }
+
+        private void ApplyFmodVolumes()
+        {
+            if (!_fmodReady)
+                return;
+
+            _masterBus.setVolume(_master);
+            _musicBus.setVolume(_music);
+            _sfxBus.setVolume(_sfx);
+            _dialogBus.setVolume(_sfx);
+            _uiBus.setVolume(_sfx);
         }
 
         public void Play(string soundId)
