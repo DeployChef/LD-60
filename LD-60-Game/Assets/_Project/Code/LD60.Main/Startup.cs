@@ -32,8 +32,8 @@ namespace LD60.Main
             rootScope.Build();
             // WebGL: до меню ждём банки FMOD, сэмплы и первый клик игрока (прелоудер).
             await FmodWebglPreloader.PrepareAsync(destroyCancellationToken);
-            // Меню и интро:
-            MenuAudio.EnsureCreated();
+            // Меню, разовые SFX, машинка, штамп, финал, пауза:
+            SoundService.EnsureCreated();
             // Громофон и фоновый roometone:
             LoudspeakerAudio.EnsureCreated();
             // SFX: вечный контейнер, клики параметром newspaper (тест — клавиша E).

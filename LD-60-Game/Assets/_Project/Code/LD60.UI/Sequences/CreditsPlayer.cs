@@ -231,7 +231,7 @@ And You, The Player!";
             // Prepare audio
             try
             {
-                MenuAudio.PlayCutscene();
+                SoundService.PlayFinal();
             }
             catch (Exception e)
             {

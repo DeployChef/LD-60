@@ -171,7 +171,7 @@ namespace LD60.UI
             {
                 if (_board != null)
                     _board.PrepareLift(piece);
-                MenuAudio.PlayPaperHandling();
+                SoundService.PlayPaperHandling();
             }
 
             _lift = SurfaceNormal() * LiftDistance;

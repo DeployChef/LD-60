@@ -44,7 +44,7 @@ namespace LD60.UI
             if (!playHover || !IsReady())
                 return;
 
-            MenuAudio.PlayButtonHover();
+            SoundService.PlayButtonHover();
             Publish(hoverSoundId);
         }
 
@@ -53,7 +53,7 @@ namespace LD60.UI
             if (!playClick || !IsReady())
                 return;
 
-            MenuAudio.PlayButtonClick();
+            SoundService.PlayButtonClick();
             Publish(clickSoundId);
         }
 

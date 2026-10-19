@@ -111,7 +111,7 @@ namespace LD60.UI
             _pending = null;
             _opened = true;
             SetWaiting(false);
-            MenuAudio.PlayEnvelopeOpen();
+            SoundService.PlayEnvelopeOpen();
             if (_story != null && _story.TryFindCapsule(id, out var delivery))
                 LayOut(delivery);
             _bus.Publish(new CapsuleTaken(id));

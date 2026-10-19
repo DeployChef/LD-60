@@ -6478,6 +6478,8 @@ MonoBehaviour:
     collider: {fileID: 363181644}
     view: {fileID: 363181647}
   continueLabel: Continue
+  charactersPerSecond: 45
+  voiceVolume: 0.914
 --- !u!4 &2003089151
 Transform:
   m_ObjectHideFlags: 0
@@ -6693,6 +6695,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 4442375592543896395, guid: cc9c2102d34630d498f77f408581bf35, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3821920282079946003, guid: cc9c2102d34630d498f77f408581bf35, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 7232279947959023230, guid: cc9c2102d34630d498f77f408581bf35, type: 3}

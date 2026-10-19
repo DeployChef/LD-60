@@ -1,4 +1,5 @@
 using DG.Tweening;
+using LD60.UI.Audio;
 using UnityEngine;
 
 namespace LD60.UI
@@ -62,6 +63,7 @@ namespace LD60.UI
                 .Append(transform.DOMove(into, 0.1f).SetEase(Ease.InQuad))
                 .AppendCallback(() =>
                 {
+                    SoundService.PlayStamp();
                     board.LeaveMark(
                         from,
                         stampSprite != null ? stampSprite : renderer != null ? renderer.sprite : null,

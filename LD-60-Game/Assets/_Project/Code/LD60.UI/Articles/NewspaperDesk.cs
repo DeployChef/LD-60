@@ -248,7 +248,7 @@ namespace LD60.UI
                     piece.transform.localRotation = restRot;
                     piece.transform.localScale = restScale;
                 });
-                MenuAudio.PlayPaperDrop();
+                SoundService.PlayPaperDrop();
                 Publish();
                 return true;
             }
@@ -264,7 +264,7 @@ namespace LD60.UI
 
                 Raise(piece.gameObject);
                 piece.PlayDrop();
-                MenuAudio.PlayPaperDrop();
+                SoundService.PlayPaperDrop();
                 Publish();
                 return true;
             }
@@ -289,7 +289,7 @@ namespace LD60.UI
             piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-12f, 12f));
             Raise(piece.gameObject);
             piece.PlayDrop();
-            MenuAudio.PlayPaperDrop();
+            SoundService.PlayPaperDrop();
         }
 
         public void Deliver(ArticlePiece piece, int index, int count)

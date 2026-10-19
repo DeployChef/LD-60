@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using FMOD.Studio;
-using FMODUnity;
 using LD60.UI.Audio;
 using TMPro;
 using UnityEngine;
@@ -13,12 +11,6 @@ namespace LD60.UI
 {
     public sealed class StoryComicsPlayer : MonoBehaviour
     {
-        private const string SfxEventPath = "event:/SFX";
-        private const string NewspaperParameter = "newspaper";
-        private const float NewspaperTypeValue = 1f;
-        private const float NewspaperNoneValue = 2f;
-        private static readonly string[] TypeEventPaths = { "event:/type", "event:/SFX/type" };
-
         [Header("Data")]
         [SerializeField] private StoryComicsData data;
         [SerializeField] private bool playOnStart;
@@ -39,7 +31,6 @@ namespace LD60.UI
         [SerializeField] private Vector2 backFlyInOffset = new Vector2(0f, -1080f);
         [SerializeField] private float blockFadeDuration = 0.6f;
         [SerializeField] private float charsPerSecond = 65f;
-        [SerializeField] private float typeSoundInterval = 0.25f;
         [SerializeField] private float postBlockDelay = 1.5f;
         [SerializeField] private float compositionFadeOutDuration = 0.8f;
         [SerializeField] private bool deactivateOnFinish = true;
@@ -54,9 +45,7 @@ namespace LD60.UI
         private Vector2 _storyBackRestingPosition;
         private bool _restingPositionCaptured;
         private CancellationTokenSource _playCts;
-        private EventInstance _sfxInstance;
         private bool _typingSoundActive;
-        private float _lastTypeSoundTime;
 
         public event Action Finished;
 
@@ -99,7 +88,6 @@ namespace LD60.UI
         private void OnDestroy()
         {
             CancelSequence();
-            ReleaseAudioInstance();
         }
 
         public void Play()
@@ -297,7 +285,7 @@ namespace LD60.UI
 
         private async UniTask AnimateBackFlyInAsync(CancellationToken token)
         {
-            MenuAudio.PlayPaperHandling();
+            SoundService.PlayPaperHandling();
 
             var startPos = _storyBackRestingPosition + backFlyInOffset;
             var targetPos = _storyBackRestingPosition;
@@ -496,149 +484,22 @@ namespace LD60.UI
         private void StartTypingAudio()
         {
             _typingSoundActive = true;
-            _lastTypeSoundTime = Time.unscaledTime;
-            TriggerTypeEvent();
+            SoundService.StartTypewriter(typingVolume);
         }
 
         private void MaintainTypingAudio()
         {
-            if (!_typingSoundActive)
-                return;
-
-            if (_sfxInstance.isValid())
-                _sfxInstance.setVolume(typingVolume);
-
-            var now = Time.unscaledTime;
-            if (now - _lastTypeSoundTime < Mathf.Max(0.08f, typeSoundInterval))
-                return;
-
-            if (!AnyTypeInstanceActive())
-            {
-                _lastTypeSoundTime = now;
-                TriggerTypeEvent();
-            }
+            if (_typingSoundActive)
+                SoundService.SetTypewriterVolume(typingVolume);
         }
 
         private void StopTypingAudio()
         {
-            if (!_typingSoundActive && !_sfxInstance.isValid())
+            if (!_typingSoundActive)
                 return;
 
             _typingSoundActive = false;
-
-            if (_sfxInstance.isValid())
-                _sfxInstance.setParameterByName(NewspaperParameter, NewspaperNoneValue, ignoreseekspeed: true);
-
-            foreach (var path in TypeEventPaths)
-            {
-                try
-                {
-                    if (RuntimeManager.StudioSystem.getEvent(path, out var description) != FMOD.RESULT.OK
-                        || !description.isValid())
-                        continue;
-
-                    if (description.getInstanceList(out var instances) != FMOD.RESULT.OK || instances == null)
-                        continue;
-
-                    for (var i = 0; i < instances.Length; i++)
-                    {
-                        if (instances[i].isValid())
-                            instances[i].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
-        private void TriggerTypeEvent()
-        {
-            // Prefer triggering via the persistent SFX container (newspaper: none -> type)
-            // or directly via event:/type if available.
-            try
-            {
-                if (!_sfxInstance.isValid())
-                {
-                    _sfxInstance = RuntimeManager.CreateInstance(SfxEventPath);
-                    if (_sfxInstance.isValid())
-                    {
-                        _sfxInstance.setVolume(typingVolume);
-                        _sfxInstance.start();
-                    }
-                }
-
-                if (_sfxInstance.isValid())
-                {
-                    _sfxInstance.setVolume(typingVolume);
-                    _sfxInstance.setParameterByName(NewspaperParameter, NewspaperNoneValue, ignoreseekspeed: true);
-                    _sfxInstance.setParameterByName(NewspaperParameter, NewspaperTypeValue, ignoreseekspeed: true);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            for (var i = 0; i < TypeEventPaths.Length; i++)
-            {
-                try
-                {
-                    if (RuntimeManager.StudioSystem.getEvent(TypeEventPaths[i], out var description) != FMOD.RESULT.OK
-                        || !description.isValid())
-                        continue;
-                    var instance = RuntimeManager.CreateInstance(TypeEventPaths[i]);
-                    instance.setVolume(typingVolume);
-                    instance.start();
-                    instance.release();
-                    return;
-                }
-                catch (EventNotFoundException)
-                {
-                }
-            }
-        }
-
-        private static bool AnyTypeInstanceActive()
-        {
-            foreach (var path in TypeEventPaths)
-            {
-                try
-                {
-                    if (RuntimeManager.StudioSystem.getEvent(path, out var description) != FMOD.RESULT.OK
-                        || !description.isValid())
-                        continue;
-
-                    if (description.getInstanceList(out var instances) != FMOD.RESULT.OK || instances == null)
-                        continue;
-
-                    for (var i = 0; i < instances.Length; i++)
-                    {
-                        if (instances[i].getPlaybackState(out var state) != FMOD.RESULT.OK)
-                            continue;
-
-                        if (state == PLAYBACK_STATE.STARTING
-                            || state == PLAYBACK_STATE.PLAYING
-                            || state == PLAYBACK_STATE.SUSTAINING)
-                            return true;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            return false;
-        }
-
-        private void ReleaseAudioInstance()
-        {
-            if (_sfxInstance.isValid())
-            {
-                _sfxInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                _sfxInstance.release();
-                _sfxInstance = default;
-            }
+            SoundService.StopTypewriter();
         }
 
         private static void SetImageAlpha(Image image, float alpha)

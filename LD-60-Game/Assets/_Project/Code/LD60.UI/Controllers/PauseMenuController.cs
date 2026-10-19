@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using LD60.Core;
+using LD60.UI.Audio;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -54,6 +55,7 @@ namespace LD60.UI
             _pause.performed -= OnPause;
             _pause.Disable();
             Time.timeScale = 1f;
+            SoundService.SetPaused(false);
         }
 
         private void OnDestroy()
@@ -77,11 +79,13 @@ namespace LD60.UI
             SetOptionsOpen(false);
             menu.SetActive(open);
             Time.timeScale = open ? 0f : 1f;
+            SoundService.SetPaused(open);
         }
 
         private void OnExitClicked()
         {
             Time.timeScale = 1f;
+            SoundService.SetPaused(false);
             _shell.ReturnToMainMenuAsync().Forget();
         }
 

@@ -265,7 +265,7 @@ namespace LD60.Main.Audio
         {
             var nextOn = !LoudspeakerAudio.IsOn;
             Debug.Log($"[Gramophone] Power clicked -> {(nextOn ? "ON" : "OFF")}");
-            MenuAudio.PlayButtonClick();
+            SoundService.PlayButtonClick();
 
             if (powerRenderer != null)
             {
@@ -280,7 +280,7 @@ namespace LD60.Main.Audio
         public void OnTrackClicked(int trackNumber)
         {
             Debug.Log($"[Gramophone] Track clicked -> Track {trackNumber}");
-            MenuAudio.PlayButtonClick();
+            SoundService.PlayButtonClick();
 
             var index = trackNumber - 1;
             if (trackButtons != null && index >= 0 && index < trackButtons.Length)

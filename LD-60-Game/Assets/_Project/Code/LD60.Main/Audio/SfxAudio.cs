@@ -9,8 +9,7 @@ namespace LD60.Main.Audio
     /// <summary>
     /// SFX (event:/SFX) — вечный контейнер-ивент (Fmod_Webgl_instruction.md §1):
     /// стартуется один раз и живёт в запущенном состоянии, таймлайн пустой.
-    /// Параметр "newspaper": typing=0, type=1, none=2 (начальное — none).
-    /// На значении type(1) лежит вложенный ивент (звук печатания), на typing(0) — другой.
+    /// Параметр "newspaper": typing=0, type=1 (штамп), convert=2, none=3.
     /// «Клик параметром» (§1 + §5.6): по вызову newspaper → type, вложенный ивент
     /// ДОИГРЫВАЕТ (ждём поллингом его инстансов), затем newspaper → none.
     /// Тест (временное, убрать после отладки): клавиша E.
@@ -21,9 +20,8 @@ namespace LD60.Main.Audio
         private const string SfxPath = "event:/SFX";
         private const string NewspaperParameter = "newspaper";
 
-        private const float TypingValue = 0f; // label "typing"
-        private const float TypeValue = 1f; // label "type"
-        private const float NoneValue = 2f; // label "none"
+        private const float TypeValue = 1f; // label "type" — удар штампа
+        private const float NoneValue = 3f; // label "none"
 
         // Вложенный ивент «звук type»: в иерархии Studio вложен в SFX — путь может
         // быть event:/type или event:/SFX/type, пробуем оба.
