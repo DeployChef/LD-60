@@ -43,21 +43,62 @@ namespace LD60.Gameplay.Context
         [SerializeField] private NewspaperRule[] rules = Array.Empty<NewspaperRule>();
         [SerializeField] private NeighborRule[] neighbors = Array.Empty<NeighborRule>();
         [SerializeField] private CapsuleDelivery[] capsules = Array.Empty<CapsuleDelivery>();
+        [SerializeField] private string[] requireOneOfArticles = Array.Empty<string>();
 
         public string Title => string.IsNullOrEmpty(title) ? name : title;
         public LD60.Gameplay.Story.ChapterAction[] Actions => actions ?? Array.Empty<LD60.Gameplay.Story.ChapterAction>();
         public NewspaperRule[] Rules => rules ?? Array.Empty<NewspaperRule>();
         public NeighborRule[] Neighbors => neighbors ?? Array.Empty<NeighborRule>();
         public CapsuleDelivery[] Capsules => capsules ?? Array.Empty<CapsuleDelivery>();
+        public string[] RequireOneOfArticles => requireOneOfArticles ?? Array.Empty<string>();
 
         public bool Allows(float fill, out string reason)
         {
-            return Allows(Rules, fill, out reason);
+            return Allows(Rules, fill, null, RequireOneOfArticles, out reason);
+        }
+
+        public bool Allows(float fill, System.Collections.Generic.IReadOnlyList<string> placedArticles, out string reason)
+        {
+            return Allows(Rules, fill, placedArticles, RequireOneOfArticles, out reason);
         }
 
         public static bool Allows(NewspaperRule[] rules, float fill, out string reason)
         {
+            return Allows(rules, fill, null, null, out reason);
+        }
+
+        public static bool Allows(NewspaperRule[] rules, float fill, System.Collections.Generic.IReadOnlyList<string> placedArticles, string[] requiredOneOf, out string reason)
+        {
             reason = null;
+            if (requiredOneOf != null && requiredOneOf.Length > 0)
+            {
+                var found = false;
+                if (placedArticles != null)
+                {
+                    for (var i = 0; i < placedArticles.Count; i++)
+                    {
+                        var id = placedArticles[i];
+                        for (var j = 0; j < requiredOneOf.Length; j++)
+                        {
+                            if (string.Equals(id, requiredOneOf[j], StringComparison.OrdinalIgnoreCase))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found)
+                            break;
+                    }
+                }
+
+                if (!found)
+                {
+                    reason = "The final edition must include one of the lead manifestos.";
+                    return false;
+                }
+            }
+
             if (rules == null)
                 return true;
 

@@ -151,7 +151,8 @@ namespace LD60.UI
                 return false;
             }
 
-            return _chapter.Allows(_desk != null ? _desk.Fill : 0f, out reason);
+            var placedIds = page != null ? Ids(page.Placed) : null;
+            return _chapter.Allows(_desk != null ? _desk.Fill : 0f, placedIds, out reason);
         }
 
         public void LeaveMark(Vector3 world, Sprite sprite, Material material, Vector3 size, int layer,
@@ -470,6 +471,9 @@ namespace LD60.UI
                 _context.SetParameter("social", social);
             }
 
+            if (page != null && _desk != null)
+                _desk.SetPlacedArticles(Ids(page.Placed));
+
             _desk?.SetScores(fill, politics, social);
             if (firstStampHint != null)
                 firstStampHint.SetHighlighted(!_editionSubmitted && page != null && page.Placed.Count > 0 && EditionReady(out _));
@@ -494,6 +498,7 @@ namespace LD60.UI
             {
                 case PlaceIssue.Taken: return "That space is taken.";
                 case PlaceIssue.Beside: return "These cannot sit side by side.";
+                case PlaceIssue.Exclusive: return "These stories cannot be published together.";
                 default: return "It does not fit there.";
             }
         }

@@ -31,6 +31,9 @@ MonoBehaviour:
   neighbors:
   - kind: 3
     other: 1
+  requireOneOfArticles:
+  - anon-truth
+  - order-curfew
   capsules:
   - id: morning-drop-10
     articles:

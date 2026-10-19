@@ -156,6 +156,7 @@ MonoBehaviour:
   postBlockDelay: 2.5
   compositionFadeOutDuration: 0.8
   deactivateOnFinish: 1
+  typingVolume: 0.305
 --- !u!1 &200000
 GameObject:
   m_ObjectHideFlags: 0

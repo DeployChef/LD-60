@@ -13,7 +13,20 @@ namespace LD60.UI
         [SerializeField] private StoryComicsData _introComics;
         [SerializeField] private CreditsPlayer _credits;
         
-        public void LookAtRoom() => views.ShowTable(false);
+        public void LookAtRoom()
+        {
+            DeskDrag.PlacementLocked = true;
+            DeskDrag.RecallHeld();
+            if (views != null)
+                views.HoldLookUp(true);
+        }
+
+        public void FreeLook()
+        {
+            DeskDrag.PlacementLocked = false;
+            if (views != null)
+                views.HoldLookUp(false);
+        }
 
         public void Cancel()
         {
@@ -22,11 +35,17 @@ namespace LD60.UI
                 _storyComics.CancelSequence();
             if (_credits != null && _credits.IsPlaying)
                 _credits.CancelSequence();
+            FreeLook();
         }
 
         public void ShowGuest(Sprite sprite) => _guestView.ShowGuest(sprite);
         public UniTask Enter() => _guestView.Enter();
         public UniTask Exit() => _guestView.Exit();
+
+        private void OnDestroy()
+        {
+            FreeLook();
+        }
 
         public UniTask PlayIntroComics() => PlayComics(_introComics);
 

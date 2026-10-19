@@ -18,10 +18,11 @@ MonoBehaviour:
   title: Curfew Moved Up
   body: Doors must be bolted by six o'clock. Anyone caught outside without a night
     pass goes straight to the cells.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 8857802627877543331, guid: ca821be203697a24380067d4b67db5c9, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.16
   politics: 3
   social: 0
   money: 0
   forbiddenNeighbors: 
+  forbiddenArticles: []

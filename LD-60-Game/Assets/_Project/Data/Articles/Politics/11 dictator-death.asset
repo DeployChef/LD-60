@@ -18,10 +18,11 @@ MonoBehaviour:
   title: Flags Lowered
   body: The Leader died at four this morning. The Military Council has taken charge
     of all ministries.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: -3768097148174024217, guid: 75eb9bd4d5b916049a05a25f492da66a, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 3
   social: 0
   money: 0
   forbiddenNeighbors: 
+  forbiddenArticles: []

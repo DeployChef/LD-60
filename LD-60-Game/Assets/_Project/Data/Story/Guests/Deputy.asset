@@ -13,10 +13,17 @@ MonoBehaviour:
   m_Name: Deputy
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
   displayName: Councilor Crowley
+  voice: 3
   emotions:
   - key: default
     sprite: {fileID: 21300000, guid: b51b3f7f076318c448cc066bf1b6a2a6, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: smug
     sprite: {fileID: 21300000, guid: b51b3f7f076318c448cc066bf1b6a2a6, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: anger
     sprite: {fileID: 21300000, guid: b51b3f7f076318c448cc066bf1b6a2a6, type: 3}
+    overrideVoice: 0
+    voice: 0

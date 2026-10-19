@@ -18,10 +18,11 @@ MonoBehaviour:
   title: District Dark
   body: Stokers walked out at the power station after dark. Neighbors are burning
     broken crates in iron drums.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: -5158181696400107204, guid: 3edc4c9d60969114d985a8ca1811e24e, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.16
   politics: 1
   social: 3
   money: 0
   forbiddenNeighbors: 
+  forbiddenArticles: []

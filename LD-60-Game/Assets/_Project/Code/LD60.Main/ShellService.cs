@@ -10,14 +10,16 @@ namespace LD60.Main
     {
         private readonly SceneLoader _scenes = new();
         private readonly DayCheckpointStore _store = new();
+        private readonly IGameAnalytics _analytics;
         private bool _busy;
         private bool _showIntro = true;
         private bool _hasCheckpoint;
         private int _chapterIndex;
         private StoryContextData _checkpoint = new();
 
-        public ShellService()
+        public ShellService(IGameAnalytics analytics = null)
         {
+            _analytics = analytics;
             _hasCheckpoint = _store.TryLoad(out _chapterIndex, out _checkpoint);
         }
 
@@ -55,6 +57,8 @@ namespace LD60.Main
             Launch = start;
             if (start == GameStart.New)
                 ClearCheckpoint();
+
+            _analytics?.TrackGameStart();
 
             try
             {

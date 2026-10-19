@@ -6,6 +6,7 @@ namespace LD60.Gameplay.Story
 {
     public interface IDialogue
     {
+        void SetSpeaker(GuestDefinition guest, string emotion = null);
         UniTask Say(string text, CancellationToken token);
         UniTask<int> Choose(string[] options, CancellationToken token, string prompt = null);
         void Hide();
@@ -15,6 +16,7 @@ namespace LD60.Gameplay.Story
     {
         void Cancel();
         void LookAtRoom();
+        void FreeLook();
         void ShowGuest(UnityEngine.Sprite sprite);
         UniTask Enter();
         UniTask Exit();

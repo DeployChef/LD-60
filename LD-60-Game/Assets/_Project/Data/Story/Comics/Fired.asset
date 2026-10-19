@@ -12,17 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
   m_Name: Fired
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
-  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
   blocks:
-  - image: {fileID: 0}
-    subtitle: "Minutes crawled by like cold printer's glue. The presses downstairs were starving for lead and paper, but the desk stayed dead silent."
-  - image: {fileID: 0}
-    subtitle: "The door didn't just open. The publisher kicked it off its hinges, his tie crooked and his face purple through a cloud of cigar smoke."
-  - image: {fileID: 0}
-    subtitle: "\"Did you come here to sleep, kid?! The presses are standing still! Because of you, the morning edition is going out blank!\""
-  - image: {fileID: 0}
-    subtitle: "\"Get out! Take your stupid mug and don't ever show your face around here again! You're fired!\""
-  - image: {fileID: 0}
-    subtitle: "Nobody bothered with a farewell. Two pressroom bouncers threw me down the stairs faster than I'd been promoted, my box of things tumbling after me."
-  - image: {fileID: 0}
-    subtitle: "My career as chief editor lasted less than a single shift. The heavy oak door bolted shut, leaving me alone in the cold rain."
+  - image: {fileID: 21300000, guid: 53f410355cc1e3349876e9f0451dbee8, type: 3}
+    subtitle: Minutes crawled by like cold printer's glue. The presses downstairs
+      were starving for lead and paper, but the desk stayed dead silent.
+  - image: {fileID: 21300000, guid: 78cd3302bfc1ff9499e7a81117c7bf9a, type: 3}
+    subtitle: The door didn't just open. The publisher kicked it off its hinges,
+      his tie crooked and his face purple through a cloud of cigar smoke.
+  - image: {fileID: 21300000, guid: 25f0f10c68310c949aff1f7278ea519b, type: 3}
+    subtitle: '"Did you come here to sleep, kid?! The presses are standing still!
+      Because of you, the morning edition is going out blank!"'
+  - image: {fileID: 21300000, guid: 8978f8e864b499648a29ada3d09a2eb0, type: 3}
+    subtitle: '"Get out! Take your stupid mug and don''t ever show your face around
+      here again! You''re fired!"'
+  - image: {fileID: 21300000, guid: fb1ffb153d990cf468a3a6fafbe58494, type: 3}
+    subtitle: Nobody bothered with a farewell. Two pressroom bouncers threw me down
+      the stairs faster than I'd been promoted, my box of things tumbling after me.
+  - image: {fileID: 21300000, guid: bf6e56472f4c362489f1d018ee5f22db, type: 3}
+    subtitle: My career as chief editor lasted less than a single shift. The heavy
+      oak door bolted shut, leaving me alone in the cold rain.

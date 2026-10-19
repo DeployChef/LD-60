@@ -18,6 +18,12 @@ namespace LD60.UI
 
         public bool IsBusy => _motion != null && _motion.IsActive();
 
+        public void Cancel()
+        {
+            _motion?.Kill(false);
+            _motion = null;
+        }
+
         private void OnDestroy()
         {
             _motion?.Kill();
@@ -29,7 +35,7 @@ namespace LD60.UI
             _homeScale = homeScale;
             _motion?.Kill();
 
-            if (board == null || !board.OverPage(transform.position))
+            if (DeskDrag.PlacementLocked || board == null || !board.OverPage(transform.position))
             {
                 Rest(board);
                 return;

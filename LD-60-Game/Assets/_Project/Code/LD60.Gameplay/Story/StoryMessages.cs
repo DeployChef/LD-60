@@ -41,10 +41,12 @@ namespace LD60.Gameplay.Story
     public readonly struct PaperStamped
     {
         public readonly float Fill;
+        public readonly string[] ArticleIds;
 
-        public PaperStamped(float fill)
+        public PaperStamped(float fill, string[] articleIds = null)
         {
             Fill = fill;
+            ArticleIds = articleIds ?? System.Array.Empty<string>();
         }
     }
 
@@ -69,6 +71,16 @@ namespace LD60.Gameplay.Story
         public ArticleGiven(string articleId)
         {
             ArticleId = articleId;
+        }
+    }
+
+    public readonly struct MoneyChanged
+    {
+        public readonly int Amount;
+
+        public MoneyChanged(int amount)
+        {
+            Amount = amount;
         }
     }
 

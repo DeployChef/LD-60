@@ -15,6 +15,7 @@ namespace LD60.Main.DI
             builder.RegisterComponentInHierarchy<StoryDebugController>();
             builder.RegisterComponentInHierarchy<CapsuleSlot>();
             builder.RegisterComponentInHierarchy<NewspaperDesk>();
+            builder.RegisterComponentInHierarchy<DeskMoneyView>();
             builder.RegisterComponentInHierarchy<SequencePlayer>().As<ISequencePlayer>();
             builder.RegisterComponentInHierarchy<DialogueManager>().As<IDialogue>();
             builder.Register<ChapterActionPlay>(Lifetime.Singleton);

@@ -37,6 +37,7 @@ namespace LD60.Gameplay.Articles
         [SerializeField] private float social;
         [SerializeField] private float money;
         [SerializeField] private ArticleKind[] forbiddenNeighbors = Array.Empty<ArticleKind>();
+        [SerializeField] private string[] forbiddenArticles = Array.Empty<string>();
 
         public string Id => string.IsNullOrEmpty(id) ? name : id;
         public ArticleShape Shape => shape;
@@ -50,6 +51,7 @@ namespace LD60.Gameplay.Articles
         public float Social => social;
         public float Money => money;
         public ArticleKind[] ForbiddenNeighbors => forbiddenNeighbors ?? Array.Empty<ArticleKind>();
+        public string[] ForbiddenArticles => forbiddenArticles ?? Array.Empty<string>();
 
 #if UNITY_EDITOR
         public void EditorConfigure(
@@ -64,7 +66,8 @@ namespace LD60.Gameplay.Articles
             float politicsValue,
             float socialValue,
             float moneyValue,
-            ArticleKind[] forbidden)
+            ArticleKind[] forbidden,
+            string[] forbiddenArticlesList = null)
         {
             id = articleId;
             shape = articleShape;
@@ -78,6 +81,7 @@ namespace LD60.Gameplay.Articles
             social = socialValue;
             money = moneyValue;
             forbiddenNeighbors = forbidden ?? Array.Empty<ArticleKind>();
+            forbiddenArticles = forbiddenArticlesList ?? Array.Empty<string>();
         }
 #endif
     }

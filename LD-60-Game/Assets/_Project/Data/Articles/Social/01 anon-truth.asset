@@ -21,9 +21,11 @@ MonoBehaviour:
     own publisher emptied the city treasury into foreign banks. Don''t let them slip
     out on the night train. Take the streets!"'
   picture: {fileID: 21300000, guid: 648a32dc7185c3949973ee1401bc75ae, type: 3}
-  pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
+  pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.39999998
   politics: 0
   social: 10
   money: 0
-  forbiddenNeighbors: 
+  forbiddenNeighbors: []
+  forbiddenArticles:
+  - order-curfew

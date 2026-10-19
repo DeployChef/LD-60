@@ -9,6 +9,7 @@ namespace LD60.UI
         [SerializeField] private Material material;
         [SerializeField] private Color color = new(1f, 0.84f, 0.18f, 1f);
         [SerializeField, Range(1f, 12f)] private float width = 5f;
+        [SerializeField] private float pulseSeconds = 1.1f;
 
         private SpriteRenderer _source;
         private MeshRenderer _outline;
@@ -104,10 +105,16 @@ namespace LD60.UI
                 _properties.SetVector("_SpriteRect", new Vector4(
                     rect.xMin / texture.width, rect.yMin / texture.height,
                     rect.xMax / texture.width, rect.yMax / texture.height));
-                _properties.SetVector("_OutlineStep", new Vector4(width / texture.width, width / texture.height, 0f, 0f));
             }
 
-            _properties.SetColor("_OutlineColor", color);
+            var textureWidth = sprite.texture.width;
+            var textureHeight = sprite.texture.height;
+            var wave = 0.5f + 0.5f * Mathf.Sin(Time.time * (Mathf.PI * 2f / Mathf.Max(0.05f, pulseSeconds)));
+            var step = width * Mathf.Lerp(0.4f, 1f, wave);
+            var pulsed = color;
+            pulsed.a *= Mathf.Lerp(0.12f, 1f, wave);
+            _properties.SetVector("_OutlineStep", new Vector4(step / textureWidth, step / textureHeight, 0f, 0f));
+            _properties.SetColor("_OutlineColor", pulsed);
             _outline.SetPropertyBlock(_properties);
             _outline.sortingLayerID = _source.sortingLayerID;
             _outline.sortingOrder = _source.sortingOrder - 1;

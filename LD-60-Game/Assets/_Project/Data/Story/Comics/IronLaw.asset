@@ -12,17 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
   m_Name: IronLaw
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
-  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
   blocks:
-  - image: {fileID: 0}
-    subtitle: "My hand trembled, but the stamp came down square. Fear won out over conscience, and the paper sided with the men holding the guns."
-  - image: {fileID: 0}
-    subtitle: "The man in the mask realized too late. The trap snapped shut the exact moment the press inked the government's martial law decree."
-  - image: {fileID: 0}
-    subtitle: "This time, they didn't miss. The living dead man went back where he came from: an unmarked pit in the wet earth."
-  - image: {fileID: 0}
-    subtitle: "The decree did its job. The city locked its doors and drew its curtains tight. The uprising died before it could even begin."
-  - image: {fileID: 0}
-    subtitle: "\"Good call, Editor,\" the officer said, clapping a heavy hand on my shoulder. \"The state needs loyal pens. This chair is yours for life.\""
-  - image: {fileID: 0}
-    subtitle: "You got everything: safety, money, official favor. Yet every night, in every dark windowpane, the shattered mask of your old mentor stares back at you."
+  - image: {fileID: -4060339134492186001, guid: e3d5f1a1f6a4b674b957cba28dc36343, type: 3}
+    subtitle: My hand trembled, but the stamp came down square. Fear won out over
+      conscience, and the paper sided with the men holding the guns.
+  - image: {fileID: -8372250915488712596, guid: b60f77e9e477d164cb4e394aafb0feb3, type: 3}
+    subtitle: The man in the mask realized too late. The trap snapped shut the exact
+      moment the press inked the government's martial law decree.
+  - image: {fileID: -3072107296297262196, guid: 8e4747a735d789e4ca8be63f2709abb3, type: 3}
+    subtitle: 'This time, they didn''t miss. The living dead man went back where
+      he came from: an unmarked pit in the wet earth.'
+  - image: {fileID: 7216545957417527376, guid: 34ebb918b4befe744bba78bd582c89ad, type: 3}
+    subtitle: The decree did its job. The city locked its doors and drew its curtains
+      tight. The uprising died before it could even begin.
+  - image: {fileID: 3113586446087389919, guid: c27421d3f1b637b47b9ce2f1c4a90a88, type: 3}
+    subtitle: '"Good call, Editor," the officer said, clapping a heavy hand on my
+      shoulder. "The state needs loyal pens. This chair is yours for life."'
+  - image: {fileID: 1654729837978108185, guid: 1557d7c7f323892439c572c5519a9a3e, type: 3}
+    subtitle: 'You got everything: safety, money, official favor. Yet every night,
+      in every dark windowpane, the shattered mask of your old mentor stares back
+      at you.'

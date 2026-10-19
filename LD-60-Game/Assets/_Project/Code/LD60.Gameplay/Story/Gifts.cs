@@ -27,6 +27,7 @@ namespace LD60.Gameplay.Story
                     return;
 
                 _context.AddMoney(amount);
+                _bus.Publish(new MoneyChanged(_context.Money));
                 Debug.Log($"[Story] Gave money {amount}. money={_context.Money}");
                 return;
             }

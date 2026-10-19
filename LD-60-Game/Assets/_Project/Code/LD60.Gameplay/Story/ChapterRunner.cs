@@ -16,6 +16,7 @@ namespace LD60.Gameplay.Story
 
     public sealed class ChapterRunner : IDisposable
     {
+        private readonly ChapterDefinition _chapter;
         private readonly ChapterAction[] _actions;
         private readonly NewspaperRule[] _rules;
         private readonly IMessageBus _bus;
@@ -45,6 +46,7 @@ namespace LD60.Gameplay.Story
             ChapterActionPlay playback,
             Action<ChapterResult> onFinished)
         {
+            _chapter = chapter;
             _actions = chapter.Actions;
             _rules = chapter.Rules;
             _bus = bus;
@@ -55,6 +57,8 @@ namespace LD60.Gameplay.Story
             _life = new CancellationTokenSource();
             _read.Context = context;
         }
+
+        public ChapterDefinition Chapter => _chapter;
 
         public ChapterMode Mode
         {
@@ -143,7 +147,7 @@ namespace LD60.Gameplay.Story
             if (Mode != ChapterMode.Work)
                 return;
 
-            if (!ChapterDefinition.Allows(_rules, message.Fill, out var reason))
+            if (!ChapterDefinition.Allows(_rules, message.Fill, message.ArticleIds, _chapter != null ? _chapter.RequireOneOfArticles : null, out var reason))
             {
                 Debug.Log($"[Story] Paper rejected. {reason} fill={message.Fill:0.00}");
                 return;

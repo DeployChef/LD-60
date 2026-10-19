@@ -39,6 +39,8 @@ namespace LD60.Main
             // SFX: вечный контейнер, клики параметром newspaper (тест — клавиша E).
             SfxAudio.EnsureCreated();
             var shell = rootScope.Container.Resolve<IShellService>();
+            var analytics = rootScope.Container.Resolve<Analytics.UnityAnalyticsService>();
+            analytics.InitializeAsync().Forget();
             await shell.StartAsync();
         }
 

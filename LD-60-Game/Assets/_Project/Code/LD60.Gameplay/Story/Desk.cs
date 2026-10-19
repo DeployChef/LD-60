@@ -8,6 +8,7 @@ namespace LD60.Gameplay.Story
     {
         private readonly IMessageBus _bus;
         private readonly List<string> _kept = new();
+        private readonly List<string> _placed = new();
 
         public Desk(IMessageBus bus)
         {
@@ -18,6 +19,7 @@ namespace LD60.Gameplay.Story
         public float Politics { get; private set; }
         public float Social { get; private set; }
         public IReadOnlyList<string> KeptArticleIds => _kept;
+        public IReadOnlyList<string> PlacedArticleIds => _placed;
 
         public void ResetDay()
         {
@@ -25,6 +27,7 @@ namespace LD60.Gameplay.Story
             Politics = 0f;
             Social = 0f;
             _kept.Clear();
+            _placed.Clear();
             _bus.Publish(new FieldStateChanged(0f, 0f, 0f));
         }
 
@@ -54,9 +57,22 @@ namespace LD60.Gameplay.Story
             }
         }
 
+        public void SetPlacedArticles(IReadOnlyList<string> ids)
+        {
+            _placed.Clear();
+            if (ids == null)
+                return;
+
+            for (var i = 0; i < ids.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(ids[i]))
+                    _placed.Add(ids[i]);
+            }
+        }
+
         public void Stamp()
         {
-            _bus.Publish(new PaperStamped(Fill));
+            _bus.Publish(new PaperStamped(Fill, _placed.ToArray()));
         }
     }
 }
