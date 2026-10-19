@@ -2643,68 +2643,68 @@ PrefabInstance:
       propertyPath: creditsContent
       value: '<b>THE LAST WORD</b>
 
-        
+
 
         A game for Ludum Dare 60
 
-        
+
 
         <size=160%><b>CHEF
         GAMES</b></size>
 
-        
+
 
         <size=120%><b>Vladislav "Chef" Titov</b></size>
 
         Game
         Design & Programming & Narrative
 
-        
 
-        <size=120%><b>Ilia
-        "Shikaka" Lepekhin</b></size>
+
+        <size=120%><b>Ilia "Shikaka"
+        Lepekhin</b></size>
 
         UI Programming & Visual Implementation
 
-        
+
 
         <size=120%><b>Efim
         "Postaek" Asiamolov</b></size>
 
         Programming
 
-        
+
 
         <size=120%><b>Darya
         "Absyrdia" Novikova</b></size>
 
         Art & Visual Design
 
-        
+
 
         <size=120%><b>Rodyk
         "Lvsth0p3" Valentin</b></size>
 
         Music & Sound Design & Fmod Implemetation
 
-        
+
 
         <size=120%><b>Egor
         "Zuljin" Zakharov</b></size>
 
         UI Design
 
-        
 
-        The
-        Last Word Team
 
-        
+        The Last Word
+        Team
+
+
 
         <size=150%><b>SPECIAL THANKS</b></size>
 
-        Ludum
-        Dare Community
+        Ludum Dare
+        Community
 
         All Our Playtesters
 
@@ -3073,7 +3073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
       propertyPath: m_Pivot.x
@@ -3154,6 +3154,26 @@ PrefabInstance:
     - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1816.279
+      objectReference: {fileID: 0}
+    - target: {fileID: 400001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 400001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 14.312
+      objectReference: {fileID: 0}
+    - target: {fileID: 400003, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_fontSize
+      value: 34.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 400003, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 34.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

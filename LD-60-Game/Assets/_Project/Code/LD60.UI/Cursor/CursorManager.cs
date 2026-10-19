@@ -336,7 +336,7 @@ namespace LD60.UI
             texture.filterMode = FilterMode.Point;
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.SetPixels32(scaledPixels);
-            texture.Apply(false, true);
+            texture.Apply(false, false);
             return texture;
         }
     }
