@@ -98,7 +98,7 @@ namespace LD60.Main.Audio
                 await UniTask.Yield(cancellationToken);
             }
 
-            Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
+                Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
 
             // 2. Сэмплы: инстанс, созданный раньше сэмплов, даёт «API отвечает, а звука нет».
             Stage = PreloadStage.Samples;
