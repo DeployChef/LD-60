@@ -112,55 +112,65 @@ namespace LD60.Gameplay.Story
             var guest = visit.Guest;
             var steps = visit.Steps;
             var index = 0;
-            while (index >= 0 && index < steps.Length)
+            if (Alive(_player))
+                _player.LookAtRoom();
+
+            try
             {
-                var step = steps[index];
-                if (step == null || !step.rule.Passes(chapter.Context))
+                while (index >= 0 && index < steps.Length)
                 {
-                    index++;
-                    continue;
-                }
+                    var step = steps[index];
+                    if (step == null || !step.rule.Passes(chapter.Context))
+                    {
+                        index++;
+                        continue;
+                    }
 
-                var following = step.next >= 0 ? step.next : index + 1;
-                Remember(chapter, step);
-                switch (step.kind)
-                {
-                    case VisitStepKind.Enter:
-                        Show(guest, step.emotion);
-                        _player.LookAtRoom();
-                        await _player.Enter();
-                        break;
-                    case VisitStepKind.Say:
-                        Show(guest, step.emotion);
-                        await _dialogue.Say(step.text, chapter.Token);
-                        break;
-                    case VisitStepKind.Choose:
-                        Show(guest, step.emotion);
-                        var choice = await _dialogue.Choose(new[] { step.optionA, step.optionB }, chapter.Token,
-                            string.IsNullOrEmpty(step.text) ? null : step.text);
-                        following = choice == 0 ? step.nextA : step.nextB;
-                        if (following < 0)
-                            following = index + 1;
-                        break;
-                    case VisitStepKind.Give:
-                        if (_gifts != null)
-                            _gifts.Give(step.giftId, step.amount);
-                        break;
-                    case VisitStepKind.Exit:
-                        if (_dialogue != null)
-                            _dialogue.Hide();
-                        await _player.Exit();
-                        following = -1;
-                        break;
-                    case VisitStepKind.Remember:
-                        break;
-                }
+                    var following = step.next >= 0 ? step.next : index + 1;
+                    Remember(chapter, step);
+                    switch (step.kind)
+                    {
+                        case VisitStepKind.Enter:
+                            Show(guest, step.emotion);
+                            _player.LookAtRoom();
+                            await _player.Enter();
+                            break;
+                        case VisitStepKind.Say:
+                            Show(guest, step.emotion);
+                            await _dialogue.Say(step.text, chapter.Token);
+                            break;
+                        case VisitStepKind.Choose:
+                            Show(guest, step.emotion);
+                            var choice = await _dialogue.Choose(new[] { step.optionA, step.optionB }, chapter.Token,
+                                string.IsNullOrEmpty(step.text) ? null : step.text);
+                            following = choice == 0 ? step.nextA : step.nextB;
+                            if (following < 0)
+                                following = index + 1;
+                            break;
+                        case VisitStepKind.Give:
+                            if (_gifts != null)
+                                _gifts.Give(step.giftId, step.amount);
+                            break;
+                        case VisitStepKind.Exit:
+                            if (_dialogue != null)
+                                _dialogue.Hide();
+                            await _player.Exit();
+                            following = -1;
+                            break;
+                        case VisitStepKind.Remember:
+                            break;
+                    }
 
-                index = following;
+                    index = following;
+                }
             }
-
-            if (_dialogue != null)
-                _dialogue.Hide();
+            finally
+            {
+                if (_dialogue != null)
+                    _dialogue.Hide();
+                if (Alive(_player))
+                    _player.FreeLook();
+            }
         }
 
         private static void Remember(ChapterRunner chapter, VisitStep step)

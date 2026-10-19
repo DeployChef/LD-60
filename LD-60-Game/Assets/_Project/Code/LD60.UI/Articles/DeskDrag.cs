@@ -13,6 +13,14 @@ namespace LD60.UI
 
         private static int _heldCount;
         public static bool IsAnyHeld => _heldCount > 0;
+        public static bool PlacementLocked { get; set; }
+
+        public static void RecallHeld()
+        {
+            var drags = FindObjectsByType<DeskDrag>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            for (var i = 0; i < drags.Length; i++)
+                drags[i].RecallIfHeld();
+        }
 
         private WorkstationViewController _views;
         private NewspaperDesk _board;
@@ -45,10 +53,10 @@ namespace LD60.UI
         private void Update()
         {
             var mouse = Mouse.current;
-            if (mouse == null || !CanUsePointer())
+            if (mouse == null || !CanUsePointer() || PlacementLocked)
             {
-                if (_held)
-                    Drop();
+                if (_held || StampBusy())
+                    Recall();
                 return;
             }
 
@@ -69,6 +77,47 @@ namespace LD60.UI
             if (_views != null && !_views.IsShowingTable)
                 return false;
             return Time.timeScale > 0f;
+        }
+
+        private bool StampBusy()
+        {
+            var stamp = GetComponent<DeskStamp>();
+            return stamp != null && stamp.IsBusy;
+        }
+
+        private void RecallIfHeld()
+        {
+            if (_held || StampBusy())
+                Recall();
+        }
+
+        private void Recall()
+        {
+            if (_held)
+            {
+                _held = false;
+                _heldCount = Mathf.Max(0, _heldCount - 1);
+            }
+
+            _rise?.Kill();
+            _risen = 0f;
+            var piece = GetComponent<ArticlePiece>();
+            if (piece != null && _views != null)
+                _views.AllowLookUp(true);
+
+            var stamp = GetComponent<DeskStamp>();
+            if (stamp != null)
+                stamp.Cancel();
+
+            transform.position = _home;
+            transform.localScale = _homeScale;
+            Lift(false);
+            if (piece != null)
+            {
+                _board?.EndHover(piece);
+                if (_board != null && !_board.Settle(piece, out _))
+                    _board.PlaceLoose(piece);
+            }
         }
 
         private Camera OutputCamera()
@@ -174,6 +223,15 @@ namespace LD60.UI
 
             if (stamp != null)
             {
+                if (PlacementLocked)
+                {
+                    stamp.Cancel();
+                    transform.position = _home;
+                    transform.localScale = _homeScale;
+                    Lift(false);
+                    return;
+                }
+
                 stamp.Release(_board, _home, _homeScale);
                 return;
             }

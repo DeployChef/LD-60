@@ -74,6 +74,16 @@ namespace LD60.Gameplay.Story
         }
     }
 
+    public readonly struct MoneyChanged
+    {
+        public readonly int Amount;
+
+        public MoneyChanged(int amount)
+        {
+            Amount = amount;
+        }
+    }
+
     public readonly struct CapsuleTaken
     {
         public readonly string CapsuleId;

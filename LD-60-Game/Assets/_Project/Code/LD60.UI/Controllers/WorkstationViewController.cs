@@ -23,6 +23,7 @@ namespace LD60.UI
         private bool _showingTable;
         private bool _lookDown = true;
         private bool _lookUp = true;
+        private bool _holdLookUp;
 
         public bool IsShowingTable => _showingTable;
 
@@ -34,6 +35,13 @@ namespace LD60.UI
         public void AllowLookUp(bool allow)
         {
             _lookUp = allow;
+        }
+
+        public void HoldLookUp(bool hold)
+        {
+            _holdLookUp = hold;
+            if (hold)
+                ShowTable(false, true);
         }
 
         private void Awake()
@@ -72,17 +80,39 @@ namespace LD60.UI
                 return;
 
             var height = position.y / Screen.height;
-            if (_lookDown && !_showingTable && height <= bottomZoneHeightPercent * 0.01f)
+            if (_lookDown && !_holdLookUp && !_showingTable && height <= bottomZoneHeightPercent * 0.01f)
                 ShowTable(true);
-            else if (_lookUp && _showingTable && height >= 1f - topZoneHeightPercent * 0.01f)
+            else if (_lookUp && !_holdLookUp && _showingTable && height >= 1f - topZoneHeightPercent * 0.01f)
                 ShowTable(false);
         }
 
-        public void ShowTable(bool show)
+        private void LateUpdate()
+        {
+            if (_holdLookUp && _showingTable)
+                ShowTable(false, true);
+        }
+
+        public void ShowTable(bool show, bool cut = false)
         {
             _showingTable = show;
             windowCamera.Priority = show ? 0 : 10;
             tableCamera.Priority = show ? 10 : 0;
+            if (cut)
+                CutBlend();
+        }
+
+        private void CutBlend()
+        {
+            if (brain == null)
+                return;
+
+            var custom = brain.CustomBlends;
+            var previous = brain.DefaultBlend;
+            brain.CustomBlends = null;
+            brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
+            brain.ManualUpdate();
+            brain.DefaultBlend = previous;
+            brain.CustomBlends = custom;
         }
 
 #if UNITY_EDITOR
