@@ -15,6 +15,8 @@ namespace LD60.UI
 {
     public sealed class NewspaperDesk : MonoBehaviour
     {
+        [SerializeField] private SpriteHintOutline firstStampHint;
+        private bool _hasStamped;
         [SerializeField] private PageGrid page;
         [SerializeField] private ArticleTray save;
         [SerializeField] private float deskScale = 0.75f;
@@ -158,6 +160,9 @@ namespace LD60.UI
 
         public void CommitStamp()
         {
+            _hasStamped = true;
+            if (firstStampHint != null)
+                firstStampHint.SetHighlighted(false);
             _desk?.Stamp();
         }
 
@@ -439,6 +444,8 @@ namespace LD60.UI
             }
 
             _desk?.SetScores(fill, politics, social);
+            if (firstStampHint != null)
+                firstStampHint.SetHighlighted(!_hasStamped && page != null && page.Placed.Count > 0 && EditionReady(out _));
         }
 
         private static List<string> Ids(IReadOnlyList<ArticlePiece> pieces)
