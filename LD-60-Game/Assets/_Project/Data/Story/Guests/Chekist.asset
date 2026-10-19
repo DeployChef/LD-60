@@ -15,10 +15,10 @@ MonoBehaviour:
   displayName: State Inspector
   emotions:
   - key: default
-    sprite: {fileID: 21300000, guid: 403a8ad2719dca243959481aa958c8b4, type: 3}
+    sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
   - key: cigar
-    sprite: {fileID: 21300000, guid: 403a8ad2719dca243959481aa958c8b4, type: 3}
+    sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
   - key: anger
-    sprite: {fileID: 21300000, guid: 403a8ad2719dca243959481aa958c8b4, type: 3}
+    sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
   - key: calm
-    sprite: {fileID: 21300000, guid: 403a8ad2719dca243959481aa958c8b4, type: 3}
+    sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
