@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
   m_Name: Fired
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
-  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
   blocks:
   - image: {fileID: 21300000, guid: 53f410355cc1e3349876e9f0451dbee8, type: 3}
     subtitle: Minutes crawled by like cold printer's glue. The presses downstairs
