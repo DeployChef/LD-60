@@ -24,6 +24,8 @@ namespace LD60.UI
         [SerializeField] private Transform desk;
         [SerializeField] private Transform pile;
         [SerializeField] private float spacing = 2.7f;
+        [SerializeField] private Sprite closedSprite;
+        [SerializeField] private Sprite openedSprite;
 
         private IMessageBus _bus;
         private StoryBook _story;
@@ -34,6 +36,8 @@ namespace LD60.UI
         private Color _awakeColor;
         private IDisposable _arrived;
         private string _pending;
+        private bool _opened;
+        private Vector3 _letterPosition;
 
         [Inject]
         public void Construct(IMessageBus bus, StoryBook story, NewspaperDesk board)
@@ -49,6 +53,7 @@ namespace LD60.UI
         {
             _renderer = GetComponent<SpriteRenderer>();
             _awakeColor = _renderer != null ? _renderer.color : Color.white;
+            _letterPosition = transform.localPosition;
             _views = FindAnyObjectByType<WorkstationViewController>();
             if (_views != null)
                 _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
@@ -56,9 +61,6 @@ namespace LD60.UI
                 _brain = FindAnyObjectByType<CinemachineBrain>();
             if (pile == null && desk != null)
                 pile = desk.Find("Pile");
-            var box = GetComponent<BoxCollider>();
-            if (box != null)
-                box.size = new Vector3(1.4f, 1.4f, 1.2f);
             SetWaiting(!string.IsNullOrEmpty(_pending));
         }
 
@@ -94,13 +96,17 @@ namespace LD60.UI
             }
 
             _pending = message.CapsuleId;
+            _opened = false;
             SetWaiting(true);
         }
 
         private void Open()
         {
+            if (string.IsNullOrEmpty(_pending))
+                return;
             var id = _pending;
             _pending = null;
+            _opened = true;
             SetWaiting(false);
             MenuAudio.PlayEnvelopeOpen();
             if (_story != null && _story.TryFindCapsule(id, out var delivery))
@@ -171,7 +177,28 @@ namespace LD60.UI
         private void SetWaiting(bool waiting)
         {
             if (_renderer != null)
-                _renderer.color = waiting ? _awakeColor : _awakeColor * 0.45f;
+            {
+                var sprite = _opened && !waiting ? openedSprite : closedSprite;
+                if (sprite != null)
+                {
+                    _renderer.sprite = sprite;
+                    _renderer.color = _awakeColor;
+                    // Both pictures share the envelope body. Only the flap grows upwards.
+                    var bottomOffset = closedSprite != null
+                        ? (closedSprite.bounds.min.y - sprite.bounds.min.y) * transform.localScale.y
+                        : 0f;
+                    transform.localPosition = _letterPosition + Vector3.up * bottomOffset;
+                    var box = GetComponent<BoxCollider>();
+                    if (box != null)
+                    {
+                        var bounds = sprite.bounds;
+                        box.size = new Vector3(bounds.size.x, bounds.size.y, Mathf.Max(0.2f, box.size.z));
+                        box.center = new Vector3(bounds.center.x, bounds.center.y, box.center.z);
+                    }
+                }
+                else
+                    _renderer.color = waiting ? _awakeColor : _awakeColor * 0.45f;
+            }
             var collider = GetComponent<Collider>();
             if (collider != null)
                 collider.enabled = waiting;

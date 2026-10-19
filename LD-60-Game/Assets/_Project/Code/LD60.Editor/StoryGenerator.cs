@@ -161,7 +161,11 @@ namespace LD60.Editor
                 var rootArticleFiles = Directory.GetFiles(ArticlesFolder, "*.asset", SearchOption.TopDirectoryOnly);
                 foreach (var file in rootArticleFiles)
                 {
-                    if (AssetDatabase.DeleteAsset(file.Replace("\\", "/")))
+                    var path = file.Replace("\\", "/");
+                    // Shared appearance/settings assets are not generated story articles.
+                    if (AssetDatabase.LoadAssetAtPath<ArticleDefinition>(path) == null)
+                        continue;
+                    if (AssetDatabase.DeleteAsset(path))
                         removed++;
                 }
             }

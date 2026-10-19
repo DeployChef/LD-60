@@ -26,7 +26,10 @@ namespace LD60.Editor
                     return;
                 var square = AssetDatabase.LoadAssetAtPath<GameObject>(FormFolder + "/ArticleSquare.prefab");
                 if (square != null && square.transform.Find("Face1") != null)
+                {
+                    ArticleStyleSetup.RepairMissing();
                     return;
+                }
                 Build();
             };
         }
@@ -61,6 +64,7 @@ namespace LD60.Editor
                     new Vector2(-2f, 0.5f), new Vector2(-1f, 0.5f), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(2f, 0.5f)
                 });
             var note = LoadOrBuildNote(sprite, material, font, layer);
+            ArticleStyleSetup.RepairMissing();
             WireGame(dot, line2H, line2V, line3H, line3V, square, banner5x2, note);
             AssetDatabase.SaveAssets();
             Debug.Log("[Articles] Props and ArticleBanner5x2 are ready (existing article prefabs preserved).");
