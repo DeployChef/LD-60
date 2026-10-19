@@ -165,6 +165,7 @@ namespace LD60.Gameplay.Story
 
         private void Show(GuestDefinition guest, string emotion)
         {
+            _dialogue?.SetSpeaker(guest, emotion);
             if (_player == null || guest == null)
                 return;
 

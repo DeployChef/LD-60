@@ -13,12 +13,21 @@ MonoBehaviour:
   m_Name: Anon
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
   displayName: Anonymous
+  voice: 4
   emotions:
   - key: mask
     sprite: {fileID: 21300000, guid: a37055218d7e61b4a9f9d4797cf756c5, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: rage
     sprite: {fileID: 21300000, guid: a37055218d7e61b4a9f9d4797cf756c5, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: hole
     sprite: {fileID: 21300000, guid: 902226a72b0fca9489deaba88d7bcd1f, type: 3}
+    overrideVoice: 1
+    voice: 5
   - key: unmasked
     sprite: {fileID: 21300000, guid: 902226a72b0fca9489deaba88d7bcd1f, type: 3}
+    overrideVoice: 1
+    voice: 5

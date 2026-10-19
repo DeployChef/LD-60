@@ -13,12 +13,21 @@ MonoBehaviour:
   m_Name: Chekist
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
   displayName: State Inspector
+  voice: 2
   emotions:
   - key: default
     sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: cigar
     sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: anger
     sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: calm
     sprite: {fileID: 21300000, guid: 545dd39109f6fa74fbad2b9604e7b252, type: 3}
+    overrideVoice: 0
+    voice: 0
