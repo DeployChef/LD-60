@@ -27,6 +27,8 @@ namespace LD60.UI.Audio
         private const float CutValue = 0f;
         private const float MenuValue = 1f;
         private const float StartValue = 2f;
+        // Marker A: the menu section of the bundled "start or menu" event.
+        private const int MenuTimelinePositionMilliseconds = 16000;
 
         private static MenuAudio _instance;
         private EventInstance _menuMusic;
@@ -132,6 +134,10 @@ namespace LD60.UI.Audio
 
         private void SetState(float value, string label)
         {
+            // Changing the parameter alone leaves the intro's sounds playing
+            // until FMOD reaches its transition region, even after Space skips it.
+            if (_targetState != value)
+                ReleaseMusicInstance(FMOD.Studio.STOP_MODE.IMMEDIATE);
             _targetState = value;
             EnsureMusicInstance();
             ApplyState();
@@ -148,25 +154,26 @@ namespace LD60.UI.Audio
             Debug.Log("[MenuAudio] cutscene or menu -> start (2)");
 
             // Даём звуку перехода отыграть и освобождаем инстанс
-            ReleaseAfterStopAsync().Forget();
+            ReleaseAfterStopAsync(_menuMusic).Forget();
         }
 
-        private async UniTaskVoid ReleaseAfterStopAsync()
+        private async UniTaskVoid ReleaseAfterStopAsync(EventInstance instance)
         {
             var deadline = Time.unscaledTime + 5f;
-            while (Time.unscaledTime < deadline && _menuMusic.isValid())
+            while (Time.unscaledTime < deadline && instance.isValid())
             {
-                if (_menuMusic.getPlaybackState(out var state) == FMOD.RESULT.OK && state == PLAYBACK_STATE.STOPPED)
+                if (instance.getPlaybackState(out var state) == FMOD.RESULT.OK && state == PLAYBACK_STATE.STOPPED)
                     break;
 
                 await UniTask.Yield();
             }
 
-            if (_menuMusic.isValid())
+            if (instance.isValid())
             {
-                _menuMusic.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                _menuMusic.release();
-                _menuMusic = default;
+                instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                instance.release();
+                if (_menuMusic.handle == instance.handle)
+                    _menuMusic = default;
             }
         }
 
@@ -176,7 +183,7 @@ namespace LD60.UI.Audio
             {
                 if (_menuMusic.getPlaybackState(out var state) == FMOD.RESULT.OK && state == PLAYBACK_STATE.STOPPED)
                 {
-                    _menuMusic.start();
+                    StartMusicInstance();
                 }
                 return;
             }
@@ -189,7 +196,7 @@ namespace LD60.UI.Audio
                     if (_menuMusic.isValid())
                     {
                         ResolveParamName(_menuMusic);
-                        _menuMusic.start();
+                        StartMusicInstance();
                         Debug.Log($"[MenuAudio] инстанс {path} создан и запущен");
                         break;
                     }
@@ -212,6 +219,14 @@ namespace LD60.UI.Audio
             }
         }
 
+        private void StartMusicInstance()
+        {
+            ApplyState();
+            if (_targetState == MenuValue)
+                _menuMusic.setTimelinePosition(MenuTimelinePositionMilliseconds);
+            _menuMusic.start();
+        }
+
         private void ApplyState()
         {
             if (!_menuMusic.isValid())
@@ -225,14 +240,19 @@ namespace LD60.UI.Audio
             instance.setParameterByName(paramName, value, ignoreseekspeed: true);
         }
 
-        private void OnDestroy()
+        private void ReleaseMusicInstance(FMOD.Studio.STOP_MODE mode)
         {
             if (_menuMusic.isValid())
             {
-                _menuMusic.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                _menuMusic.stop(mode);
                 _menuMusic.release();
                 _menuMusic = default;
             }
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseMusicInstance(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
 }
