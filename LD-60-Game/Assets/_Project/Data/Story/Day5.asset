@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day5
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 5: Heavy Footsteps'
+  actions:
+  - {fileID: 11400000, guid: d2f229b5bc4f1db44905cb3b86f9053f, type: 2}
+  - {fileID: 11400000, guid: aa38311f1ee4fef4e8331f20bfe202f5, type: 2}
+  - {fileID: 11400000, guid: bea8217c72c55104bac1fd66f9bbd416, type: 2}
+  - {fileID: 11400000, guid: 1a2e7c5c788e42e4fbce1dd5989300d6, type: 2}
+  - {fileID: 11400000, guid: 7139b4af2c0e1fc4599933c39df5b606, type: 2}
+  - {fileID: 11400000, guid: acc8bb61f7ce8bd42b972c02997ff10b, type: 2}
+  - {fileID: 11400000, guid: 35b90599b4e54954380f9c008a5c1c87, type: 2}
+  - {fileID: 11400000, guid: c1be50cdd44d6f24c87138c66af44458, type: 2}
+  - {fileID: 11400000, guid: 1a96653706a45fc428f8c7180f423735, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.8
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-5
+    articles:
+    - {fileID: 11400000, guid: 554f0f317f1958f4394213d6f99c4b4e, type: 2}
+    - {fileID: 11400000, guid: 03397c068300fa0488de8295231d5736, type: 2}
+    - {fileID: 11400000, guid: f5b1fdf1d07e30c4c8ceb28ff23d96e2, type: 2}
+    - {fileID: 11400000, guid: af2ea69d76a16c6418a5fe6d0a5775fc, type: 2}
+    - {fileID: 11400000, guid: acf91acd286ee9945986f1bfb4967488, type: 2}
+    - {fileID: 11400000, guid: f8cd9d433ad4d3846a0b201067eb96ec, type: 2}
+    - {fileID: 11400000, guid: a4ef6067515996e4a8c9ab69bddc55eb, type: 2}
+    - {fileID: 11400000, guid: 91eedbf0f6b2f1841a9b284a22d9f25b, type: 2}
+    - {fileID: 11400000, guid: 6bd085c249af9004882a743d4223527b, type: 2}
+    - {fileID: 11400000, guid: e76c6ea387d500f4297c51f4f8232a16, type: 2}
+    - {fileID: 11400000, guid: 967b30e85cb2bb4409d40e3aefe359a0, type: 2}
+    note: Fill at least 80% of the page (20/25 cells). Never mix Ads with Politics.
+  - id: guest-stash-5
+    articles:
+    - {fileID: 11400000, guid: b7ae706ffa00c864c98eb07c84b012b2, type: 2}
+    note: Hand-delivered by guests.

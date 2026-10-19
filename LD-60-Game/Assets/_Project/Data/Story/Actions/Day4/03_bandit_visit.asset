@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 03_bandit_visit
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 15
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: ea1e8352de34cc6418b09acc646e6672, type: 2}
+  steps:
+  - kind: 0
+    emotion: smirk
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smirk
+    text: Rough weather out there, scribe. My boys just opened a back-room parlor
+      on Canal Street called the Lily Club. Good Scotch, no uniform crowd.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: threat
+    text: Run this notice today and fifty coins stay on your blotter. Turn me down,
+      and you'll be walking home by the canal in the dark.
+    giftId: 
+    amount: 1
+    optionA: Leave the fifty.
+    optionB: Find another paper.
+    next: -1
+    nextA: 3
+    nextB: 6
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: money
+    amount: 50
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: mob_deal
+    value: 1
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: speakeasy-ad
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smirk
+    text: Pleasure doing business. I'll look for it in the morning edition.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 7
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: cold
+    text: Suit yourself, four-eyes. Just remember how cold that canal water gets
+      in November.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 7
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: angry_bandit
+    value: 1
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 03_anon_final_entry
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 10
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: cae03ef2fb3e447409d7c5546077b38f, type: 2}
+  steps:
+  - kind: 0
+    emotion: hole
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: hole
+    text: The soldiers at the bridge are waiting to see what comes off our press
+      before they pick a side.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: hole
+    text: Here is my signed statement and the quarry ledger. Lay it across the top
+      of the page. When the bundles hit the street, the garrison won't fire on the
+      crowd.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: anon-truth
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: hole
+    text: It's your page now, kid.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

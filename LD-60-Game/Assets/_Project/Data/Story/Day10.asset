@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day10
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 10: The Last Word'
+  actions:
+  - {fileID: 11400000, guid: 326795837b4bf9940b208647690b2a8d, type: 2}
+  - {fileID: 11400000, guid: ee5b3ef169ecb1f418136d546cc26263, type: 2}
+  - {fileID: 11400000, guid: 4849822fd7308d345aef50a32fe28746, type: 2}
+  - {fileID: 11400000, guid: ffd92b440c5c6eb40bfdaefae8c74ee7, type: 2}
+  - {fileID: 11400000, guid: 7a6f512fcb00e0b4ab3cde364e622633, type: 2}
+  - {fileID: 11400000, guid: dd755eac41041924aaebbd533ad974e6, type: 2}
+  - {fileID: 11400000, guid: faa683840af8564428ceb8b23e72e324, type: 2}
+  - {fileID: 11400000, guid: 2d00702118ec39a43a4648c8275a5977, type: 2}
+  - {fileID: 11400000, guid: 47c9c52ccd2b8474c9f2b5de9e53bd1a, type: 2}
+  - {fileID: 11400000, guid: 583d15e6a159ad34b97d22eafc3e6c06, type: 2}
+  - {fileID: 11400000, guid: 6df585ebff16bf0498fc2d57041e1969, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.88
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-10
+    articles:
+    - {fileID: 11400000, guid: a06a31fb9fda1ba4dbc562fc4becd6ce, type: 2}
+    - {fileID: 11400000, guid: b304eb59d1eac9242b26fe5297cd53b8, type: 2}
+    - {fileID: 11400000, guid: 584b16e513413eb4c8183561a844c53e, type: 2}
+    - {fileID: 11400000, guid: ff120c85fddb89249a9e2c7e1ad49c27, type: 2}
+    - {fileID: 11400000, guid: 0c8e27d30a4aa7946ac05ed70da2abc8, type: 2}
+    - {fileID: 11400000, guid: 3626ca08e5c6057498a96728671b5619, type: 2}
+    - {fileID: 11400000, guid: fdf70bcaf4b31f14cad6506b42fe468c, type: 2}
+    note: Fill at least 88% of the page (22/25 cells). Place one of the two final
+      manifestos and surround it with the remaining reports.
+  - id: guest-stash-10
+    articles:
+    - {fileID: 11400000, guid: 9ac4c5d11f65f5445858ac6defebf2b7, type: 2}
+    - {fileID: 11400000, guid: 0f16290643cb8104693e5336c69a2109, type: 2}
+    note: Hand-delivered by guests.

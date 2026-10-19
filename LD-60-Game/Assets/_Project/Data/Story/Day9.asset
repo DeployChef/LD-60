@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day9
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 9: Eve of the Storm'
+  actions:
+  - {fileID: 11400000, guid: f9caa41fd7bdf1842882d3b3a9b75137, type: 2}
+  - {fileID: 11400000, guid: f57f84427db86f04085a47a68c3866ba, type: 2}
+  - {fileID: 11400000, guid: 7d654281f90c9404e954f6a6a39d4520, type: 2}
+  - {fileID: 11400000, guid: 6df88afc1e7c1b44a83c4dd1fa0b9442, type: 2}
+  - {fileID: 11400000, guid: a549678a1b06b86438be520bd515f039, type: 2}
+  - {fileID: 11400000, guid: d61edc2fe5b729a498cae1fbd3aaf552, type: 2}
+  - {fileID: 11400000, guid: e41dc71eac1015248b0278a9d2da6777, type: 2}
+  - {fileID: 11400000, guid: bc6e4c3b35b26a14d900f4048f9ea285, type: 2}
+  - {fileID: 11400000, guid: c10a6cdb1ba2fdb45b19e72004e8983c, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.88
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-9
+    articles:
+    - {fileID: 11400000, guid: c24657b5678416d4db1a1acc0dd04a7a, type: 2}
+    - {fileID: 11400000, guid: 49c0eb52be124d843b87ab7bb689c905, type: 2}
+    - {fileID: 11400000, guid: 27a578ae564d3fb46a2af490b113d87c, type: 2}
+    - {fileID: 11400000, guid: 66f16f30cb33e2548a89479ec4278658, type: 2}
+    - {fileID: 11400000, guid: a901559f2bfc81845bee4e8acd27e6ed, type: 2}
+    - {fileID: 11400000, guid: 606089056e7636448b17c81cffa79916, type: 2}
+    - {fileID: 11400000, guid: 4e2252d6c27f6f844b3ade126c444ae1, type: 2}
+    - {fileID: 11400000, guid: 93ce61269cee9714c8316d65e2d72248, type: 2}
+    - {fileID: 11400000, guid: 2172f40e50f83334d973891daf80f448, type: 2}
+    - {fileID: 11400000, guid: c69e4a2cec56f4c4ba3a4bd74c95f039, type: 2}
+    note: Fill at least 88% of the page (22/25 cells). The Dictator is dead. Keep
+      Ads away from Politics.

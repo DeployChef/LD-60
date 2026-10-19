@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
+  m_Name: Intro
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
+  background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  blocks:
+  - image: {fileID: 21300000, guid: 9e5b4f9594d77d8428cf635ed7cf4a7a, type: 3}
+    subtitle: The city is burning. Angry crowds flood the avenues beneath the Leader's
+      portrait, shouting for bread and blood.
+  - image: {fileID: 21300000, guid: c62d57a4d5de9154d8c3675439de279d, type: 3}
+    subtitle: Inside The Last Word, the newsroom is in freefall. Five minutes ago,
+      I was just a junior typesetter holding the morning proofs.
+  - image: {fileID: 21300000, guid: 169903a09d67dcb499adfa6339e969b2, type: 3}
+    subtitle: Then two men in trench coats dragged the chief editor out of his office
+      before his coffee even went cold.
+  - image: {fileID: 21300000, guid: a580bbd19d1e50f41845dff6f9cd138a, type: 3}
+    subtitle: 'The publisher didn''t waste a second. He pointed a shaking finger
+      straight at me: "You! You''re running the desk now."'
+  - image: {fileID: 21300000, guid: b2527cf61cf528c48a7a8fc44362ff5d, type: 3}
+    subtitle: He slammed the press stamp onto the desk. The paper goes to print every
+      morning, or I follow the old man out.
+  - image: {fileID: 21300000, guid: 65575df3ef0fab646b0fca69bdd894cf, type: 3}
+    subtitle: Six days until the election. Outside my window, the streets are still
+      on fire. God, I hate Mondays.

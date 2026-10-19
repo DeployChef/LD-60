@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 03_fishman_visit
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 15
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: e4da370376917ee4383cce84b93cf5dc, type: 2}
+  steps:
+  - kind: 0
+    emotion: gurgle
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: gurgle
+    text: Your room stinks of coal smoke, dry-lander. Your dredging barges and herring
+      nets are choking our channels in the bay.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: anger
+    text: Put our warning in tonight's paper. Every boat and net off the water by
+      sundown, or I come back with a harpoon.
+    giftId: 
+    amount: 1
+    optionA: I'll print the warning.
+    optionB: Get your wet boots off my floor!
+    next: -1
+    nextA: 3
+    nextB: 5
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: fish-ultimatum
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: fish_ally
+    value: 1
+  - kind: 1
+    emotion: gurgle
+    text: Smart minnow. See that the boatmen read it.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 6
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: shot
+    text: Then lock your shutters tonight, dry-lander. The tide comes up the drainpipes.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 6
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: fish_angry
+    value: 2
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day3
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 3: Still Waters'
+  actions:
+  - {fileID: 11400000, guid: d9bfb9e898ae83c41b4ce6ba91f4aa94, type: 2}
+  - {fileID: 11400000, guid: 2fb3ec3d7e2606a4890c3db29ac1e6da, type: 2}
+  - {fileID: 11400000, guid: e609a903b3766ce4aaeff5f5d9cbc699, type: 2}
+  - {fileID: 11400000, guid: cd7493597a3cb5f4c9e43646caceac1f, type: 2}
+  - {fileID: 11400000, guid: 35d922e5abad66f46b07b98de89ede12, type: 2}
+  - {fileID: 11400000, guid: 6af9c715cf04bd74a8329fa6a43e285f, type: 2}
+  - {fileID: 11400000, guid: 69ee6f53fa55cb54993d5f492dafb6bc, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.72
+  neighbors:
+  - kind: 1
+    other: 2
+  capsules:
+  - id: morning-drop-3
+    articles:
+    - {fileID: 11400000, guid: 1cb3ec55de77e8f448593c4d2680fb05, type: 2}
+    - {fileID: 11400000, guid: ef17e6d4c3a9909479004f960b95bca8, type: 2}
+    - {fileID: 11400000, guid: e172531fa25858740b67f0087db20007, type: 2}
+    - {fileID: 11400000, guid: ffaa0adde787907498d19d79857ea8df, type: 2}
+    - {fileID: 11400000, guid: 7da331e9d0667a44eb341e26b7a60381, type: 2}
+    - {fileID: 11400000, guid: adac2e9ddc36613498eeeeb081a460ee, type: 2}
+    - {fileID: 11400000, guid: ac4e5306c551fc14d8b86a97533a9619, type: 2}
+    - {fileID: 11400000, guid: 7a58a9740bde2d645aff391ce20d45aa, type: 2}
+    - {fileID: 11400000, guid: eb49eecc0ee255949b560d46f6c15ffa, type: 2}
+    - {fileID: 11400000, guid: bb332a1803cbf964e99cbf7646c83860, type: 2}
+    note: 'Fill at least 72% of the page (18/25 cells). Directive: never place Politics
+      next to Social pieces.'
+  - id: guest-stash-3
+    articles:
+    - {fileID: 11400000, guid: 87ccf6f492f39f440a470fdd96eb9902, type: 2}
+    note: Hand-delivered by guests.

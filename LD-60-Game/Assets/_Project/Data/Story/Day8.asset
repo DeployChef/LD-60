@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day8
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 8: Behind the Mask'
+  actions:
+  - {fileID: 11400000, guid: 207a77e644faf8a4fa33ef4a1c8e7267, type: 2}
+  - {fileID: 11400000, guid: 2411baf93db423846b8221bcb8ac3d21, type: 2}
+  - {fileID: 11400000, guid: ba69768bb2c3e56439517dcf238c7ac9, type: 2}
+  - {fileID: 11400000, guid: bfe4daa7761143047ab31b57d715d4b6, type: 2}
+  - {fileID: 11400000, guid: abda8d3f4cd46fc48921cea81af66003, type: 2}
+  - {fileID: 11400000, guid: b137db555b53e7b4683dde75b7cae7af, type: 2}
+  - {fileID: 11400000, guid: 46e86e86d7e75b9408a89ceb2154f1ce, type: 2}
+  - {fileID: 11400000, guid: e1ff9a71bc9f5f74581e31485103e94e, type: 2}
+  - {fileID: 11400000, guid: a8d6fdafca043af4b9cbaa3a98dd9b6e, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.88
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-8
+    articles:
+    - {fileID: 11400000, guid: 13518b971271228498ccf1289bd3478c, type: 2}
+    - {fileID: 11400000, guid: 12cc5d9e29420244ca597b09955585e3, type: 2}
+    - {fileID: 11400000, guid: 29d7bb5c21bde7e4cbd8b1d391fee91c, type: 2}
+    - {fileID: 11400000, guid: d5b503828fc6b0d498ad91d7f960c8f8, type: 2}
+    - {fileID: 11400000, guid: 53398d93a59e85646a806cd0a400bcf4, type: 2}
+    - {fileID: 11400000, guid: ae36fecf801e490449ef1069e37ddb31, type: 2}
+    - {fileID: 11400000, guid: 1e042656f171642448f144196443800d, type: 2}
+    - {fileID: 11400000, guid: 27e914a0c6ae076489925975660d216c, type: 2}
+    - {fileID: 11400000, guid: a1904548402c3b84fa838c6221932668, type: 2}
+    - {fileID: 11400000, guid: fb8dd177723077f49b889296b05dbfd8, type: 2}
+    note: Fill at least 88% of the page (22/25 cells). Tension is at the breaking
+      point. Lock your office door.
+  - id: guest-stash-8
+    articles:
+    - {fileID: 11400000, guid: fe4c5121773744a448bc1b486fadfc36, type: 2}
+    note: Hand-delivered by guests.

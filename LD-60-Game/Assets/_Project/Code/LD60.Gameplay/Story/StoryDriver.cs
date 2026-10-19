@@ -16,12 +16,14 @@ namespace LD60.Gameplay.Story
         private readonly IGameSession _session;
         private readonly IShellService _shell;
         private readonly ChapterActionPlay _playback;
+        private readonly ISequencePlayer _player;
         private readonly ChapterDefinition[] _chapters;
         private readonly ChapterDefinition _finale;
         private readonly DayStartPreset _debugStart;
         private ChapterRunner _runner;
         private int _index = -1;
         private bool _inFinale;
+        private bool _disposed;
 
         public StoryDriver(
             IMessageBus bus,
@@ -30,6 +32,7 @@ namespace LD60.Gameplay.Story
             IGameSession session,
             IShellService shell,
             ChapterActionPlay playback,
+            ISequencePlayer player,
             StoryBook story)
         {
             _bus = bus;
@@ -38,6 +41,7 @@ namespace LD60.Gameplay.Story
             _session = session;
             _shell = shell;
             _playback = playback;
+            _player = player;
             _chapters = story.Chapters;
             _finale = story.Finale;
             _debugStart = story.DebugStart;
@@ -53,7 +57,7 @@ namespace LD60.Gameplay.Story
             {
                 _context.Load(saved);
                 Debug.Log($"[Story] Continue chapter {index}. {_context.Describe()}");
-                Play(index);
+                StartChapterAsync(index, playIntro: false).Forget();
                 return;
             }
 
@@ -61,12 +65,24 @@ namespace LD60.Gameplay.Story
             {
                 _context.Load(_debugStart.Context);
                 Debug.Log($"[Story] Debug start at chapter {_debugStart.ChapterIndex}. {_context.Describe()}");
-                Play(_debugStart.ChapterIndex);
+                StartChapterAsync(_debugStart.ChapterIndex, playIntro: _debugStart.ChapterIndex == 0).Forget();
                 return;
             }
 
             _context.Load(new StoryContextData());
-            Play(0);
+            StartChapterAsync(0, playIntro: true).Forget();
+        }
+
+        private async UniTaskVoid StartChapterAsync(int index, bool playIntro)
+        {
+            if (playIntro && _player != null)
+            {
+                await _player.PlayIntroComics();
+                if (_disposed)
+                    return;
+            }
+
+            Play(index);
         }
 
         public void AddFill(float amount)
@@ -81,7 +97,13 @@ namespace LD60.Gameplay.Story
 
         public void CompleteCurrent()
         {
-            _runner?.CompleteCurrent();
+            if (_runner != null)
+            {
+                _runner.CompleteCurrent();
+                return;
+            }
+
+            _player?.Cancel();
         }
 
         public void LogStatus()
@@ -104,6 +126,7 @@ namespace LD60.Gameplay.Story
 
         public void Dispose()
         {
+            _disposed = true;
             _runner?.Dispose();
             _runner = null;
         }

@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 05_buddy_port_anxiety
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 3
+  at: 0.56
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: 40435fb57494a4441864d199f6bf3ac4, type: 2}
+  steps:
+  - kind: 0
+    emotion: shock
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: shock
+    text: Tell me I'm seeing things. Did a fellow with river weed on his coat just
+      walk down the back stairs, leaving wet puddles all the way to the alley?
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: whisper
+    text: The whole harbor's gone mad today. Troops blocked off Pier 2, and that
+      stray poodle with the red glass eye bit through a chain at the battery works.
+      Just keep the ads away from the political column so we can go home in one piece.
+    giftId: 
+    amount: 1
+    optionA: We'll get through the shift.
+    optionB: Go check the ink rollers.
+    next: -1
+    nextA: 3
+    nextB: 4
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smile
+    text: Yeah. Only a few days left in the week. I'll keep the press warm.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: default
+    text: Right, right. Back to the cellar I go.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

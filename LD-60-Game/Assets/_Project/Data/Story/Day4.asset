@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day4
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 4: Shadow Syndicate'
+  actions:
+  - {fileID: 11400000, guid: f5ae861aeced36e44ab3a725b6da8d15, type: 2}
+  - {fileID: 11400000, guid: aea98ed8b558e674c8550d157f622fa9, type: 2}
+  - {fileID: 11400000, guid: d9cb5addb2164eb4ab3e3bf5e6ec9f29, type: 2}
+  - {fileID: 11400000, guid: 4a6a728e93d014549942477cc21e662c, type: 2}
+  - {fileID: 11400000, guid: c2b82bfd426cb0245ae6d2fd4ec9b158, type: 2}
+  - {fileID: 11400000, guid: 36dc22f63484c29438bdaf0162e4519c, type: 2}
+  - {fileID: 11400000, guid: f2a2b1246231be54abe017c7be377d45, type: 2}
+  - {fileID: 11400000, guid: 45c3d2a1170cc274b861816939ba3587, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.8
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-4
+    articles:
+    - {fileID: 11400000, guid: 932ea776497d377419d6efbe63447e25, type: 2}
+    - {fileID: 11400000, guid: 1f1c36b23ba3216408cb490ef284c21b, type: 2}
+    - {fileID: 11400000, guid: 5bb3f7e24acae924aa4bbfc454e0ea63, type: 2}
+    - {fileID: 11400000, guid: afde8ca11d65a2748b3158bc301d87ef, type: 2}
+    - {fileID: 11400000, guid: 9c5c8d1d408aa2845a78ac479d305f9b, type: 2}
+    - {fileID: 11400000, guid: 1183ac3eab3ff864899433b5074b2510, type: 2}
+    - {fileID: 11400000, guid: 8903389bc5a69404d970e924370ee4ec, type: 2}
+    - {fileID: 11400000, guid: f686767a9235bb049a11eaf193322e2d, type: 2}
+    - {fileID: 11400000, guid: 9458d77fd3e3bf641a3509d40c77e849, type: 2}
+    - {fileID: 11400000, guid: 1474c0d5899dc8640bdf90861d0c43f3, type: 2}
+    note: Fill at least 80% of the page (20/25 cells). Keep Ads away from Politics.
+  - id: guest-stash-4
+    articles:
+    - {fileID: 11400000, guid: d85bae1ef7ff4c143a6bfd67aa67e606, type: 2}
+    note: Hand-delivered by guests.

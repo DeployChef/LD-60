@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
+  m_Name: Death
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
+  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  blocks:
+  - image: {fileID: 0}
+    subtitle: "Everyone in the newsroom knew that knock. Polite guests don't use a rifle butt on frosted glass."
+  - image: {fileID: 0}
+    subtitle: "The secret police officer took his time. He smoked his cigar down to the band before tossing a stack of crime clippings onto my desk."
+  - image: {fileID: 0}
+    subtitle: "\"Thought you were clever, Citizen Editor? Thought the syndicate would cover for you? Your final issue just went to print.\""
+  - image: {fileID: 0}
+    subtitle: "The iron cuffs clicked louder than the rotary press. Spilled ink spread across the layout like a black shroud."
+  - image: {fileID: 0}
+    subtitle: "The publisher didn't even come downstairs to watch. A minute later, the black van's engine roared, carrying me somewhere no one comes back from."
+  - image: {fileID: 0}
+    subtitle: "By the next morning, my name was crossed out of the Ministry archives in black ink. The editor's chair was vacant once again."

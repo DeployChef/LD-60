@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 05_babka_arrives
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 3
+  at: 0.44
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: 0a910927228b4d7488eaf655a63bcedd, type: 2}
+  steps:
+  - kind: 0
+    emotion: whisper
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: whisper
+    text: Son, have you heard what happened down at the pier? The night boatmen swear
+      a pike as big as a hog stuck its head out of the water and cursed the foreman
+      in plain speech! Put it in the paper so folk stay off the docks!
+    giftId: 
+    amount: 1
+    optionA: Leave the note here.
+    optionB: I'm busy, Mrs. Marple.
+    next: -1
+    nextA: 2
+    nextB: 4
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: fish-whisper
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 3
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: babka_promise
+    value: 1
+  - kind: 1
+    emotion: smirk
+    text: Bless your heart, dearie. At least you still listen to working folk.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: fear
+    text: One day in a leather chair and you're already too grand for the neighbors.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

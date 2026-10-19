@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 03_deputy_visit
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 15
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: 02058d8a99ac22b4f9e6901e7e6e024d, type: 2}
+  steps:
+  - kind: 0
+    emotion: smug
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: smug
+    text: So you're the new boy. I'm Councilor Crowley. There's a notice in your
+      folder about the bread I sent to the orphanage. Make sure it's on the page
+      today.
+    giftId: 
+    amount: 1
+    optionA: Space costs extra.
+    optionB: I print what fits.
+    next: -1
+    nextA: 2
+    nextB: 5
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: money
+    amount: 40
+    optionA: 
+    optionB: 
+    next: 3
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: took_deputy_bribe
+    value: 1
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: deputy-bribe
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smug
+    text: You learn quick. Here's forty coins for your trouble, and slip this quote
+      from me in while you're at it.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 6
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: anger
+    text: Careful, boy. The last man who sat at this desk thought he could lecture
+      me too, and look where it got him.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 6
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: angry_deputy
+    value: 1
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
+  m_Name: Boat
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
+  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  blocks:
+  - image: {fileID: 0}
+    subtitle: "Money doesn't stink, especially when the whole city smells of smoke and gunpowder. The mob's bribes were more than enough for a new life overseas."
+  - image: {fileID: 0}
+    subtitle: "\"Smart timing, four-eyes,\" the scarred gangster chuckled, pocketing his cut. \"The garrison seals the port in two hours. We'll be long gone.\""
+  - image: {fileID: 0}
+    subtitle: "The wooden launch smelled of diesel, salt, and freedom. The city was already falling behind."
+  - image: {fileID: 0}
+    subtitle: "Fires of revolution lit up the horizon behind the stern. Hell was breaking loose back there, but it was someone else's hell now."
+  - image: {fileID: 0}
+    subtitle: "The coast guard patrol stayed blind and deaf. Searchlights licked the dark waves and died out, letting the launch slip into neutral waters."
+  - image: {fileID: 0}
+    subtitle: "Let them write their own obituaries. The former editor closed his final layout and opened an account at a neutral bank."

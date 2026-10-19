@@ -18,5 +18,7 @@ namespace LD60.Gameplay.Story
         void ShowGuest(UnityEngine.Sprite sprite);
         UniTask Enter();
         UniTask Exit();
+        UniTask PlayIntroComics();
+        UniTask PlayComics(UnityEngine.ScriptableObject comics);
     }
 }

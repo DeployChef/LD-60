@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
+  m_Name: WalkingDead
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
+  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  blocks:
+  - image: {fileID: 0}
+    subtitle: "The stamp came down like an executioner's axe. The last word had been spoken, and for once, it was the plain truth."
+  - image: {fileID: 0}
+    subtitle: "Buddy pushed the old rotary machines past their limit. The pressroom roared, firing thousands of fresh papers out into the night."
+  - image: {fileID: 0}
+    subtitle: "The city woke up changed. Workers passed the morning issue from hand to hand as shock turned to whispers, and whispers grew into a roar."
+  - image: {fileID: 0}
+    subtitle: "Ten years of lies collapsed in a single morning. A regime built on fear finally choked on its own blood."
+  - image: {fileID: 0}
+    subtitle: "The Leader's giant portrait crashed onto the cobblestones in a shower of sparks. For the first time in years, the city took a full breath."
+  - image: {fileID: 0}
+    subtitle: "\"I hate Mondays, Boss,\" I said quietly. The old man turned his scarred face toward the sun and smiled: \"At least now, kid, it's really your paper.\""

@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 04_boss_warning
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 15
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: c770c0c1dcae2084d856a02042415e38, type: 2}
+  steps:
+  - kind: 0
+    emotion: smirk
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: smirk
+    text: Don't get too comfortable in that chair. I want the page packed tight,
+      and keep the ads away from the political column. I can't afford another fine
+      from the Ministry.
+    giftId: 
+    amount: 1
+    optionA: Understood, Boss.
+    optionB: Where did they take the Chief?
+    next: -1
+    nextA: 2
+    nextB: 3
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smirk
+    text: Good. Keep your head down and paste the type.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: shout
+    text: Keep your nose in your own paste pot! He's cutting timber up north, and
+      you'll be holding the other end of his saw if the paper is late!
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
