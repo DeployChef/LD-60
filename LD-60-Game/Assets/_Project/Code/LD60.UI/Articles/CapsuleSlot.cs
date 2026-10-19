@@ -38,7 +38,6 @@ namespace LD60.UI
         private IDisposable _arrived;
         private string _pending;
         private bool _opened;
-        private bool _hasOpenedLetter;
         private Vector3 _letterPosition;
 
         [Inject]
@@ -109,7 +108,6 @@ namespace LD60.UI
             var id = _pending;
             _pending = null;
             _opened = true;
-            _hasOpenedLetter = true;
             SetWaiting(false);
             MenuAudio.PlayEnvelopeOpen();
             if (_story != null && _story.TryFindCapsule(id, out var delivery))
@@ -180,7 +178,7 @@ namespace LD60.UI
         private void SetWaiting(bool waiting)
         {
             if (firstOpenHint != null)
-                firstOpenHint.SetHighlighted(waiting && !_hasOpenedLetter);
+                firstOpenHint.SetHighlighted(waiting);
             if (_renderer != null)
             {
                 var sprite = _opened && !waiting ? openedSprite : closedSprite;
