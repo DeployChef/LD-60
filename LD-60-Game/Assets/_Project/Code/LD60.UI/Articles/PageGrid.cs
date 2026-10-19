@@ -208,7 +208,9 @@ namespace LD60.UI
                 piece.transform.SetParent(desk, true);
 
             piece.transform.rotation = desk.rotation;
-            piece.transform.localScale = Vector3.one;
+            // Pieces share the grid's parent, so they must also share its scale.
+            // The paper may itself be scaled independently of the desk.
+            piece.transform.localScale = transform.localScale;
             var delta = slot.position - piece.transform.TransformPoint(cell);
             var normal = desk.forward;
             delta -= normal * Vector3.Dot(delta, normal);
@@ -345,7 +347,8 @@ namespace LD60.UI
             var delta = world - other;
             var normal = desk.forward;
             delta -= normal * Vector3.Dot(delta, normal);
-            return delta.magnitude;
+            // Slot pitch is measured in grid-local units.
+            return transform.InverseTransformVector(delta).magnitude;
         }
 
         private static float Pitch(List<Transform> slots)

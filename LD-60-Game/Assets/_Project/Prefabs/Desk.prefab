@@ -390,7 +390,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5298, y: 0.097757, z: -0.0055685}
-  m_LocalScale: {x: 0.73, y: 0.73, z: 0.73}
+  m_LocalScale: {x: 0.8064516, y: 0.8064516, z: 0.8064516}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4639887716396497558}
@@ -776,6 +776,7 @@ GameObject:
   - component: {fileID: 4672476927517256296}
   - component: {fileID: 4719930492338524746}
   - component: {fileID: 8628815156936285599}
+  - component: {fileID: 3904172160315752800}
   m_Layer: 0
   m_Name: MessageBox
   m_TagString: Untagged
@@ -903,6 +904,22 @@ MonoBehaviour:
   spacing: 2.7
   closedSprite: {fileID: 6034176672207827764, guid: ecf6e01927aa6644daa11d97b3114e59, type: 3}
   openedSprite: {fileID: 9112109772130517721, guid: d7c5e9384399b094bb749eb72db1e4b5, type: 3}
+  firstOpenHint: {fileID: 3904172160315752800}
+--- !u!114 &3904172160315752800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2564919044344372830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e79003ea045489419c3a2ab28137766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.SpriteHintOutline
+  material: {fileID: 2100000, guid: 27376a29ce649ca4d8bfbe3ca5144250, type: 2}
+  color: {r: 1, g: 0.84, b: 0.18, a: 1}
+  width: 5
 --- !u!1 &3147953300619250633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,6 +1275,7 @@ GameObject:
   - component: {fileID: 9051628714055746575}
   - component: {fileID: 6700247911715817861}
   - component: {fileID: 9156815599157713940}
+  - component: {fileID: 10610040950964143}
   m_Layer: 0
   m_Name: Stamp
   m_TagString: Untagged
@@ -1386,6 +1404,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5dd74acdb677147bc5cd435e99699e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.UI::LD60.UI.DeskDrag
+--- !u!114 &10610040950964143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4268013896427685795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e79003ea045489419c3a2ab28137766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.SpriteHintOutline
+  material: {fileID: 2100000, guid: 27376a29ce649ca4d8bfbe3ca5144250, type: 2}
+  color: {r: 1, g: 0.84, b: 0.18, a: 1}
+  width: 5
 --- !u!1 &4713225931561058338
 GameObject:
   m_ObjectHideFlags: 0
@@ -2531,6 +2564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4473f19060c103a46a0bd9ffea59abb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.UI::LD60.UI.NewspaperDesk
+  firstStampHint: {fileID: 10610040950964143}
   page: {fileID: 6338704105186278904}
   save: {fileID: 6779458293668383908}
   deskScale: 0.75
