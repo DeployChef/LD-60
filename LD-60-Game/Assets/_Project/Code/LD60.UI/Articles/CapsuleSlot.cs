@@ -3,6 +3,7 @@ using LD60.Core.Bus;
 using LD60.Gameplay.Articles;
 using LD60.Gameplay.Context;
 using LD60.Gameplay.Story;
+using LD60.UI.Audio;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -101,6 +102,7 @@ namespace LD60.UI
             var id = _pending;
             _pending = null;
             SetWaiting(false);
+            MenuAudio.PlayEnvelopeOpen();
             if (_story != null && _story.TryFindCapsule(id, out var delivery))
                 LayOut(delivery);
             _bus.Publish(new CapsuleTaken(id));

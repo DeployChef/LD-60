@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using LD60.Core;
 using LD60.Gameplay.Context;
+using LD60.Main.Audio;
 using UnityEngine;
 
 namespace LD60.Main
@@ -58,6 +59,7 @@ namespace LD60.Main
             try
             {
                 await TransitionAsync(GameScenes.MainMenu, GameScenes.Game);
+                LoudspeakerAudio.SetOn(true);
             }
             finally
             {
@@ -76,6 +78,7 @@ namespace LD60.Main
             try
             {
                 await TransitionAsync(GameScenes.Game, GameScenes.Game);
+                LoudspeakerAudio.SetOn(true);
             }
             finally
             {
@@ -92,6 +95,7 @@ namespace LD60.Main
             _showIntro = false;
             try
             {
+                LoudspeakerAudio.SetOn(false);
                 await TransitionAsync(GameScenes.Game, GameScenes.MainMenu);
             }
             finally

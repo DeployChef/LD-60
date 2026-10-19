@@ -6,6 +6,7 @@ using LD60.Core.Bus;
 using LD60.Gameplay.Articles;
 using LD60.Gameplay.Context;
 using LD60.Gameplay.Story;
+using LD60.UI.Audio;
 using TMPro;
 using UnityEngine;
 using VContainer;
@@ -216,6 +217,7 @@ namespace LD60.UI
                     piece.transform.localRotation = restRot;
                     piece.transform.localScale = restScale;
                 });
+                MenuAudio.PlayPaperDrop();
                 Publish();
                 return true;
             }
@@ -231,6 +233,7 @@ namespace LD60.UI
 
                 Raise(piece.gameObject);
                 piece.PlayDrop();
+                MenuAudio.PlayPaperDrop();
                 Publish();
                 return true;
             }
@@ -255,6 +258,7 @@ namespace LD60.UI
             piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-12f, 12f));
             Raise(piece.gameObject);
             piece.PlayDrop();
+            MenuAudio.PlayPaperDrop();
         }
 
         public void Deliver(ArticlePiece piece, int index, int count)

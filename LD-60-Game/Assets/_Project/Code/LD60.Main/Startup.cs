@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using LD60.Core;
 using LD60.Main.Audio;
 using LD60.Main.DI;
+using LD60.UI.Audio;
 using UnityEngine;
 using VContainer;
 
@@ -28,7 +29,9 @@ namespace LD60.Main
             rootScope.Build();
             // WebGL: до меню ждём банки FMOD, сэмплы и первый клик игрока (прелоудер).
             await FmodWebglPreloader.PrepareAsync(destroyCancellationToken);
-            // Громофон: один глобальный инстанс (дочерний ивент Music) + вечный Music.
+            // Меню и интро:
+            MenuAudio.EnsureCreated();
+            // Громофон и фоновый roometone:
             LoudspeakerAudio.EnsureCreated();
             // SFX: вечный контейнер, клики параметром newspaper (тест — клавиша E).
             SfxAudio.EnsureCreated();

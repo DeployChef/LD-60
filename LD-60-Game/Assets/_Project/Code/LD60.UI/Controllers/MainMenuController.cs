@@ -42,11 +42,13 @@ namespace LD60.UI
             ShowMenu();
             if (_shell.ShowIntro && intro != null)
             {
+                LD60.UI.Audio.MenuAudio.PlayCutscene();
                 intro.Finished += OnIntroFinished;
                 intro.Play();
                 return;
             }
 
+            LD60.UI.Audio.MenuAudio.PlayMenu();
             if (intro != null)
                 intro.gameObject.SetActive(false);
         }
@@ -65,6 +67,8 @@ namespace LD60.UI
         {
             if (intro != null)
                 intro.Finished -= OnIntroFinished;
+
+            LD60.UI.Audio.MenuAudio.PlayMenu();
         }
 
         private void ShowMenu()
@@ -77,11 +81,13 @@ namespace LD60.UI
 
         private void OnPlayClicked()
         {
+            LD60.UI.Audio.MenuAudio.PlayStart();
             _shell.EnterGameAsync(GameStart.New).Forget();
         }
 
         private void OnResumeClicked()
         {
+            LD60.UI.Audio.MenuAudio.PlayStart();
             _shell.EnterGameAsync(GameStart.Continue).Forget();
         }
 

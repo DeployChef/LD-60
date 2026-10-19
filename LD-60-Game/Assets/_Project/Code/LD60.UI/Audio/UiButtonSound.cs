@@ -1,5 +1,6 @@
 using LD60.Core.Audio;
 using LD60.Core.Bus;
+using LD60.UI.Audio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -43,6 +44,7 @@ namespace LD60.UI
             if (!playHover || !IsReady())
                 return;
 
+            MenuAudio.PlayButtonHover();
             Publish(hoverSoundId);
         }
 
@@ -51,6 +53,7 @@ namespace LD60.UI
             if (!playClick || !IsReady())
                 return;
 
+            MenuAudio.PlayButtonClick();
             Publish(clickSoundId);
         }
 

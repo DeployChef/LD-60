@@ -1,4 +1,5 @@
 using DG.Tweening;
+using LD60.UI.Audio;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -114,8 +115,12 @@ namespace LD60.UI
             var piece = GetComponent<ArticlePiece>();
             _home = transform.position;
             _homeScale = transform.localScale;
-            if (piece != null && _board != null)
-                _board.PrepareLift(piece);
+            if (piece != null)
+            {
+                if (_board != null)
+                    _board.PrepareLift(piece);
+                MenuAudio.PlayPaperHandling();
+            }
 
             _lift = SurfaceNormal() * LiftDistance;
             _risen = 0f;

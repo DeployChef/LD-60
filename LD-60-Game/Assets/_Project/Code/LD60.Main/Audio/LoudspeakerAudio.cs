@@ -27,7 +27,7 @@ namespace LD60.Main.Audio
     [DefaultExecutionOrder(1000)] // после RuntimeManager.Update (System::update)
     public sealed class LoudspeakerAudio : MonoBehaviour
     {
-        private const string MusicPath = "event:/Music";
+        private const string RoometonePath = "event:/roometone";
         private const string LoudspeakerPath = "event:/громофон";
         private const string OnOffParameter = "on or off";
         private const string TrackParameter = "track";
@@ -40,7 +40,7 @@ namespace LD60.Main.Audio
         private static LoudspeakerAudio _instance;
 
         private EventInstance _loudspeaker;
-        private EventInstance _music;
+        private EventInstance _roometone;
 
         private bool _on;
         private int _track = 1;
@@ -66,6 +66,7 @@ namespace LD60.Main.Audio
             _instance._on = on;
             _instance.ApplyParameters(verbose: true);
             _instance.EnsurePlaying();
+            _instance.UpdateRoometone();
         }
 
         /// <summary>Выбрать трек 1..3 (параметр "track").</summary>
@@ -87,21 +88,13 @@ namespace LD60.Main.Audio
             await FmodWebglPreloader.PrepareAsync();
 
             _loudspeaker = RuntimeManager.CreateInstance(LoudspeakerPath);
-            try
-            {
-                _music = RuntimeManager.CreateInstance(MusicPath);
-                _music.start();
-            }
-            catch (EventNotFoundException)
-            {
-                Debug.LogWarning($"[Loudspeaker] ивент {MusicPath} не найден в банках FMOD (музыка играет через громофон)");
-            }
 
             // Громофон стартует выключенным: включение — start() + параметры
             // (чтобы не озвучивать ритуал выключения на буте).
             ApplyParameters(verbose: true);
+            UpdateRoometone();
 
-            Debug.Log("[Loudspeaker] громофон готов: off, track1 (тест: 9=on, 0=off, 1/2/3=трек)");
+            Debug.Log("[Loudspeaker] громофон и roometone готовы: off, track1 (тест: 9=on, 0=off, 1/2/3=трек)");
         }
 
         // ВРЕМЕННЫЙ ТЕСТ: переключение параметров клавишами (верхний ряд и numpad).
@@ -178,18 +171,50 @@ namespace LD60.Main.Audio
             }
         }
 
+        private void UpdateRoometone()
+        {
+            if (_on)
+            {
+                if (_roometone.isValid())
+                {
+                    _roometone.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                    _roometone.release();
+                    _roometone = default;
+                    Debug.Log("[Loudspeaker] roometone остановлен (громофон включён)");
+                }
+            }
+            else
+            {
+                if (!_roometone.isValid())
+                {
+                    try
+                    {
+                        _roometone = RuntimeManager.CreateInstance(RoometonePath);
+                        _roometone.start();
+                        Debug.Log("[Loudspeaker] roometone запущен (громофон выключен)");
+                    }
+                    catch (EventNotFoundException)
+                    {
+                        Debug.LogWarning($"[Loudspeaker] ивент {RoometonePath} не найден в банках FMOD");
+                    }
+                }
+            }
+        }
+
         private void OnDestroy()
         {
             if (_loudspeaker.isValid())
             {
                 _loudspeaker.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 _loudspeaker.release();
+                _loudspeaker = default;
             }
 
-            if (_music.isValid())
+            if (_roometone.isValid())
             {
-                _music.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                _music.release();
+                _roometone.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                _roometone.release();
+                _roometone = default;
             }
         }
     }
