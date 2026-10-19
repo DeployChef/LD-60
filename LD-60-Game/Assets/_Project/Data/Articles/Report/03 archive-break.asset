@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Archive Break-In
   body: Someone in a white mask jimmied the back window at the press archive and
     took the staff files.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 0154a41c4bd342b49b109b4ca5bab197, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 1
