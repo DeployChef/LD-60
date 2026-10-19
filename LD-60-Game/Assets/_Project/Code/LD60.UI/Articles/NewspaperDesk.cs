@@ -26,6 +26,7 @@ namespace LD60.UI
         [SerializeField] private float horizontalSpread = 0.12f;
         [SerializeField] private Vector2 notePosition = new(5.7f, 3.35f);
         [SerializeField] private TMP_Text stats;
+        [SerializeField] private TextMeshPro noticePrefab;
         [SerializeField] private ArticlePiece dot;
         [SerializeField] private ArticlePiece line2H;
         [SerializeField] private ArticlePiece line2V;
@@ -43,6 +44,7 @@ namespace LD60.UI
         private StoryContext _context;
         private ChapterDefinition _chapter;
         private TextMeshPro _notice;
+        private SpriteRenderer _noticeFrame;
         private Tween _noticeFade;
         private IDisposable _day;
         private IDisposable _gift;
@@ -64,6 +66,11 @@ namespace LD60.UI
             _noticeFade?.Kill();
             _day?.Dispose();
             _gift?.Dispose();
+        }
+
+        private void OnDisable()
+        {
+            HideNotice();
         }
 
         public void Hover(ArticlePiece piece)
@@ -92,6 +99,9 @@ namespace LD60.UI
 
         public void Notify(string message, Vector3 world)
         {
+            // Notices are runtime objects; editor previews must not become scene content.
+            if (!Application.isPlaying)
+                return;
             EnsureNotice();
             if (_notice == null)
                 return;
@@ -99,10 +109,19 @@ namespace LD60.UI
             _notice.transform.position = world - transform.forward * 0.25f + transform.up * 0.9f;
             _notice.transform.rotation = transform.rotation;
             _notice.text = message ?? string.Empty;
-            _notice.alpha = 1f;
             _noticeFade?.Kill();
-            _noticeFade = DOTween.To(() => _notice.alpha, value => _notice.alpha = value, 0f, 0.7f)
-                .SetDelay(1.8f)
+            _notice.gameObject.SetActive(true);
+            var preferred = _notice.GetPreferredValues(_notice.text, 6.3f, Mathf.Infinity);
+            // Leave room for the serif glyphs extending beyond TMP's advance widths.
+            _notice.rectTransform.sizeDelta = new Vector2(Mathf.Clamp(preferred.x + 0.12f, 0.8f, 6.5f), Mathf.Max(0.35f, preferred.y + 0.08f));
+            if (_noticeFrame != null)
+                _noticeFrame.size = _notice.rectTransform.sizeDelta + new Vector2(0.56f, 0.36f);
+            _notice.ForceMeshUpdate();
+            SetNoticeAlpha(1f);
+            _noticeFade = DOTween.To(() => _notice.alpha, SetNoticeAlpha, 0f, 0.3f)
+                .SetDelay(0.7f)
+                .SetUpdate(true)
+                .OnComplete(HideNotice)
                 .SetTarget(this);
         }
 
@@ -295,6 +314,7 @@ namespace LD60.UI
 
         private void OnDay(DayStarted message)
         {
+            HideNotice();
             var kept = save != null ? new List<ArticlePiece>(save.Pieces) : new List<ArticlePiece>();
             _chapter = message.Chapter;
             if (page != null)
@@ -476,14 +496,36 @@ namespace LD60.UI
             if (_notice != null)
                 return;
 
+            if (noticePrefab != null)
+            {
+                _notice = Instantiate(noticePrefab, transform, false);
+                _notice.name = "Notice";
+                _notice.gameObject.hideFlags = HideFlags.DontSave;
+                _noticeFrame = _notice.GetComponentInChildren<SpriteRenderer>();
+                var sampleRenderer = page != null ? page.GetComponentInChildren<SpriteRenderer>() : null;
+                if (sampleRenderer != null)
+                    _notice.sortingLayerID = sampleRenderer.sortingLayerID;
+                _notice.sortingOrder = 4200;
+                if (_noticeFrame != null)
+                {
+                    _noticeFrame.sortingLayerID = _notice.sortingLayerID;
+                    _noticeFrame.sortingOrder = 4199;
+                }
+                SetNoticeAlpha(0f);
+                _notice.gameObject.SetActive(false);
+                return;
+            }
+
             var font = stats != null ? stats.font : TMP_Settings.defaultFontAsset;
             var go = new GameObject("Notice");
+            go.hideFlags = HideFlags.DontSave;
             go.transform.SetParent(transform, false);
             _notice = go.AddComponent<TextMeshPro>();
             _notice.font = font;
             _notice.fontStyle = FontStyles.Bold;
             _notice.alignment = TextAlignmentOptions.Center;
-            _notice.enableAutoSizing = true;
+            _notice.enableAutoSizing = false;
+            _notice.fontSize = 2.4f;
             _notice.fontSizeMin = 0.8f;
             _notice.fontSizeMax = 2.4f;
             _notice.color = new Color(0.62f, 0.1f, 0.08f, 1f);
@@ -496,6 +538,28 @@ namespace LD60.UI
             if (sample != null)
                 _notice.sortingLayerID = sample.sortingLayerID;
             _notice.sortingOrder = 4200;
+            go.SetActive(false);
+        }
+
+        private void HideNotice()
+        {
+            _noticeFade?.Kill();
+            _noticeFade = null;
+            SetNoticeAlpha(0f);
+            if (_notice != null)
+                _notice.gameObject.SetActive(false);
+        }
+
+        private void SetNoticeAlpha(float alpha)
+        {
+            if (_notice != null)
+                _notice.alpha = alpha;
+            if (_noticeFrame != null)
+            {
+                var color = _noticeFrame.color;
+                color.a = alpha;
+                _noticeFrame.color = color;
+            }
         }
 
         private Vector3 IncomingSpot(int index, int count)

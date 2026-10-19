@@ -2574,6 +2574,7 @@ MonoBehaviour:
   horizontalSpread: 0.12
   notePosition: {x: 5.7, y: 3.35}
   stats: {fileID: 3179921672708017575}
+  noticePrefab: {fileID: 5903884138497410985, guid: 5245cc675fdd18741919c75b948b7776, type: 3}
   dot: {fileID: 8398376816932303169, guid: c2a42fd1090e5b84ea16b349b5247e8e, type: 3}
   line2H: {fileID: 3476868540136927820, guid: aa15ac28c13a9bf43bdef1e2fbc3f482, type: 3}
   line2V: {fileID: 3815467337958107990, guid: 52d4ea7a99c49354daf6f474c765642e, type: 3}
