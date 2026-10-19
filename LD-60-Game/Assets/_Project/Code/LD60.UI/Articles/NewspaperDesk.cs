@@ -16,7 +16,7 @@ namespace LD60.UI
     public sealed class NewspaperDesk : MonoBehaviour
     {
         [SerializeField] private SpriteHintOutline firstStampHint;
-        private bool _hasStamped;
+        private bool _editionSubmitted;
         [SerializeField] private PageGrid page;
         [SerializeField] private ArticleTray save;
         [SerializeField] private float deskScale = 0.75f;
@@ -182,7 +182,7 @@ namespace LD60.UI
         {
             if (editionPreview != null && editionPreview.IsOpen)
                 return;
-            _hasStamped = true;
+            _editionSubmitted = true;
             if (firstStampHint != null)
                 firstStampHint.SetHighlighted(false);
             HideNotice();
@@ -320,6 +320,7 @@ namespace LD60.UI
 
         private void OnDay(DayStarted message)
         {
+            _editionSubmitted = false;
             HideNotice();
             var kept = save != null ? new List<ArticlePiece>(save.Pieces) : new List<ArticlePiece>();
             _chapter = message.Chapter;
@@ -471,7 +472,7 @@ namespace LD60.UI
 
             _desk?.SetScores(fill, politics, social);
             if (firstStampHint != null)
-                firstStampHint.SetHighlighted(!_hasStamped && page != null && page.Placed.Count > 0 && EditionReady(out _));
+                firstStampHint.SetHighlighted(!_editionSubmitted && page != null && page.Placed.Count > 0 && EditionReady(out _));
         }
 
         private static List<string> Ids(IReadOnlyList<ArticlePiece> pieces)

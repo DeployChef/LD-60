@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Wanted Man
   body: 10,000 rubles for the man in the white mask. Anyone hiding him faces a military
     court.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: b3c89e04ad55a8e4eb16bab5c58d1665, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 3

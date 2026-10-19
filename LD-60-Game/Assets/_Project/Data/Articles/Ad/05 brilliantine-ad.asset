@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 3
   title: Hair Pomade
   body: Keeps your hair parted through sea wind and rough questioning.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: c6dce71fa20761844afb0f710cd87f55, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.08
   politics: 0

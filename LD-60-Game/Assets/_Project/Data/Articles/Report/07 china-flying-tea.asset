@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 0
   title: "\u4E91\u5357\u53E4\u5239\u4E91\u96FE\u4ED9\u8336"
   body: "\u53E4\u5239\u50E7\u4FA3\u91C7\u5F97\u9AD8\u5C71\u4E91\u96FE\u8336\uFF0C\u6CB8\u6C34\u521D\u6CE8\uFF0C\u78A7\u53F6\u51CC\u7A7A\u98D8\u6D6E\u4E0D\u6C89\uFF0C\u6E05\u9999\u900F\u5341\u91CC\u3002"
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 4aa22a4dad2398e4296eda4669aef583, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.08
   politics: 0
