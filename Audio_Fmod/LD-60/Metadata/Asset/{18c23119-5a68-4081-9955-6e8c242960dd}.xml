@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.03.00">
-	<object class="EncodableAsset" id="{791c8153-88ba-449a-b339-ed7af1418c88}">
+	<object class="EncodableAsset" id="{18c23119-5a68-4081-9955-6e8c242960dd}">
 		<property name="assetPath">
-			<value>аэротруба/</value>
+			<value>final/</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>

@@ -138,6 +138,9 @@
 		</relationship>
 	</object>
 	<object class="GroupTrack" id="{84d04755-c509-49a4-baed-988da89d54d9}">
+		<relationship name="modules">
+			<destination>{1ab32ac7-67be-4918-81f2-595480d27b6f}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{9bb4f733-c055-4de8-910a-717813b28de2}</destination>
 		</relationship>
@@ -160,6 +163,7 @@
 			<destination>{1a0f7675-1b64-4a47-806d-e727617fd547}</destination>
 			<destination>{d4d09717-1b0c-4cb4-a826-103b9a4f13d2}</destination>
 			<destination>{6baac82d-5664-42dc-84f9-2cabb0b098b3}</destination>
+			<destination>{1ab32ac7-67be-4918-81f2-595480d27b6f}</destination>
 		</relationship>
 		<relationship name="markers">
 			<destination>{b4837c71-7237-4cab-9869-341ea47b0cb9}</destination>
@@ -618,6 +622,20 @@
 		</relationship>
 		<relationship name="output">
 			<destination>{51538309-ee83-49cd-a92a-8dca4c88ee96}</destination>
+		</relationship>
+	</object>
+	<object class="CommandSound" id="{1ab32ac7-67be-4918-81f2-595480d27b6f}">
+		<property name="length">
+			<value>1010.7374374999999</value>
+		</property>
+		<property name="commandType">
+			<value>1</value>
+		</property>
+		<relationship name="triggerConditions">
+			<destination>{ab3c85a4-b96b-49a6-a701-7b0bd3aac6af}</destination>
+		</relationship>
+		<relationship name="commandTarget">
+			<destination>{500b1931-d979-43cf-91d3-57938d52063c}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{9bb4f733-c055-4de8-910a-717813b28de2}">
@@ -2932,6 +2950,17 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{85cda4ee-dfb8-4817-81df-432bd42e48db}" />
+	<object class="ParameterCondition" id="{ab3c85a4-b96b-49a6-a701-7b0bd3aac6af}">
+		<property name="minimum">
+			<value>0</value>
+		</property>
+		<property name="maximum">
+			<value>0</value>
+		</property>
+		<relationship name="parameter">
+			<destination>{568e4173-317b-499e-b6cf-e69074980a3e}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusEffectChain" id="{2e8f1900-0c0e-4afe-9468-0a286ad0602b}">
 		<relationship name="effects">
 			<destination>{b4fe6146-78a7-4adb-aa84-330be68abaf8}</destination>
