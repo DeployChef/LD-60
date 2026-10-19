@@ -1698,7 +1698,7 @@ MonoBehaviour:
   playHover: 1
   playClick: 1
   hoverSoundId: UiMove
-  clickSoundId: UiClick
+  clickSoundId: MenuStart
 --- !u!114 &1469653762
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,8 +13,11 @@
     <list default="true" id="bcc3e600-cd66-45e3-bc99-4c53a57c2cc1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LD-60-Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/AudioManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/AudioManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Audio/UiButtonSound.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Audio/UiButtonSound.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/VolumeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Controllers/VolumeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Project/Scenes/Root.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Project/Scenes/Root.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +31,27 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Core/Audio/AudioCatalogFMOD.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Core/Audio/FmodSoundDefinition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Views/GuestView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_Project/Data/Story/Credits.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@bf35135da627/Runtime/UniTaskScheduler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@f3f96bcb59af/Runtime/Core/CinemachineVirtualCameraBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@21a28c3a6c83/InputSystem/Plugins/UI/InputSystemUIInputModule.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@3dd2fbd8c1f1/Runtime/UGUI/EventSystem/EventSystem.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@3dd2fbd8c1f1/Runtime/UGUI/EventSystem/ExecuteEvents.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@3dd2fbd8c1f1/Runtime/UGUI/UI/Core/Button.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/jp.hadashikick.vcontainer@dcf16cda6a65/Runtime/Unity/LifetimeScope.AwakeScheduler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/jp.hadashikick.vcontainer@dcf16cda6a65/Runtime/Unity/LifetimeScope.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/123f14278b9e4d239c90e124e08514a321c00/d5/47aaba41/AudioSource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/123f14278b9e4d239c90e124e08514a321c00/f4/d8de39ee/AudioListener.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/1c/c7dbc6b7/CancellationTokenSource.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ea200363ab142a582463089d51cabd3214200/22/29f0b78e/UnityEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ea200363ab142a582463089d51cabd3214200/6f/9a3c3c1e/Application.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ea200363ab142a582463089d51cabd3214200/fd/02b1b50b/PlayerPrefs.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f713e1c3c5f545ce9b1df47230f4f85346ae00/b0/4acae3b5/String.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f713e1c3c5f545ce9b1df47230f4f85346ae00/ee/c2ef5c22/Dictionary`2.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fabdb0fbdbc046e6aa87caf0683057482b800/54/e4cdd75b/DOTweenComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8a522b806eac9bb894e6e4c5fe87f353457535e769447e79c6b396beecb5d0/System.Threading.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -87,11 +105,11 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="3196">
       <option name="allowRunningInParallel" value="false" />
       <option name="coreClr" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="3196" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -142,17 +160,17 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/_Project/Code/LD60.Main/Audio/FmodWebglPreloader.cs</url>
-          <line>57</line>
-          <properties documentPath="C:\GitUnity\LD-60\LD-60-Game\Assets\_Project\Code\LD60.Main\Audio\FmodWebglPreloader.cs" containingFunctionPresentation="Method 'PrepareAsync'">
+          <url>file://$PROJECT_DIR$/Assets/_Project/Code/LD60.UI/Audio/UiButtonSound.cs</url>
+          <line>54</line>
+          <properties documentPath="C:\GitUnity\LD-60\LD-60-Game\Assets\_Project\Code\LD60.UI\Audio\UiButtonSound.cs" containingFunctionPresentation="Method 'PlayClick'">
             <startOffsets>
-              <option value="2264" />
+              <option value="1411" />
             </startOffsets>
             <endOffsets>
-              <option value="2296" />
+              <option value="1433" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

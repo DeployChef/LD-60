@@ -1,3 +1,4 @@
+using LD60.Core;
 using LD60.Core.Audio;
 using LD60.Core.Bus;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace LD60.UI
         [SerializeField] private bool playHover = true;
         [SerializeField] private bool playClick = true;
         [SerializeField] private string hoverSoundId = AudioCatalog.Ids.UiMove;
-        [SerializeField] private string clickSoundId = AudioCatalog.Ids.UiClick;
+        [SerializeField] private string clickSoundId = "MenuStart";
 
         private Button _button;
         private IMessageBus _bus;
@@ -43,7 +44,7 @@ namespace LD60.UI
             if (!playHover || !IsReady())
                 return;
 
-            Publish(hoverSoundId);
+           // Publish(hoverSoundId);
         }
 
         private void PlayClick()

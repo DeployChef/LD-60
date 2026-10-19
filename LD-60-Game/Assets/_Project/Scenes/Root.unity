@@ -692,9 +692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f861b6d3e05236c42a9d237fd8c93e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.Main::LD60.Main.Audio.AudioManager
-  catalog: {fileID: 11400000, guid: 7e8c1da49c7c634459845e2af662d318, type: 2}
-  sources:
-  - {fileID: 2844370089787452078}
+  catalogFMOD: {fileID: 11400000, guid: a6dc1da1895b9db43a1389471430a2a4, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

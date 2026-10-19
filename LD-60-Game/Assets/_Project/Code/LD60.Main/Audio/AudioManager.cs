@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
+using LD60.Core;
 using LD60.Core.Audio;
 using UnityEngine;
 
@@ -9,17 +12,20 @@ namespace LD60.Main.Audio
         private const string MasterKey = "ld60.audio.master";
         private const string SfxKey = "ld60.audio.sfx";
         private const string MusicKey = "ld60.audio.music";
-
-        [SerializeField] private AudioCatalog catalog;
-        [SerializeField] private List<AudioSource> sources = new();
-
-        private readonly Dictionary<string, float> _lastPlayTimes = new();
-        private readonly Dictionary<AudioSource, AudioChannel> _channels = new();
-
+        
+        [SerializeField] private AudioCatalogFMOD catalogFMOD;
+   
         private float _master = 1f;
         private float _sfx = 1f;
         private float _music = 1f;
+        
+        private Bus _masterBus;
+        private Bus _sfxBus;
+        private Bus _musicBus;
+        private Bus _uiBus;
+        private Bus _dialogBus;
 
+        
         public float MasterVolume => _master;
         public float SfxVolume => _sfx;
         public float MusicVolume => _music;
@@ -29,95 +35,186 @@ namespace LD60.Main.Audio
             _master = PlayerPrefs.GetFloat(MasterKey, 1f);
             _sfx = PlayerPrefs.GetFloat(SfxKey, 1f);
             _music = PlayerPrefs.GetFloat(MusicKey, 1f);
-            AudioListener.volume = _master;
+            InitializeFmod();
+        }
+
+        private void InitializeFmod()
+        {
+            _masterBus = RuntimeManager.GetBus("bus:/");
+            _musicBus = RuntimeManager.GetBus("bus:/all_music");
+
+            _sfxBus = RuntimeManager.GetBus("bus:/sfx_gr");
+            _uiBus = RuntimeManager.GetBus("bus:/ui");
+            _dialogBus = RuntimeManager.GetBus("bus:/dialog_gr");
+
+            SetMasterVolume(_master);
+            SetMusicVolume(_music);
+            SetSfxVolume(_sfx);
         }
 
         public void SetMasterVolume(float volume)
         {
             _master = Mathf.Clamp01(volume);
+
             PlayerPrefs.SetFloat(MasterKey, _master);
-            AudioListener.volume = _master;
+
+            if (_masterBus.isValid())
+                _masterBus.setVolume(_master);
         }
 
         public void SetSfxVolume(float volume)
         {
             _sfx = Mathf.Clamp01(volume);
+
             PlayerPrefs.SetFloat(SfxKey, _sfx);
-            ApplyPlaying();
+
+            if (_sfxBus.isValid())
+                _sfxBus.setVolume(_sfx);
+
+            if (_uiBus.isValid())
+                _uiBus.setVolume(_sfx);
+
+            if (_dialogBus.isValid())
+                _dialogBus.setVolume(_sfx);
         }
 
         public void SetMusicVolume(float volume)
         {
             _music = Mathf.Clamp01(volume);
+
             PlayerPrefs.SetFloat(MusicKey, _music);
-            ApplyPlaying();
+
+            if (_musicBus.isValid())
+                _musicBus.setVolume(_music);
         }
 
-        public void Play(string soundId)
+       public void Play(string soundId)
+{
+    if (catalogFMOD == null || !catalogFMOD.TryGet(soundId, out var sound))
+    {
+        Debug.LogWarning($"Звук не найден: {soundId}");
+        return;
+    }
+
+    if (string.IsNullOrWhiteSpace(sound.EventPath))
+        return;
+
+    var instance = RuntimeManager.CreateInstance(sound.EventPath);
+
+    if (!instance.isValid())
+    {
+        Debug.LogError($"FMOD Event не найден: {sound.EventPath}");
+        return;
+    }
+
+    try
+    {
+        if (!string.IsNullOrWhiteSpace(sound.ParameterName))
         {
-            // WebGL: единственный аудио-движок — FMOD (§6.11 инструкции). Второй
-            // движок (Unity AudioSource) поверх FMOD даёт микротреск музыки при
-            // кликах и hover-спаме. UI-звуки в браузере появятся через event:/UI,
-            // когда Валентин добавит туда параметр-кликер (схема SfxAudio).
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                return;
+            var result = instance.getDescription(out var description);
 
-            if (catalog == null || !catalog.TryGet(soundId, out var sound))
-                return;
-
-            if (sound.Clips == null || sound.Clips.Length == 0 || sources.Count == 0)
-                return;
-
-            var now = Time.unscaledTime;
-            if (sound.Cooldown > 0f
-                && _lastPlayTimes.TryGetValue(soundId, out var lastTime)
-                && now - lastTime < sound.Cooldown)
-                return;
-
-            var source = FindSource(sound);
-            if (source == null)
-                return;
-
-            source.clip = sound.Clips[Random.Range(0, sound.Clips.Length)];
-            source.loop = sound.Loop;
-            source.pitch = sound.BasePitch;
-            source.volume = VolumeFor(sound.Channel);
-            source.Play();
-            _channels[source] = sound.Channel;
-            _lastPlayTimes[soundId] = now;
-        }
-
-        private float VolumeFor(AudioChannel channel)
-        {
-            return channel == AudioChannel.Music ? _music : _sfx;
-        }
-
-        private void ApplyPlaying()
-        {
-            foreach (var pair in _channels)
+            if (result != FMOD.RESULT.OK)
             {
-                if (pair.Key != null)
-                    pair.Key.volume = VolumeFor(pair.Value);
+                Debug.LogError($"FMOD Description Error: {result}");
+                return;
             }
-        }
 
-        private AudioSource FindSource(SoundDefinition sound)
-        {
-            AudioSource busy = null;
+            result = description.getParameterDescriptionCount(out int count);
 
-            for (var i = 0; i < sources.Count; i++)
+            if (result != FMOD.RESULT.OK)
             {
-                var candidate = sources[i];
-                if (candidate == null)
+                Debug.LogError($"FMOD Parameter Count Error: {result}");
+                return;
+            }
+
+            Debug.Log($"Событие: {sound.EventPath}");
+            Debug.Log($"Ищем параметр: '{sound.ParameterName}'");
+            Debug.Log($"Количество параметров: {count}");
+
+            bool parameterFound = false;
+
+            for (int i = 0; i < count; i++)
+            {
+                result = description.getParameterDescriptionByIndex(
+                    i,
+                    out var parameter
+                );
+
+                if (result != FMOD.RESULT.OK)
                     continue;
 
-                if (!candidate.isPlaying)
-                    return candidate;
+                // Преобразуем FMOD.StringWrapper в обычную строку
+                string realName = (string)parameter.name;
 
-                busy = candidate;
+                Debug.Log($"РЕАЛЬНОЕ ИМЯ ПАРАМЕТРА: '{realName}'");
+
+                Debug.Log(
+                    $"Совпадает с каталогом: " +
+                    $"{realName == sound.ParameterName}"
+                );
+
+                if (realName != sound.ParameterName)
+                    continue;
+
+                parameterFound = true;
+
+                // Выводим доступные Label
+                for (int j = 0; j <= (int)parameter.maximum; j++)
+                {
+                    var labelResult = description.getParameterLabelByIndex(
+                        i,
+                        j,
+                        out var label
+                    );
+
+                    if (labelResult == FMOD.RESULT.OK)
+                    {
+                        Debug.Log($"Доступный Label: '{label}'");
+                    }
+                }
             }
 
-            return sound.AllowOverlap ? busy : null;
+            if (!parameterFound)
+            {
+                Debug.LogError(
+                    $"Параметр '{sound.ParameterName}' " +
+                    $"не найден в событии '{sound.EventPath}'"
+                );
+
+                return;
+            }
+
+            // Устанавливаем параметр
+            result = instance.setParameterByNameWithLabel(
+                sound.ParameterName,
+                sound.ParameterLabel
+            );
+
+            if (result != FMOD.RESULT.OK)
+            {
+                Debug.LogError(
+                    $"Ошибка установки Label '{sound.ParameterLabel}': {result}"
+                );
+
+                return;
+            }
         }
+
+        // Запускаем звук
+        var startResult = instance.start();
+
+        if (startResult != FMOD.RESULT.OK)
+        {
+            Debug.LogError($"FMOD Start Error: {startResult}");
+            return;
+        }
+
+        Debug.Log($"FMOD успешно запущен: {soundId}");
+    }
+    finally
+    {
+        instance.release();
+    }
+}
     }
 }
