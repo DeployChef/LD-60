@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LD60.Gameplay.Articles;
 using LD60.Gameplay.Context;
@@ -287,10 +288,51 @@ namespace LD60.UI
                 }
             }
 
+            if (!ArticlesAllow(piece))
+                return PlaceIssue.Exclusive;
+
             if (!NeighborsAllow(piece, slots))
                 return PlaceIssue.Beside;
 
             return PlaceIssue.None;
+        }
+
+        private bool ArticlesAllow(ArticlePiece piece)
+        {
+            var article = piece != null ? piece.Article : null;
+            if (article == null)
+                return true;
+
+            for (var i = 0; i < _placed.Count; i++)
+            {
+                var otherPiece = _placed[i];
+                if (otherPiece == null || otherPiece == piece)
+                    continue;
+
+                var other = otherPiece.Article;
+                if (other == null)
+                    continue;
+
+                if (ForbidsArticle(article, other) || ForbidsArticle(other, article))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool ForbidsArticle(ArticleDefinition article, ArticleDefinition other)
+        {
+            if (article == null || other == null)
+                return false;
+
+            var banned = article.ForbiddenArticles;
+            for (var i = 0; i < banned.Length; i++)
+            {
+                if (string.Equals(banned[i], other.Id, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
         }
 
         private bool DayForbids(ArticleKind left, ArticleKind right)
@@ -443,6 +485,7 @@ namespace LD60.UI
         None,
         Blocked,
         Taken,
-        Beside
+        Beside,
+        Exclusive
     }
 }

@@ -26,4 +26,6 @@ MonoBehaviour:
   politics: 10
   social: 0
   money: 0
-  forbiddenNeighbors: 
+  forbiddenNeighbors: []
+  forbiddenArticles:
+  - anon-truth

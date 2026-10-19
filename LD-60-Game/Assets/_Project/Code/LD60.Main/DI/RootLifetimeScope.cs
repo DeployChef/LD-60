@@ -16,6 +16,7 @@ namespace LD60.Main.DI
             builder.Register<MessageBus>(Lifetime.Singleton).As<IMessageBus>();
             builder.RegisterComponentInHierarchy<AudioManager>().As<IAudioManager>();
             builder.Register<AudioService>(Lifetime.Singleton);
+            builder.Register<Analytics.UnityAnalyticsService>(Lifetime.Singleton).As<IGameAnalytics>().AsSelf();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<AudioService>());
         }
     }

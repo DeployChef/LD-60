@@ -8,7 +8,9 @@
         "UniTask",
         "VContainer",
         "FMODUnity",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.Services.Core",
+        "Unity.Services.Analytics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

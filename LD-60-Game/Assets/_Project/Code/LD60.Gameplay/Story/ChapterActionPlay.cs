@@ -11,14 +11,16 @@ namespace LD60.Gameplay.Story
         private readonly Gifts _gifts;
         private readonly IMessageBus _bus;
         private readonly Desk _desk;
+        private readonly LD60.Core.IGameAnalytics _analytics;
 
-        public ChapterActionPlay(ISequencePlayer player, IDialogue dialogue, Gifts gifts, IMessageBus bus, Desk desk)
+        public ChapterActionPlay(ISequencePlayer player, IDialogue dialogue, Gifts gifts, IMessageBus bus, Desk desk, LD60.Core.IGameAnalytics analytics = null)
         {
             _player = player;
             _dialogue = dialogue;
             _gifts = gifts;
             _bus = bus;
             _desk = desk;
+            _analytics = analytics;
         }
 
         public void Cancel()
@@ -79,6 +81,9 @@ namespace LD60.Gameplay.Story
             var ending = action as EndingAction;
             if (ending != null)
             {
+                var chapterName = chapter?.Chapter != null ? chapter.Chapter.name : "unknown";
+                _analytics?.TrackEnding(ending.name, chapterName);
+
                 if (ending.Comics != null && Alive(_player))
                     await _player.PlayComics(ending.Comics);
 
@@ -89,6 +94,9 @@ namespace LD60.Gameplay.Story
             var credits = action as CreditsAction;
             if (credits != null)
             {
+                var chapterName = chapter?.Chapter != null ? chapter.Chapter.name : "unknown";
+                _analytics?.TrackEnding(credits.name, chapterName);
+
                 if (Alive(_player))
                     await _player.PlayCredits();
 
