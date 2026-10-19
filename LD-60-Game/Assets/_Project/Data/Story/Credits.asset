@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
   title: Credits
   actions:
-  - {fileID: 11400000, guid: 05980ce656e6ff349ad77c1e44a333de, type: 2}
+  - {fileID: 11400000, guid: 278d28be83a92d44fb1ea1204d68f470, type: 2}
   rules: []
+  neighbors: []
   capsules: []

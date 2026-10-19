@@ -216,9 +216,13 @@ namespace LD60.Gameplay.Story
             BeginChapter(_index + 1, false);
         }
 
-        private void Finish()
+        private async void Finish()
         {
             Debug.Log("[Story] Finale finished.");
+            var alive = _player is UnityEngine.Object u ? u != null : _player != null;
+            if (alive)
+                await _player.PlayCredits();
+
             _shell.FinishStoryAsync().Forget();
         }
     }

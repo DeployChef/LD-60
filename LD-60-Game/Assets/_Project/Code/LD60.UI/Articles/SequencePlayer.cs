@@ -11,6 +11,7 @@ namespace LD60.UI
         [SerializeField] private GuestView _guestView;
         [SerializeField] private StoryComicsPlayer _storyComics;
         [SerializeField] private StoryComicsData _introComics;
+        [SerializeField] private CreditsPlayer _credits;
         
         public void LookAtRoom() => views.ShowTable(false);
 
@@ -19,6 +20,8 @@ namespace LD60.UI
             _guestView.Cancel();
             if (_storyComics != null && _storyComics.IsPlaying)
                 _storyComics.CancelSequence();
+            if (_credits != null && _credits.IsPlaying)
+                _credits.CancelSequence();
         }
 
         public void ShowGuest(Sprite sprite) => _guestView.ShowGuest(sprite);
@@ -28,6 +31,34 @@ namespace LD60.UI
         public UniTask PlayIntroComics() => PlayComics(_introComics);
 
         public UniTask PlayComics(ScriptableObject comics) => PlayComics(comics as StoryComicsData);
+
+        public async UniTask PlayCredits(CancellationToken token = default)
+        {
+            if (_credits == null)
+                _credits = FindAnyObjectByType<CreditsPlayer>(FindObjectsInactive.Include);
+
+            if (_credits == null)
+            {
+                Debug.LogWarning("[SequencePlayer] CreditsPlayer not found in scene.");
+                return;
+            }
+
+            if (views != null)
+            {
+                views.ShowTable(false);
+                views.AllowLookDown(false);
+            }
+
+            try
+            {
+                await _credits.PlayAsync(token);
+            }
+            finally
+            {
+                if (views != null)
+                    views.AllowLookDown(true);
+            }
+        }
 
         public async UniTask PlayComics(StoryComicsData comics)
         {

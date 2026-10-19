@@ -54,8 +54,8 @@ MonoBehaviour:
     value: 0
   - kind: 1
     emotion: sympathy
-    text: Here. My wife packed an extra ham sandwich in wax paper. Eat something
-      before you pass out on the galley proofs.
+    text: Here. I packed an extra ham sandwich in wax paper. Eat something before
+      you pass out on the galley proofs.
     giftId: 
     amount: 1
     optionA: 
