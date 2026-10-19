@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.03.00">
-	<object class="AudioFile" id="{4ce36f17-e063-4baf-8acb-6b599f38d863}">
+	<object class="AudioFile" id="{7f9fff34-233c-4b56-9888-7248497e4446}">
 		<property name="assetPath">
-			<value>music_player/LD-60 - Track 4.wav</value>
-		</property>
-		<property name="isStreaming">
-			<value>true</value>
+			<value>protest/Guns, Rifle, Military Base, Exterior Shots, Many, Distant 01 SND8332.wav</value>
 		</property>
 		<property name="frequencyInKHz">
-			<value>48</value>
+			<value>96</value>
 		</property>
 		<property name="channelCount">
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>204.68479166666665</value>
+			<value>9.3848749999999992</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>

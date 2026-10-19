@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.03.00">
-	<object class="AudioFile" id="{7190971b-d79b-4d35-ba6d-bacf040b431e}">
+	<object class="AudioFile" id="{36996d9f-4ba6-43cd-9afc-8c0e4f250c1f}">
 		<property name="assetPath">
-			<value>аэротруба/Food &amp; Drink, Glassware, Bottle, Wine, Cork, Pop Open SND11743 S00 - Pitch 72_0.wav</value>
+			<value>protest/Crowds, Loop Group, Army LosIng In Battle, Screams Of Panic 02 SND67451 S00.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>96</value>
@@ -11,7 +14,7 @@
 			<value>1</value>
 		</property>
 		<property name="length">
-			<value>0.89749999999999996</value>
+			<value>10.7526875</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{fc07b12e-bce0-4b24-aa67-8d5262234dec}</destination>
