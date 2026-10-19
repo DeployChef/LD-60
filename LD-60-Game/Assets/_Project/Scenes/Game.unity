@@ -6480,7 +6480,7 @@ MonoBehaviour:
   continueLabel: Continue
   charactersPerSecond: 45
   voiceVolume: 4
-  voiceGap: 0.1
+  voiceGap: 0.16
   voiceBite: 0.161
 --- !u!4 &2003089151
 Transform:

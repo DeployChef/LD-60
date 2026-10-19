@@ -12,6 +12,7 @@ namespace LD60.UI
     {
         private const string DefaultCursorResource = "Cursors/Cursor_Default";
         private const string HoverCursorResource = "Cursors/Cursor_Hover";
+        private const float WebGlCursorScale = 1f / 1.5f;
 
         [Header("Textures")]
         [SerializeField] private Texture2D defaultCursor;
@@ -31,6 +32,7 @@ namespace LD60.UI
         private readonly List<RaycastResult> _uiRaycastResults = new(16);
         private bool _isCurrentlyHovering;
         private Texture2D _activeTexture;
+        private readonly Dictionary<int, Texture2D> _scaledCursors = new();
 
         public static CursorManager Instance
         {
@@ -285,7 +287,57 @@ namespace LD60.UI
                 return;
 
             _activeTexture = texture;
+            texture = ScaleCursorForWebGl(texture, ref hotspot);
             Cursor.SetCursor(texture, hotspot, cursorMode);
+        }
+
+        private Texture2D ScaleCursorForWebGl(Texture2D source, ref Vector2 hotspot)
+        {
+            if (Application.platform != RuntimePlatform.WebGLPlayer)
+                return source;
+
+            var id = source.GetInstanceID();
+            if (!_scaledCursors.TryGetValue(id, out var scaled))
+            {
+                scaled = ScaleCursor(source, WebGlCursorScale);
+                _scaledCursors.Add(id, scaled);
+            }
+
+            hotspot *= WebGlCursorScale;
+            return scaled;
+        }
+
+        private static Texture2D ScaleCursor(Texture2D source, float scale)
+        {
+            var width = Mathf.Max(1, Mathf.RoundToInt(source.width * scale));
+            var height = Mathf.Max(1, Mathf.RoundToInt(source.height * scale));
+            var pixels = source.GetPixels32();
+            var scaledPixels = new Color32[width * height];
+            var sourceWidth = source.width;
+            var sourceHeight = source.height;
+
+            for (var y = 0; y < height; y++)
+            {
+                var sourceY = Mathf.Clamp(
+                    Mathf.RoundToInt((y + 0.5f) * sourceHeight / height - 0.5f),
+                    0,
+                    sourceHeight - 1);
+                for (var x = 0; x < width; x++)
+                {
+                    var sourceX = Mathf.Clamp(
+                        Mathf.RoundToInt((x + 0.5f) * sourceWidth / width - 0.5f),
+                        0,
+                        sourceWidth - 1);
+                    scaledPixels[y * width + x] = pixels[sourceY * sourceWidth + sourceX];
+                }
+            }
+
+            var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.SetPixels32(scaledPixels);
+            texture.Apply(false, true);
+            return texture;
         }
     }
 }
