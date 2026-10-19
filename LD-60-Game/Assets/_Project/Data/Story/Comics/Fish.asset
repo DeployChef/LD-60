@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41a8b62c93e47f198a5b2c4e6f01357, type: 3}
+  m_Name: Fish
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
+  background: {fileID: 2508105488073898482, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
+  blocks:
+  - image: {fileID: 0}
+    subtitle: "The office suddenly reeked of rotten river weeds, bottom silt, and gun oil. The window facing the embankment had been smashed from the outside."
+  - image: {fileID: 0}
+    subtitle: "\"I warned you, landworm,\" a raspy bass gurgled from the shadows. \"I asked you nicely to keep those fishing rod ads out of the paper!\""
+  - image: {fileID: 0}
+    subtitle: "The roar of a submachine gun drowned out the harbor tugboats. The river brotherhood never forgave a debt."
+  - image: {fileID: 0}
+    subtitle: "There were no witnesses on the wet pier. Only hungry gulls circled above the oily black water, waiting for their share."
+  - image: {fileID: 0}
+    subtitle: "A heavy splash swallowed the night's silence. The river closed over its former editor, dragging his secrets down into the mud."
+  - image: {fileID: 0}
+    subtitle: "In the morning, the police found only brass casings, river slime, and a single palm-sized scale. The editor was filed away as missing."

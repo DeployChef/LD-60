@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 04_official_followup
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 3
+  at: 0.32
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: 2fdafc9c6e355914d8f2b600955b22a5, type: 2}
+  steps:
+  - kind: 0
+    emotion: cold
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: cold
+    text: The Directorate was pleased with yesterday's layout. Here is twenty coins
+      from the press fund. Keep the page clean of tavern notices.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 2
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: official_loyal
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: money
+    amount: 20
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: official_loyal
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: scorn
+    text: I went over yesterday's sheet, Editor. Your remarks about the mill hands
+      went into my ledger.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 4
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: threat
+    text: I have sent a copy of your file to the State Inspector. Watch your step.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: heat
+    value: 1
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 04_bandit_flee_offer
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 3
+  at: 0.48
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: ea1e8352de34cc6418b09acc646e6672, type: 2}
+  steps:
+  - kind: 0
+    emotion: smirk
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smirk
+    text: Smell that, four-eyes? They're burning tyres by the bridge, and armored
+      cars just turned onto Market Street.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: business
+    text: Our launch leaves the coal slip at midnight. One hundred and twenty coins
+      buys the last seat across the bay. Are you coming, or staying to get shot over
+      a printing press?
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: business
+    text: Got the 120 coins?
+    giftId: 
+    amount: 1
+    optionA: Here's the money. Let's go.
+    optionB: I'm finishing tomorrow's paper.
+    next: -1
+    nextA: 5
+    nextB: 7
+    rule:
+      parameter: money
+      greaterThan: 119.5
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: cold
+    text: You're short on cash, pal. Keep your head down tomorrow.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 8
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 3
+    emotion: 
+    text: 
+    giftId: money
+    amount: -120
+    optionA: 
+    optionB: 
+    next: 6
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: smirk
+    text: Smartest thing you've done all week. Leave the paste brush and come out
+      the back way.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 8
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: boat_ending
+    value: 1
+  - kind: 1
+    emotion: cold
+    text: Your funeral, scribe. Don't say I didn't offer.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 8
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

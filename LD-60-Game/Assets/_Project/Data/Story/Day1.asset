@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day1
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 1: A New Broom'
+  actions:
+  - {fileID: 11400000, guid: fb5f2abaccbd7224ca724434e8be4fca, type: 2}
+  - {fileID: 11400000, guid: 307ade9e4597d3046a7ba9e7740de08b, type: 2}
+  - {fileID: 11400000, guid: 330510f162af7e1418d41564128bf273, type: 2}
+  - {fileID: 11400000, guid: e27bb68e4010d184eb427a86bc6c9965, type: 2}
+  - {fileID: 11400000, guid: 127765737a7604448b97f1d1f1000ff2, type: 2}
+  - {fileID: 11400000, guid: 8898d9f3ad1eff74a934fadacdfd67a2, type: 2}
+  - {fileID: 11400000, guid: 3c83ee02ebe976046a8773ca2ac5bdb0, type: 2}
+  - {fileID: 11400000, guid: 67f2e1ddcbe9f6549b5ac07030a0e490, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.72
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-1
+    articles:
+    - {fileID: 11400000, guid: e425c975b0dfad44ea026f320aa34f46, type: 2}
+    - {fileID: 11400000, guid: 238fad37da7320a4891ed010c27198ee, type: 2}
+    - {fileID: 11400000, guid: e4ee82a019e86144cbcfdca79dfac007, type: 2}
+    - {fileID: 11400000, guid: 1af1155cfb008664190f145ab60add9f, type: 2}
+    - {fileID: 11400000, guid: b9918c94124098a41b5bcef83386d98a, type: 2}
+    - {fileID: 11400000, guid: d232149c092bf9e428dc58f5abfcdfb4, type: 2}
+    - {fileID: 11400000, guid: e4e3fbfc8ef8d824dab9c5393364a989, type: 2}
+    - {fileID: 11400000, guid: 6979b687c66df1d40a22199aa928f89f, type: 2}
+    - {fileID: 11400000, guid: f0e4ceda51e3c0641ba3cf74afc89854, type: 2}
+    - {fileID: 11400000, guid: 4c962b288e375c648b2e280213f585fe, type: 2}
+    note: Fill at least 72% of the page (18/25 cells). Never place Ads beside Politics.
+  - id: guest-stash-1
+    articles:
+    - {fileID: 11400000, guid: fe8323a57ae363a4cbe969e543b3c53e, type: 2}
+    note: Hand-delivered by guests.

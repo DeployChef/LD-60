@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 05_babka_queue_rumor
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 3
+  at: 0.56
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: 0a910927228b4d7488eaf655a63bcedd, type: 2}
+  steps:
+  - kind: 0
+    emotion: panting
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: panting
+    text: Lord save us, I nearly lost my shawl in the crush! Down at Flour Store
+      No. 3 the crowd broke the shutters, and the mounted police came down the lane
+      with flats of their sabers!
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 2
+    emotion: whisper
+    text: The dockers say army barges are hauling the grain out after midnight while
+      we stand in line for chaff. Are you going to print what happened at the store?
+    giftId: 
+    amount: 1
+    optionA: I'll run the story.
+    optionB: Go home and lock your door.
+    next: -1
+    nextA: 3
+    nextB: 4
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: default
+    text: Thank you, son. Let the whole town read what they did to hungry women.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: default
+    text: Aye, everybody's afraid of the troopers now. God help us this winter.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 5
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

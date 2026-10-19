@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff36e22124bd9e43bc3faff9dc2dba4, type: 3}
+  m_Name: Official
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
+  displayName: Ministry Official
+  emotions:
+  - key: default
+    sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+  - key: cold
+    sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+  - key: scorn
+    sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+  - key: threat
+    sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}

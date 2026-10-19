@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c0f74614a0e2c41aa0a5996a6b2dba, type: 3}
+  m_Name: 99_finish_game
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.EndingAction
+  when: 4
+  at: 1
+  parameter: 
+  minimum: 0
+  comics: {fileID: 11400000, guid: d36fa147eb504923c5f4a7b8c9d0e1f2, type: 2}

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
+  m_Name: 03_chekist_inquiry
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
+  when: 2
+  at: 15
+  parameter: 
+  minimum: 0
+  rule:
+    parameter: 
+    greaterThan: 0
+  guest: {fileID: 11400000, guid: c4231743e8bf10249859b1f67f76b585, type: 2}
+  steps:
+  - kind: 0
+    emotion: cigar
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 1
+    emotion: anger
+    text: We raided an unlicensed bar on Canal Street last night and found your newspaper
+      on the tables. Run another ad for smugglers and you'll be riding north in a
+      boxcar.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 3
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: mob_deal
+      greaterThan: 0
+    remember: heat
+    value: 1
+  - kind: 1
+    emotion: calm
+    text: You kept the bootleggers out of the paper yesterday. Good. We are looking
+      for a man in a white mask who has been slipping into print shops after dark.
+      If he shows up here, ring the guard post.
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: 3
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0
+  - kind: 4
+    emotion: 
+    text: 
+    giftId: 
+    amount: 1
+    optionA: 
+    optionB: 
+    next: -1
+    nextA: -1
+    nextB: -1
+    rule:
+      parameter: 
+      greaterThan: 0
+    remember: 
+    value: 0

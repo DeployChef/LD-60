@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day7
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 7: Ghost Hunt'
+  actions:
+  - {fileID: 11400000, guid: 5150a6525f1ee204cb53096b0912016d, type: 2}
+  - {fileID: 11400000, guid: 2730c0591367f664ea46b58309c3af7e, type: 2}
+  - {fileID: 11400000, guid: 17ab3c7ac4eb7d4478f86be792b63c8e, type: 2}
+  - {fileID: 11400000, guid: bcce77db870231f439c6cb43c87fdba7, type: 2}
+  - {fileID: 11400000, guid: 8d523438677a9074197d96e89ef9f4d9, type: 2}
+  - {fileID: 11400000, guid: bedb11faccf34fe4cb62cc3465367bf7, type: 2}
+  - {fileID: 11400000, guid: 3ccb313fbffd2c0458ebe8f625b43dbf, type: 2}
+  - {fileID: 11400000, guid: 64c83a52e6a02154ebe18d46d4607cbb, type: 2}
+  - {fileID: 11400000, guid: b54a32cfcfdb1b34f99d6f11ddebb815, type: 2}
+  - {fileID: 11400000, guid: 52143715a165ef9439df1d856b9dfece, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.8
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-7
+    articles:
+    - {fileID: 11400000, guid: 9615559d2598fe14ca6cefce2d2e4e8f, type: 2}
+    - {fileID: 11400000, guid: 2deae37c0bf97ef4984718bc65cae66c, type: 2}
+    - {fileID: 11400000, guid: 08ee7c321f0a6d84884bbc1cd5dda8ce, type: 2}
+    - {fileID: 11400000, guid: faf8971d2aab99d4887fb9408981379c, type: 2}
+    - {fileID: 11400000, guid: a8a7e76c96a901f43a37b35e31151395, type: 2}
+    - {fileID: 11400000, guid: c0f5d338bcb0e16409447eab734b7a14, type: 2}
+    - {fileID: 11400000, guid: feccf0f018b4c8b41868bc9e95318021, type: 2}
+    - {fileID: 11400000, guid: 6772d88b97033444b936ba104360d07a, type: 2}
+    - {fileID: 11400000, guid: 7eb31f88eb60f0d4a967661819416320, type: 2}
+    - {fileID: 11400000, guid: a88d95e0b0ace2d4b95f16d74d153fda, type: 2}
+    note: Fill at least 80% of the page (20/25 cells). Never mix Ads with Politics.
+  - id: guest-stash-7
+    articles:
+    - {fileID: 11400000, guid: f3c429a07110b9b4195dd430ea92ff0e, type: 2}
+    note: Hand-delivered by guests.

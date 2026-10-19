@@ -3050,6 +3050,118 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 345763998445505603, guid: 56a72d4e7c788db44b770802b676a69b, type: 3}
   m_PrefabInstance: {fileID: 104939830}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &788000100
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 100000, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_Name
+      value: StoryComics
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+--- !u!114 &788000106 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 100006, guid: f63ca084eb504913bac7d4e608b23579, type: 3}
+  m_PrefabInstance: {fileID: 788000100}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52b9c73da4f4802a9b6c3d5f7a12468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsPlayer
 --- !u!1 &887583282
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,7 +3353,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f9f4a2986647344bd6cc391ae4d224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.StoryBook
-  chapters: []
+  chapters:
+  - {fileID: 11400000, guid: 0c68f21f0929209498cb4118711b2b2b, type: 2}
+  - {fileID: 11400000, guid: 0c391d7dd08f7ac49a4ece4b6fa99061, type: 2}
+  - {fileID: 11400000, guid: b1f695661cd38394583961bf58103d8d, type: 2}
+  - {fileID: 11400000, guid: 3108518f9b1328847ba6f76665a0ac47, type: 2}
+  - {fileID: 11400000, guid: 22891564d9c2d6643ae24c0df254e6d7, type: 2}
+  - {fileID: 11400000, guid: df9f43d4641489a46a2cfb2c06a109a2, type: 2}
+  - {fileID: 11400000, guid: 133e419d72e342b40bce1a886ff20df4, type: 2}
+  - {fileID: 11400000, guid: 428ab0022e1351049ae54e7fe19677ea, type: 2}
+  - {fileID: 11400000, guid: a9cde5f087869264ca1964d7d9e0539a, type: 2}
+  - {fileID: 11400000, guid: a5522f820249f6c4cb62f3ffb86b4f87, type: 2}
   finale: {fileID: 11400000, guid: c3a91e7b4d2f48a0b6e5c1d84f0a7b29, type: 2}
   debugStart: {fileID: 0}
   debugKeys: 1
@@ -6630,6 +6752,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.SequencePlayer
   views: {fileID: 1316376785}
   _guestView: {fileID: 743947342}
+  _storyComics: {fileID: 788000106}
+  _introComics: {fileID: 11400000, guid: a93c7e14b82d46f092c1d4e5f6a7b8c9, type: 2}
 --- !u!4 &2119274997
 Transform:
   m_ObjectHideFlags: 0
@@ -7715,3 +7839,4 @@ SceneRoots:
   - {fileID: 1291854410}
   - {fileID: 2119274997}
   - {fileID: 2003089151}
+  - {fileID: 788000100}

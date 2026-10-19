@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86a6d01ce2daac4f95c1ccef1e4e746, type: 3}
+  m_Name: 22 suitcases-ad
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Articles.ArticleDefinition
+  id: suitcases-ad
+  shape: 1
+  kind: 3
+  title: Canvas Trunks
+  body: Strapped travelling trunks with brass locks. Ready to carry.
+  picture: {fileID: 0}
+  pictureLayout: {fileID: 11400000, guid: 2af6751cb1d5530429f459a84bff70d6, type: 2}
+  fill: 0.08
+  politics: 0
+  social: 0
+  money: 15
+  forbiddenNeighbors: 

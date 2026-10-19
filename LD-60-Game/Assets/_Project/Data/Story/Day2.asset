@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e53206580f941b893eaffdf3a4a2, type: 3}
+  m_Name: Day2
+  m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Context.ChapterDefinition
+  title: 'Day 2: Gold Mine'
+  actions:
+  - {fileID: 11400000, guid: 54dfd0f0a8121a344baddb16b6a5c957, type: 2}
+  - {fileID: 11400000, guid: 47ee602f5608cea43805923561bf383e, type: 2}
+  - {fileID: 11400000, guid: 2106e14b4a074444db2a1464f0bfaa16, type: 2}
+  - {fileID: 11400000, guid: 0aea54dbf7eafd24a899caea02261cd4, type: 2}
+  - {fileID: 11400000, guid: 272fb1890099e104e9b4fec77a18be33, type: 2}
+  - {fileID: 11400000, guid: e0b9f7cb934a2ee46806c75ee1ed22b8, type: 2}
+  - {fileID: 11400000, guid: 4bdd73cb26388b04ea84473de1d6200f, type: 2}
+  rules:
+  - parameterId: fill
+    minimum: 0.72
+  neighbors:
+  - kind: 3
+    other: 1
+  capsules:
+  - id: morning-drop-2
+    articles:
+    - {fileID: 11400000, guid: c9ec3d982ba294d419904ec3ae61388f, type: 2}
+    - {fileID: 11400000, guid: ac1b8f34c826c8d43ab1262741f37e06, type: 2}
+    - {fileID: 11400000, guid: dacd177d2e3d7384ba3f7407bb4b8d3a, type: 2}
+    - {fileID: 11400000, guid: 649e228894e4d36448ac9f8f6b02bca8, type: 2}
+    - {fileID: 11400000, guid: a685974126247a04884b52b05b0d3092, type: 2}
+    - {fileID: 11400000, guid: cf79f08c77b80324ebed09ebe9ce67b8, type: 2}
+    - {fileID: 11400000, guid: 279b5c8c755ff744c92c24b63ea62c63, type: 2}
+    - {fileID: 11400000, guid: d135b4407a9e77f438c634acbe12774f, type: 2}
+    - {fileID: 11400000, guid: a31238cd65647cf47ac84d717dadb0f5, type: 2}
+    - {fileID: 11400000, guid: 870865274116c6d4fbf3c7f841fea974, type: 2}
+    note: Fill at least 72% of the page (18/25 cells). Keep Ads away from Politics.
+  - id: guest-stash-2
+    articles:
+    - {fileID: 11400000, guid: 135f5c9f23b544245905e43dbebd652b, type: 2}
+    note: Hand-delivered by guests.

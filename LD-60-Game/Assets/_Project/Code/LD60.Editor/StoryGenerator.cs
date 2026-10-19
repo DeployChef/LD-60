@@ -19,6 +19,7 @@ namespace LD60.Editor
         private const string StoryFolder = "Assets/_Project/Data/Story";
         private const string GuestsFolder = "Assets/_Project/Data/Story/Guests";
         private const string ActionsFolder = "Assets/_Project/Data/Story/Actions";
+        private const string ComicsFolder = "Assets/_Project/Data/Story/Comics";
         private const string ArtFolder = "Assets/_Project/Art/DariyaArt";
 
         // 25 cells (5x5 grid) = 1.00 (100% fill) -> 1 cell = 0.04f
@@ -29,6 +30,7 @@ namespace LD60.Editor
         private static Dictionary<ArticleKind, int> _kindCounters;
         private static Dictionary<string, (Sprite sprite, ArticlePictureLayout layout)> _preservedCustomPictures;
         private static Dictionary<string, GuestDefinition> _guests;
+        private static Dictionary<string, StoryComicsData> _comics;
         private static ArticlePictureLayout _layoutNoPic;
         private static ArticlePictureLayout _layoutPicMid;
         private static ArticlePictureLayout _layoutPicTop;
@@ -81,7 +83,8 @@ namespace LD60.Editor
             GenerateArticles();
             AssetDatabase.SaveAssets();
 
-            // 7. Generate all 10 Days and their Actions
+            // 7. Load existing StoryComicsData assets (read-only: never recreated, cleaned, or modified) and generate 10 Days
+            LoadExistingComics();
             Debug.Log("[StoryGenerator] [Step 6/7] Generating 10 Days (Chapters & Actions)...");
             var chapters = new[]
             {
@@ -226,6 +229,34 @@ namespace LD60.Editor
             if (sprite == null)
                 Debug.LogWarning($"[StoryGenerator][Art] Character sprite not found at '{path}'!");
             return sprite;
+        }
+
+        private static void LoadExistingComics()
+        {
+            _comics = new Dictionary<string, StoryComicsData>(StringComparer.OrdinalIgnoreCase);
+            var comicNames = new[] { "Intro", "Fired", "Death", "WalkingDead", "IronLaw", "Fish", "Boat" };
+            foreach (var name in comicNames)
+            {
+                var path = $"{ComicsFolder}/{name}.asset";
+                var asset = AssetDatabase.LoadAssetAtPath<StoryComicsData>(path);
+                if (asset != null)
+                {
+                    _comics[name] = asset;
+                }
+                else
+                {
+                    Debug.LogWarning($"[StoryGenerator][Comics] Existing comic asset not found at '{path}'.");
+                }
+            }
+
+            Debug.Log($"[StoryGenerator][Comics] Loaded {_comics.Count}/{comicNames.Length} existing StoryComicsData assets from '{ComicsFolder}' (preserved untouched).");
+        }
+
+        private static StoryComicsData GetComics(string name)
+        {
+            if (_comics != null && _comics.TryGetValue(name, out var data) && data != null)
+                return data;
+            return AssetDatabase.LoadAssetAtPath<StoryComicsData>($"{ComicsFolder}/{name}.asset");
         }
 
         private static void GenerateGuests()
@@ -1008,7 +1039,7 @@ namespace LD60.Editor
             ));
 
             // 2. Early ending hook (if idle-fired triggers)
-            actions.Add(MakeEnding(folder, "02_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "02_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
 
             // 3. Morning drop (EnterWork)
             actions.Add(MakeCapsule(folder, "03_morning_drop", ChapterWhen.EnterWork, "morning-drop-1"));
@@ -1055,7 +1086,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day2");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-2"));
 
             // Deputy visit (15s)
@@ -1098,7 +1129,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day3");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-3"));
 
             // Official visit (15s)
@@ -1141,7 +1172,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day4");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-4"));
 
             // Bandit visit (15s)
@@ -1200,7 +1231,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day5");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-5"));
 
             // Chekist inquiry (15s)
@@ -1237,7 +1268,7 @@ namespace LD60.Editor
 
             AddIdleActions(folder, actions);
 
-            actions.Add(MakeEnding(folder, "98_early_arrest", ChapterWhen.PaperStamped, 1f, "heat", 3f));
+            actions.Add(MakeEnding(folder, "98_early_arrest", ChapterWhen.PaperStamped, 1f, "heat", 3f, GetComics("Death")));
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
             // 26 cells in morning-drop-5 (1.04) + 2 cells in guest-stash-5 = 28 cells (1.12), required = 0.80 (20 cells)
@@ -1256,7 +1287,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day6");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-6"));
 
             // Fishman visit (15s)
@@ -1307,7 +1338,7 @@ namespace LD60.Editor
                 StepSay("shot", "I warned you, dry-lander. No warning in the paper, so the bay comes to collect."),
                 StepExit()
             ));
-            actions.Add(MakeEnding(folder, "98_fish_shot_ending", ChapterWhen.PaperStamped, 1f, "fish_angry", 1f));
+            actions.Add(MakeEnding(folder, "98_fish_shot_ending", ChapterWhen.PaperStamped, 1f, "fish_angry", 1f, GetComics("Fish")));
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
             // 26 cells in morning-drop-6 (1.04) + 3 cells in guest-stash-6 = 29 cells (1.16), required = 0.80 (20 cells)
@@ -1326,7 +1357,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day7");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-7"));
 
             // Chekist order (15s)
@@ -1368,7 +1399,7 @@ namespace LD60.Editor
                 StepSay("anger", "That's your last issue. The van is at the curb, and my men are padlocking the press room. Put your coat on."),
                 StepExit()
             ));
-            actions.Add(MakeEnding(folder, "98_late_arrest_ending", ChapterWhen.PaperStamped, 1f, "heat", 3f));
+            actions.Add(MakeEnding(folder, "98_late_arrest_ending", ChapterWhen.PaperStamped, 1f, "heat", 3f, GetComics("Death")));
             actions.Add(MakeClose(folder, "99_close_day", ChapterWhen.PaperStamped));
 
             // 26 cells in morning-drop-7 (1.04) + 3 cells in guest-stash-7 = 29 cells (1.16), required = 0.80 (20 cells)
@@ -1387,7 +1418,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day8");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-8"));
 
             // Fishman followup (15s)
@@ -1454,7 +1485,8 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day9");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
+            actions.Add(MakeEnding(folder, "01b_boat_ending", ChapterWhen.Context, 0f, "boat_ending", 1f, GetComics("Boat")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-9"));
 
             // Chekist pressure (15s)
@@ -1476,7 +1508,7 @@ namespace LD60.Editor
                     "money", 119.5f),
                 StepSay("cold", "You're short on cash, pal. Keep your head down tomorrow.", next: 8),
                 StepGive("money", -120, next: 6),
-                StepSay("smirk", "Smartest thing you've done all week. Leave the paste brush and come out the back way.", remember: "ending_reached", value: 1f, next: 8),
+                StepSay("smirk", "Smartest thing you've done all week. Leave the paste brush and come out the back way.", remember: "boat_ending", value: 1f, next: 8),
                 StepSay("cold", "Your funeral, scribe. Don't say I didn't offer.", next: 8),
                 StepExit()
             ));
@@ -1506,7 +1538,7 @@ namespace LD60.Editor
             var folder = EnsureActionDayFolder("Day10");
             var actions = new List<ChapterAction>();
 
-            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f));
+            actions.Add(MakeEnding(folder, "01_early_ending", ChapterWhen.Context, 0f, "ending_reached", 1f, GetComics("Fired")));
             actions.Add(MakeCapsule(folder, "02_morning_drop", ChapterWhen.EnterWork, "morning-drop-10"));
 
             // Anon final entry (10s)
@@ -1546,8 +1578,10 @@ namespace LD60.Editor
                 StepExit()
             ));
 
-            // Finish game EndingAction
-            actions.Add(MakeEnding(folder, "99_finish_game", ChapterWhen.PaperStamped, 1f, "", 0f));
+            // Finish game EndingActions (WalkingDead for Anon manifesto, IronLaw for Chekist decree)
+            actions.Add(MakeEnding(folder, "98_ending_anon_victory", ChapterWhen.PaperStamped, 1f, "social", 6f, GetComics("WalkingDead")));
+            actions.Add(MakeEnding(folder, "98_ending_chekist_order", ChapterWhen.PaperStamped, 1f, "politics", 6f, GetComics("IronLaw")));
+            actions.Add(MakeEnding(folder, "99_finish_game", ChapterWhen.PaperStamped, 1f, "", 0f, GetComics("WalkingDead")));
 
             // 19 cells in morning-drop-10 (0.76) + 10 cells for chosen 5x2 manifesto (0.40) = 29 cells (1.16), required = 0.88 (22 cells)
             return CreateChapter("Day10", "Day 10: The Last Word", 0.88f,
@@ -1750,7 +1784,7 @@ namespace LD60.Editor
             return action;
         }
 
-        private static EndingAction MakeEnding(string folder, string name, ChapterWhen when, float at, string parameter, float minimum)
+        private static EndingAction MakeEnding(string folder, string name, ChapterWhen when, float at, string parameter, float minimum, StoryComicsData comics = null)
         {
             var path = $"{folder}/{name}.asset";
             var action = AssetDatabase.LoadAssetAtPath<EndingAction>(path);
@@ -1763,6 +1797,8 @@ namespace LD60.Editor
             so.FindProperty("at").floatValue = at;
             so.FindProperty("parameter").stringValue = parameter ?? "";
             so.FindProperty("minimum").floatValue = minimum;
+            if (comics != null)
+                so.FindProperty("comics").objectReferenceValue = comics;
             so.ApplyModifiedPropertiesWithoutUndo();
 
             if (isNew)
@@ -1918,6 +1954,21 @@ namespace LD60.Editor
 
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(storyBook);
+
+            var seqPlayer = UnityEngine.Object.FindAnyObjectByType<SequencePlayer>();
+            if (seqPlayer != null)
+            {
+                var seqSo = new SerializedObject(seqPlayer);
+                var introAsset = GetComics("Intro");
+                if (introAsset != null)
+                    seqSo.FindProperty("_introComics").objectReferenceValue = introAsset;
+                var comicsPlayer = UnityEngine.Object.FindAnyObjectByType<StoryComicsPlayer>(FindObjectsInactive.Include);
+                if (comicsPlayer != null)
+                    seqSo.FindProperty("_storyComics").objectReferenceValue = comicsPlayer;
+                seqSo.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(seqPlayer);
+            }
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log($"[StoryGenerator][Scene] Wired StoryBook in '{scene.path}' with {chapters.Length} chapters and finale='{(credits != null ? credits.name : "none")}'.");

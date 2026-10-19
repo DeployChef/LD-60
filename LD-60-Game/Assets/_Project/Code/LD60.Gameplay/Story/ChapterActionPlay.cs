@@ -79,6 +79,9 @@ namespace LD60.Gameplay.Story
             var ending = action as EndingAction;
             if (ending != null)
             {
+                if (ending.Comics != null && Alive(_player))
+                    await _player.PlayComics(ending.Comics);
+
                 chapter.End(ChapterResult.Ending);
                 return;
             }
