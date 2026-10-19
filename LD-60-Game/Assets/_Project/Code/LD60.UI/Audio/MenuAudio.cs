@@ -100,6 +100,9 @@ namespace LD60.UI.Audio
             {
                 try
                 {
+                    if (RuntimeManager.StudioSystem.getEvent(paths[i], out var description) != FMOD.RESULT.OK
+                        || !description.isValid())
+                        continue;
                     RuntimeManager.PlayOneShot(paths[i]);
                     return true;
                 }
