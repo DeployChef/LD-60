@@ -86,6 +86,16 @@ namespace LD60.Gameplay.Story
                 return;
             }
 
+            var credits = action as CreditsAction;
+            if (credits != null)
+            {
+                if (Alive(_player))
+                    await _player.PlayCredits(chapter.Token);
+
+                chapter.End(ChapterResult.Ending);
+                return;
+            }
+
             UnityEngine.Debug.LogWarning("[Story] " + action.name + " has no playable type.");
         }
 

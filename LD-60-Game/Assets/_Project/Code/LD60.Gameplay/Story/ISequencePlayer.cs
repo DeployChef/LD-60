@@ -20,5 +20,6 @@ namespace LD60.Gameplay.Story
         UniTask Exit();
         UniTask PlayIntroComics();
         UniTask PlayComics(UnityEngine.ScriptableObject comics);
+        UniTask PlayCredits(CancellationToken token = default);
     }
 }

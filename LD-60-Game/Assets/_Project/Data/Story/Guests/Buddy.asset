@@ -15,16 +15,16 @@ MonoBehaviour:
   displayName: Buddy
   emotions:
   - key: default
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: shock
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: sympathy
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: smile
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: whisper
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: anxiety
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
   - key: handshake
-    sprite: {fileID: 21300000, guid: ee92b3c6eeb3a2745a2af6fbbcfb7cbd, type: 3}
+    sprite: {fileID: 21300000, guid: 8f60159796855f743bd9e5e8419b9bb2, type: 3}
