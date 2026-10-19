@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using LD60.Gameplay.Story;
+using LD60.UI.Audio;
 using UnityEngine;
 
 namespace LD60.UI
@@ -39,7 +40,11 @@ namespace LD60.UI
         }
 
         public void ShowGuest(Sprite sprite) => _guestView.ShowGuest(sprite);
-        public UniTask Enter() => _guestView.Enter();
+        public UniTask Enter()
+        {
+            SoundService.PlayDoor();
+            return _guestView.Enter();
+        }
         public UniTask Exit() => _guestView.Exit();
 
         private void OnDestroy()

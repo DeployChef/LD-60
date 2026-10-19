@@ -586,7 +586,7 @@ namespace LD60.Editor
                 0f, 0f, 20f);
 
             // =====================================================================
-            // REPORTAGE ARTICLES (Keeping Russian / French / Chinese in original!)
+            // REPORTAGE ARTICLES (Russian and French stay in the original)
             // =====================================================================
             AddArticle("archive-break", ArticleShape.Line3H, ArticleKind.Report, 2,
                 "Archive Break-In",
@@ -604,13 +604,13 @@ namespace LD60.Editor
                 0f, 1f, 0f);
 
             AddArticle("china-cricket-arena", ArticleShape.Line3H, ArticleKind.Report, 2,
-                "上海斗蟋王四十七连胜",
-                "昨夜城隍庙蟋蟀争霸赛落幕，闸北青头大将军勇夺四十七连胜，赢家获赠紫檀小轿，全场欢声雷动。",
+                "Cricket King",
+                "Last night's temple cricket bout ended at forty-seven straight wins. The champion took a rosewood sedan chair. The hall roared.",
                 0f, 1f, 0f);
 
             AddArticle("china-flying-tea", ArticleShape.Line2H, ArticleKind.Report, 2,
-                "云南古刹云雾仙茶",
-                "古刹僧侣采得高山云雾茶，沸水初注，碧叶凌空飘浮不沉，清香透十里。",
+                "Floating Tea",
+                "Monks at an old Yunnan temple picked high mist tea. The leaves hang in the cup instead of sinking.",
                 0f, 1f, 0f);
 
             AddArticle("city-clock", ArticleShape.Line2V, ArticleKind.Report, 2,

@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using FMOD.Studio;
 using FMODUnity;
+using LD60.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
@@ -151,8 +152,17 @@ namespace LD60.Main.Audio
             {
                 Stage = PreloadStage.WaitForInput;
                 Progress01 = 0.95f;
-                while (!AnyUserInputThisFrame())
-                    await UniTask.Yield(cancellationToken);
+                Debug.Log("[FmodPreloader] Ожидание клика: Click to play");
+                ClickToPlayPrompt.Show();
+                try
+                {
+                    while (!AnyUserInputThisFrame())
+                        await UniTask.Yield(cancellationToken);
+                }
+                finally
+                {
+                    ClickToPlayPrompt.Hide();
+                }
             }
 
             Stage = PreloadStage.Ready;
@@ -163,8 +173,7 @@ namespace LD60.Main.Audio
         }
 
         private static bool AnyUserInputThisFrame()
-        {   
-            Debug.Log("[FmodPreloader] Ожидание ввода игрока (клик / тач / клавиша)");
+        {
             var mouse = Mouse.current;
             if (mouse != null && mouse.leftButton.wasPressedThisFrame)
                 return true;

@@ -28,8 +28,16 @@ namespace LD60.UI.Audio
         private const string TypewriterPath = "event:/comics";
         private const string FinalPath = "event:/Final";
         private const string WriteFinalParameter = "write_final";
-        private const float WriteFinalNone = 4f;
+        // writing держит луп печати. spacebar / new_string / char звукарь сделал
+        // на набор текста, которого в игре нет.
+        private const float WriteFinalTyping = 0f;
         private const string PauseSnapshotPath = "snapshot:/pause";
+        private const string DoorPath = "event:/door";
+        private const string ThompsonPath = "event:/tompson";
+        private const string ProtestPath = "event:/protest";
+        private const string BrokeWindowPath = "event:/broke_window";
+        private const string ScorePath = "event:/score";
+        private const string ScoreParameter = "score";
 
         private const float CutValue = 0f;
         private const float MenuValue = 1f;
@@ -43,6 +51,8 @@ namespace LD60.UI.Audio
         private EventInstance _typewriter;
         private EventInstance _final;
         private EventInstance _pauseSnapshot;
+        private EventInstance _comicsCue;
+        private int _comicsCueId;
         private string _resolvedParamName = "cutscene or menu";
         private float _targetState = CutValue;
         private bool _typewriterMissing;
@@ -101,6 +111,52 @@ namespace LD60.UI.Audio
             PlayFirstAvailable(ConvertPaths);
         }
 
+        public static void PlayDoor()
+        {
+            PlayFirstAvailable(new[] { DoorPath });
+        }
+
+        /// <summary>
+        /// Концовка-комикс. Fish — очередь Томпсона, WalkingDead — протест, Death — разбитое окно.
+        /// Возвращает id запуска: останавливать нужно именно его.
+        /// </summary>
+        public static int PlayComicsCue(string comicsName)
+        {
+            EnsureCreated();
+            return _instance.StartComicsCue(comicsName);
+        }
+
+        public static void StopComicsCue(int cueId)
+        {
+            if (_instance == null)
+                return;
+
+            _instance.EndComicsCue(cueId);
+        }
+
+        /// <summary>
+        /// Очки газеты. Параметр score — размер начисления, как есть (банк сам режет до 0…1).
+        /// </summary>
+        public static void PlayScore(float points)
+        {
+            if (points <= 0.001f || !RuntimeManager.IsInitialized)
+                return;
+
+            try
+            {
+                var instance = RuntimeManager.CreateInstance(ScorePath);
+                if (!instance.isValid())
+                    return;
+
+                instance.setParameterByName(ScoreParameter, points, ignoreseekspeed: true);
+                instance.start();
+                instance.release();
+            }
+            catch (EventNotFoundException)
+            {
+            }
+        }
+
         /// <summary>
         /// Тот же щелчок, что раньше играл на субтитрах комикса: newspaper 2 → 1.
         /// </summary>
@@ -134,8 +190,7 @@ namespace LD60.UI.Audio
         }
 
         /// <summary>
-        /// Титры. write_final = none: отдельного «как дописали финал» в игре пока нет.
-        /// Ивент сам ставит глобальный final и зовёт меню.
+        /// Титры. Музыку ивент включает сам, write_final = writing крутит звук печати.
         /// </summary>
         public static void PlayFinal()
         {
@@ -307,6 +362,54 @@ namespace LD60.UI.Audio
             instance.setParameterByName(paramName, value, ignoreseekspeed: true);
         }
 
+        private int StartComicsCue(string comicsName)
+        {
+            ReleaseInstance(ref _comicsCue, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            var id = ++_comicsCueId;
+            if (string.IsNullOrEmpty(comicsName))
+                return id;
+
+            string path = null;
+            if (string.Equals(comicsName, "Fish", System.StringComparison.OrdinalIgnoreCase))
+                path = ThompsonPath;
+            else if (string.Equals(comicsName, "WalkingDead", System.StringComparison.OrdinalIgnoreCase))
+                path = ProtestPath;
+            else if (string.Equals(comicsName, "Death", System.StringComparison.OrdinalIgnoreCase))
+                path = BrokeWindowPath;
+
+            if (path == null)
+                return id;
+
+            try
+            {
+                _comicsCue = RuntimeManager.CreateInstance(path);
+            }
+            catch (EventNotFoundException)
+            {
+                Debug.LogWarning("[Sound] " + path + " не найден");
+                return id;
+            }
+
+            if (!_comicsCue.isValid())
+                return id;
+
+            _comicsCue.start();
+            return id;
+        }
+
+        private void EndComicsCue(int cueId)
+        {
+            if (cueId != _comicsCueId)
+                return;
+
+            ReleaseInstance(ref _comicsCue, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
+        private void EndComicsCue()
+        {
+            ReleaseInstance(ref _comicsCue, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
         private void TriggerStamp()
         {
             try
@@ -410,9 +513,9 @@ namespace LD60.UI.Audio
             if (!_final.isValid())
                 return;
 
-            _final.setParameterByName(WriteFinalParameter, WriteFinalNone, ignoreseekspeed: true);
+            _final.setParameterByName(WriteFinalParameter, WriteFinalTyping, ignoreseekspeed: true);
             _final.start();
-            Debug.Log("[Sound] Final started (write_final=none)");
+            Debug.Log("[Sound] Final started (write_final=writing)");
         }
 
         private void StopFinal()
@@ -471,6 +574,7 @@ namespace LD60.UI.Audio
             ReleaseInstance(ref _sfx, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             EndTypewriter();
             StopFinal();
+            EndComicsCue();
             ReleaseInstance(ref _pauseSnapshot, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             if (_instance == this)
                 _instance = null;

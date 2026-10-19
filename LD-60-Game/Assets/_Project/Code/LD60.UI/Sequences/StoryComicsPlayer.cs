@@ -42,6 +42,7 @@ namespace LD60.UI
         private InputAction _skipAction;
         private bool _skipPressed;
         private bool _playing;
+        private int _comicsCueId;
         private Vector2 _storyBackRestingPosition;
         private bool _restingPositionCaptured;
         private CancellationTokenSource _playCts;
@@ -117,6 +118,7 @@ namespace LD60.UI
             gameObject.SetActive(true);
             _playing = true;
             _skipPressed = false;
+            _comicsCueId = SoundService.PlayComicsCue(data.name);
 
             _playCts = externalToken.CanBeCanceled
                 ? CancellationTokenSource.CreateLinkedTokenSource(externalToken, this.GetCancellationTokenOnDestroy())
@@ -157,6 +159,7 @@ namespace LD60.UI
             finally
             {
                 StopTypingAudio();
+                SoundService.StopComicsCue(_comicsCueId);
             }
 
             Finish();
@@ -165,6 +168,7 @@ namespace LD60.UI
         public void CancelSequence()
         {
             StopTypingAudio();
+            SoundService.StopComicsCue(_comicsCueId);
             if (_playCts != null)
             {
                 _playCts.Cancel();

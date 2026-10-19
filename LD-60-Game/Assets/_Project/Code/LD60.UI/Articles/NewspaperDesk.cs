@@ -17,6 +17,9 @@ namespace LD60.UI
     {
         [SerializeField] private SpriteHintOutline firstStampHint;
         private bool _editionSubmitted;
+        private float _heardFill;
+        private float _heardPolitics;
+        private float _heardSocial;
         [SerializeField] private PageGrid page;
         [SerializeField] private ArticleTray save;
         [SerializeField] private float deskScale = 0.75f;
@@ -450,6 +453,15 @@ namespace LD60.UI
                     social += article.Social;
                 }
             }
+
+            var gained = Mathf.Max(
+                fill - _heardFill,
+                Mathf.Max(politics - _heardPolitics, social - _heardSocial));
+            if (gained > 0.001f)
+                SoundService.PlayScore(gained);
+            _heardFill = fill;
+            _heardPolitics = politics;
+            _heardSocial = social;
 
             if (stats != null)
             {

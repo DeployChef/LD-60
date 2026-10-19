@@ -15,8 +15,9 @@ MonoBehaviour:
   id: china-cricket-arena
   shape: 3
   kind: 0
-  title: "\u4E0A\u6D77\u6597\u87CB\u738B\u56DB\u5341\u4E03\u8FDE\u80DC"
-  body: "\u6628\u591C\u57CE\u968D\u5E99\u87CB\u87C0\u4E89\u9738\u8D5B\u843D\u5E55\uFF0C\u95F8\u5317\u9752\u5934\u5927\u5C06\u519B\u52C7\u593A\u56DB\u5341\u4E03\u8FDE\u80DC\uFF0C\u8D62\u5BB6\u83B7\u8D60\u7D2B\u6A80\u5C0F\u8F7F\uFF0C\u5168\u573A\u6B22\u58F0\u96F7\u52A8\u3002"
+  title: Cricket King
+  body: Last night's temple cricket bout ended at forty-seven straight wins. The
+    champion took a rosewood sedan chair. The hall roared.
   picture: {fileID: 21300000, guid: 9f4785e15f221e947a6eefa96fc01f25, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
