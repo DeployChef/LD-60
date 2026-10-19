@@ -50,12 +50,14 @@ namespace LD60.UI
                 return;
 
             var debug = ArticleDebugView.ShowValues && article != null;
+            var sprite = !debug && article != null ? article.Picture : null;
             var slot = !debug && article != null && article.PictureLayout != null ? article.PictureLayout.Slot : 1;
+            if (!debug && slot == 1 && sprite != null)
+                slot = 2;
             var headline = debug
                 ? article.Id + "\n" + article.Kind + "  " + article.Shape
                 : article != null ? article.Title : string.Empty;
             var copy = debug ? Values() : article != null ? article.Body : string.Empty;
-            var sprite = !debug && article != null ? article.Picture : null;
 
             Show(one, slot == 1, headline, copy, null);
             Show(two, slot == 2, headline, copy, sprite);

@@ -18,6 +18,7 @@ namespace LD60.UI
         [SerializeField] private ArticlePiece line3H;
         [SerializeField] private ArticlePiece line3V;
         [SerializeField] private ArticlePiece square;
+        [SerializeField] private ArticlePiece banner5x2;
         [SerializeField] private NoteSlip note;
         [SerializeField] private Transform desk;
         [SerializeField] private Transform pile;
@@ -153,6 +154,7 @@ namespace LD60.UI
                 case ArticleShape.Line2V: return line2V;
                 case ArticleShape.Line3H: return line3H;
                 case ArticleShape.Line3V: return line3V;
+                case ArticleShape.Banner5x2: return banner5x2 != null ? banner5x2 : square;
                 default: return square;
             }
         }

@@ -10,7 +10,8 @@ namespace LD60.Gameplay.Articles
         Line2V,
         Line3H,
         Line3V,
-        Square
+        Square,
+        Banner5x2
     }
 
     public enum ArticleKind
@@ -49,5 +50,35 @@ namespace LD60.Gameplay.Articles
         public float Social => social;
         public float Money => money;
         public ArticleKind[] ForbiddenNeighbors => forbiddenNeighbors ?? Array.Empty<ArticleKind>();
+
+#if UNITY_EDITOR
+        public void EditorConfigure(
+            string articleId,
+            ArticleShape articleShape,
+            ArticleKind articleKind,
+            string headline,
+            string copy,
+            Sprite sprite,
+            ArticlePictureLayout layout,
+            float fillValue,
+            float politicsValue,
+            float socialValue,
+            float moneyValue,
+            ArticleKind[] forbidden)
+        {
+            id = articleId;
+            shape = articleShape;
+            kind = articleKind;
+            title = headline;
+            body = copy;
+            picture = sprite;
+            pictureLayout = layout;
+            fill = fillValue;
+            politics = politicsValue;
+            social = socialValue;
+            money = moneyValue;
+            forbiddenNeighbors = forbidden ?? Array.Empty<ArticleKind>();
+        }
+#endif
     }
 }

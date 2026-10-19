@@ -29,6 +29,9 @@ namespace LD60.UI
         [SerializeField] private ArticlePiece line3H;
         [SerializeField] private ArticlePiece line3V;
         [SerializeField] private ArticlePiece square;
+        [SerializeField] private ArticlePiece banner5x2;
+        [SerializeField] private GameObject foodSandwich;
+        [SerializeField] private GameObject foodPie;
 
         private readonly List<Vector2> _cells = new();
         private int _draw = 48;
@@ -311,12 +314,31 @@ namespace LD60.UI
             for (var i = 0; i < notes.Length; i++)
                 Destroy(notes[i].gameObject);
 
+            if (foodSandwich != null)
+                foodSandwich.SetActive(false);
+            if (foodPie != null)
+                foodPie.SetActive(false);
+
             RestoreKept();
             Publish();
         }
 
         private void OnGift(ArticleGiven message)
         {
+            if (string.Equals(message.ArticleId, "food-sandwich", StringComparison.OrdinalIgnoreCase))
+            {
+                if (foodSandwich != null)
+                    foodSandwich.SetActive(true);
+                return;
+            }
+
+            if (string.Equals(message.ArticleId, "food-pie", StringComparison.OrdinalIgnoreCase))
+            {
+                if (foodPie != null)
+                    foodPie.SetActive(true);
+                return;
+            }
+
             var article = _story != null ? _story.FindArticle(message.ArticleId) : null;
             var source = Form(article);
             if (article == null || source == null)
@@ -367,6 +389,7 @@ namespace LD60.UI
                 case ArticleShape.Line2V: return line2V;
                 case ArticleShape.Line3H: return line3H;
                 case ArticleShape.Line3V: return line3V;
+                case ArticleShape.Banner5x2: return banner5x2 != null ? banner5x2 : square;
                 default: return square;
             }
         }
@@ -403,6 +426,12 @@ namespace LD60.UI
                 save.RefreshLabel();
                 if (_desk != null)
                     _desk.SetKeptArticles(Ids(save.Pieces));
+            }
+
+            if (_context != null)
+            {
+                _context.SetParameter("politics", politics);
+                _context.SetParameter("social", social);
             }
 
             _desk?.SetScores(fill, politics, social);
