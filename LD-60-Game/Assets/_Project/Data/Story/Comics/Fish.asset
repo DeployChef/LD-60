@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
   background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
   blocks:
-  - image: {fileID: 8512653675723254151, guid: 6177477034cd42b4aa4a07a5179de231, type: 3}
+  - image: {fileID: 21300000, guid: 6177477034cd42b4aa4a07a5179de231, type: 3}
     subtitle: The office suddenly reeked of rotten river weeds, bottom silt, and
       gun oil. The window facing the embankment had been smashed from the outside.
-  - image: {fileID: -2494067699363254937, guid: 870a9947552336d43a7f8aaf5f2a2d7c, type: 3}
+  - image: {fileID: 21300000, guid: 870a9947552336d43a7f8aaf5f2a2d7c, type: 3}
     subtitle: '"I warned you, landworm," a raspy bass gurgled from the shadows. "I
       asked you nicely to keep those fishing rod ads out of the paper!"'
-  - image: {fileID: -1241328635425971941, guid: 167c0ba01963b6e4ebc1670d950963a4, type: 3}
+  - image: {fileID: 21300000, guid: 167c0ba01963b6e4ebc1670d950963a4, type: 3}
     subtitle: The roar of a submachine gun drowned out the harbor tugboats. The river
       brotherhood never forgave a debt.
-  - image: {fileID: 1517946090045181178, guid: 3345a513b14e555478045ea04e072b03, type: 3}
+  - image: {fileID: 21300000, guid: 3345a513b14e555478045ea04e072b03, type: 3}
     subtitle: There were no witnesses on the wet pier. Only hungry gulls circled
       above the oily black water, waiting for their share.
-  - image: {fileID: 8085661429158845064, guid: 030dbcadd80a592459b5fd34369f6198, type: 3}
+  - image: {fileID: 21300000, guid: 030dbcadd80a592459b5fd34369f6198, type: 3}
     subtitle: A heavy splash swallowed the night's silence. The river closed over
       its former editor, dragging his secrets down into the mud.
-  - image: {fileID: 8523644094722702764, guid: 1096c175969bf2a49981f4cd3b0709f6, type: 3}
+  - image: {fileID: 21300000, guid: 1096c175969bf2a49981f4cd3b0709f6, type: 3}
     subtitle: In the morning, the police found only brass casings, river slime, and
       a single palm-sized scale. The editor was filed away as missing.

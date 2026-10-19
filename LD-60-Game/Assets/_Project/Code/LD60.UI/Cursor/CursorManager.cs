@@ -33,13 +33,6 @@ namespace LD60.UI
         private bool _isCurrentlyHovering;
         private Texture2D _activeTexture;
         private readonly Dictionary<int, Texture2D> _scaledCursors = new();
-        private GameObject _softwareCursorRoot;
-        private RawImage _softwareCursor;
-        private RectTransform _softwareCursorRect;
-        private Texture2D _softwareCursorTexture;
-
-        private bool UseSoftwareCursor =>
-            Application.platform == RuntimePlatform.WebGLPlayer;
 
         public static CursorManager Instance
         {
@@ -109,15 +102,11 @@ namespace LD60.UI
 
         private void OnDestroy()
         {
-            if (_instance != this)
-                return;
-
-            if (_softwareCursorRoot != null)
-                Destroy(_softwareCursorRoot);
-
-            Cursor.visible = true;
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            _instance = null;
+            if (_instance == this)
+            {
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                _instance = null;
+            }
         }
 
         private void LoadTexturesIfMissing()
@@ -131,16 +120,13 @@ namespace LD60.UI
 
         private void LateUpdate()
         {
-            if (UseSoftwareCursor)
-                Cursor.visible = false;
-
             var screenPos = GetMousePosition(out var hasMouse);
-            var inside = hasMouse &&
-                         screenPos.x >= 0f && screenPos.y >= 0f &&
-                         screenPos.x <= Screen.width && screenPos.y <= Screen.height;
-            if (!inside)
+            if (!hasMouse)
+                return;
+
+            if (screenPos.x < 0f || screenPos.y < 0f ||
+                screenPos.x > Screen.width || screenPos.y > Screen.height)
             {
-                SetSoftwareCursorVisible(false);
                 return;
             }
 
@@ -152,8 +138,6 @@ namespace LD60.UI
                 var targetHotspot = _isCurrentlyHovering ? hoverHotspot : defaultHotspot;
                 ApplyCursor(targetTex, targetHotspot);
             }
-
-            MoveSoftwareCursor(screenPos);
         }
 
         private bool EvaluateHoverState(Vector2 screenPos)
@@ -303,70 +287,8 @@ namespace LD60.UI
                 return;
 
             _activeTexture = texture;
-            if (UseSoftwareCursor)
-            {
-                Cursor.visible = false;
-                ApplySoftwareCursor(texture, hotspot);
-                return;
-            }
-
             texture = ScaleCursorForWebGl(texture, ref hotspot);
             Cursor.SetCursor(texture, hotspot, cursorMode);
-        }
-
-        private void ApplySoftwareCursor(Texture2D texture, Vector2 hotspot)
-        {
-            EnsureSoftwareCursor();
-            if (_softwareCursorTexture == texture)
-                return;
-
-            _softwareCursorTexture = texture;
-            _softwareCursor.texture = texture;
-            _softwareCursorRect.sizeDelta = new Vector2(texture.width, texture.height);
-            _softwareCursorRect.pivot = new Vector2(
-                texture.width > 0f ? hotspot.x / texture.width : 0f,
-                texture.height > 0f ? 1f - hotspot.y / texture.height : 1f);
-        }
-
-        private void MoveSoftwareCursor(Vector2 screenPos)
-        {
-            if (!UseSoftwareCursor || _softwareCursorRect == null)
-                return;
-
-            _softwareCursorRect.anchoredPosition = screenPos;
-            SetSoftwareCursorVisible(true);
-        }
-
-        private void SetSoftwareCursorVisible(bool visible)
-        {
-            if (_softwareCursor != null && _softwareCursor.enabled != visible)
-                _softwareCursor.enabled = visible;
-        }
-
-        private void EnsureSoftwareCursor()
-        {
-            if (_softwareCursor != null)
-                return;
-
-            _softwareCursorRoot = new GameObject("SoftwareCursor");
-            DontDestroyOnLoad(_softwareCursorRoot);
-
-            var canvas = _softwareCursorRoot.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 32767;
-
-            var scaler = _softwareCursorRoot.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-            scaler.scaleFactor = 1f;
-
-            var imageObject = new GameObject("Image");
-            imageObject.transform.SetParent(_softwareCursorRoot.transform, false);
-            _softwareCursor = imageObject.AddComponent<RawImage>();
-            _softwareCursor.raycastTarget = false;
-            _softwareCursor.enabled = false;
-            _softwareCursorRect = _softwareCursor.rectTransform;
-            _softwareCursorRect.anchorMin = Vector2.zero;
-            _softwareCursorRect.anchorMax = Vector2.zero;
         }
 
         private Texture2D ScaleCursorForWebGl(Texture2D source, ref Vector2 hotspot)
