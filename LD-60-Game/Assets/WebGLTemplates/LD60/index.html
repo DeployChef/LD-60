@@ -56,6 +56,29 @@
     <script>
       var canvas = document.querySelector("#unity-canvas");
 
+      // Игра сама прячет системную стрелку. Unity у края холста включает её
+      // обратно — как только игра один раз поставила none, держим none.
+      (function () {
+        var hideCursor = false;
+        function hideSystemCursor() {
+          if (!canvas)
+            return;
+          if (canvas.style.cursor === "none") {
+            hideCursor = true;
+            return;
+          }
+          if (!hideCursor)
+            return;
+          canvas.style.cursor = "none";
+        }
+        canvas.addEventListener("mousemove", hideSystemCursor);
+        canvas.addEventListener("mouseenter", hideSystemCursor);
+        new MutationObserver(hideSystemCursor).observe(canvas, {
+          attributes: true,
+          attributeFilter: ["style"]
+        });
+      })();
+
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
       // If type=='warning', a yellow highlight color is used.
