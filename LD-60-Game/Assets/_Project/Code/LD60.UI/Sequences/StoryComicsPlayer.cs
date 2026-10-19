@@ -478,6 +478,10 @@ namespace LD60.UI
             if (keyboard != null && keyboard.spaceKey.wasPressedThisFrame)
                 _skipPressed = true;
 
+            var mouse = Mouse.current;
+            if (mouse != null && mouse.leftButton.wasPressedThisFrame)
+                _skipPressed = true;
+
             if (!_skipPressed)
                 return false;
 

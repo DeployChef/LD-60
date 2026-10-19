@@ -35,6 +35,9 @@ namespace LD60.Main.Audio
         private const float OnValue = 0f; // label "on"
         private const float OffValue = 1f; // label "off"
 
+        private const string FinalParameter = "final";
+        private const float FinalGameValue = 1f; // label "game". 0 = "final" и громофон сам себя стопает.
+
         private const float ParamRefreshInterval = 0.1f;
 
         private static LoudspeakerAudio _instance;
@@ -64,6 +67,8 @@ namespace LD60.Main.Audio
         {
             EnsureCreated();
             _instance._on = on;
+            if (on)
+                _instance.ReleaseEndingMute();
             _instance.ApplyParameters(verbose: true);
             _instance.EnsurePlaying();
             _instance.UpdateRoometone();
@@ -91,7 +96,9 @@ namespace LD60.Main.Audio
 
             // Громофон стартует выключенным: включение — start() + параметры
             // (чтобы не озвучивать ритуал выключения на буте).
+            // Если игру уже успели включить, пока банки грузились, догоняем.
             ApplyParameters(verbose: true);
+            EnsurePlaying();
             UpdateRoometone();
 
             Debug.Log("[Loudspeaker] громофон и roometone готовы: off, track1 (тест: 9=on, 0=off, 1/2/3=трек)");
@@ -127,6 +134,16 @@ namespace LD60.Main.Audio
                 SetTrack(2);
             else if (keyboard.digit3Key.wasPressedThisFrame || keyboard.numpad3Key.wasPressedThisFrame)
                 SetTrack(3);
+        }
+
+        private void ReleaseEndingMute()
+        {
+            // Команда внутри громофона стопает его, пока глобальный final == 0
+            // (концовка). После титров параметр так и остаётся, и новая игра молчит.
+            if (!RuntimeManager.IsInitialized || !RuntimeManager.StudioSystem.isValid())
+                return;
+
+            RuntimeManager.StudioSystem.setParameterByName(FinalParameter, FinalGameValue);
         }
 
         /// <summary>

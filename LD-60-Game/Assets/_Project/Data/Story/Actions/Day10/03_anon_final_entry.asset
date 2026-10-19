@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3cd351a4724f2044bb75a5407ab68bf, type: 3}
   m_Name: 03_anon_final_entry
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
-  when: 2
-  at: 10
+  when: 3
+  at: 0.1
   parameter: 
   minimum: 0
   rule:

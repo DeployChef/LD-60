@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 03_chekist_inquiry
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.VisitAction
   when: 2
-  at: 15
+  at: 10
   parameter: 
   minimum: 0
   rule:

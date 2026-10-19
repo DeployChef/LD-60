@@ -199,9 +199,9 @@ namespace LD60.UI.Audio
         }
 
         /// <summary>
-        /// snapshot:/pause глушит музыку и включает эквалайзер.
-        /// В обёртке 2.03 нет EventDescription.activate: снапшот — это ивент,
-        /// start включает его, stop выключает. В группе он вытесняет snapshot:/start.
+        /// snapshot:/pause глушит шину start и режет эквалайзер all_music.
+        /// В одной группе с snapshot:/start, поэтому его надо снимать сразу:
+        /// затухание и release в том же кадре оставляли глушение висеть, и музыка пропадала.
         /// </summary>
         public static void SetPaused(bool paused)
         {
@@ -276,6 +276,14 @@ namespace LD60.UI.Audio
             if (!_menuMusic.isValid())
                 return;
 
+            // Переход на «start» есть только с участка меню (с 16 с).
+            // Если интро ещё не доехало туда, без перемотки музыка молчит.
+            if (_menuMusic.getTimelinePosition(out var position) == FMOD.RESULT.OK
+                && position < MenuTimelinePositionMilliseconds)
+            {
+                _menuMusic.setTimelinePosition(MenuTimelinePositionMilliseconds);
+            }
+
             SetParameter(_menuMusic, _resolvedParamName, StartValue);
             Debug.Log("[Sound] cutscene or menu -> start (2)");
             ReleaseAfterStopAsync(_menuMusic).Forget();
@@ -343,10 +351,13 @@ namespace LD60.UI.Audio
 
         private void StartMusicInstance()
         {
-            ApplyState();
+            // start() сбрасывает таймлайн и параметры. Сначала запуск, потом
+            // перемотка на меню (16 с) и параметр, иначе после интро курсор
+            // остаётся в начале и играет только эмбиент.
+            _menuMusic.start();
             if (_targetState == MenuValue)
                 _menuMusic.setTimelinePosition(MenuTimelinePositionMilliseconds);
-            _menuMusic.start();
+            ApplyState();
         }
 
         private void ApplyState()
@@ -525,31 +536,45 @@ namespace LD60.UI.Audio
 
         private void ApplyPause(bool paused)
         {
-            if (!paused)
-            {
-                if (_pauseSnapshot.isValid())
-                    Debug.Log("[Sound] snapshot:/pause off");
-                ReleaseInstance(ref _pauseSnapshot, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                return;
-            }
-
-            if (_pauseSnapshot.isValid() || !RuntimeManager.IsInitialized)
+            if (!RuntimeManager.IsInitialized)
                 return;
 
             var system = RuntimeManager.StudioSystem;
             if (!system.isValid())
                 return;
 
-            if (system.getEvent(PauseSnapshotPath, out var description) != FMOD.RESULT.OK || !description.isValid())
+            if (!paused)
             {
-                Debug.LogWarning("[Sound] snapshot:/pause не найден в банках");
+                if (!_pauseSnapshot.isValid())
+                    return;
+
+                _pauseSnapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                system.flushCommands();
+                Debug.Log("[Sound] snapshot:/pause off");
                 return;
             }
 
-            if (description.createInstance(out _pauseSnapshot) != FMOD.RESULT.OK || !_pauseSnapshot.isValid())
-                return;
+            if (!_pauseSnapshot.isValid())
+            {
+                if (system.getEvent(PauseSnapshotPath, out var description) != FMOD.RESULT.OK || !description.isValid())
+                {
+                    Debug.LogWarning("[Sound] snapshot:/pause не найден в банках");
+                    return;
+                }
 
-            _pauseSnapshot.start();
+                if (description.createInstance(out _pauseSnapshot) != FMOD.RESULT.OK || !_pauseSnapshot.isValid())
+                    return;
+            }
+
+            if (_pauseSnapshot.getPlaybackState(out var state) != FMOD.RESULT.OK
+                || (state != PLAYBACK_STATE.PLAYING
+                    && state != PLAYBACK_STATE.STARTING
+                    && state != PLAYBACK_STATE.SUSTAINING))
+            {
+                _pauseSnapshot.start();
+            }
+
+            system.flushCommands();
             Debug.Log("[Sound] snapshot:/pause on");
         }
 
@@ -575,7 +600,7 @@ namespace LD60.UI.Audio
             EndTypewriter();
             StopFinal();
             EndComicsCue();
-            ReleaseInstance(ref _pauseSnapshot, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            ReleaseInstance(ref _pauseSnapshot, FMOD.Studio.STOP_MODE.IMMEDIATE);
             if (_instance == this)
                 _instance = null;
         }

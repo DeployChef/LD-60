@@ -125,6 +125,33 @@
       // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
       // expected to change.
 
+      // Холст всегда 16:9. На 21:9 и в фуллскрине itch по бокам чёрные поля,
+      // картинка не растягивается на весь монитор.
+      var playAspect = 16 / 9;
+      function fitCanvas() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var canvasW, canvasH;
+        if (h <= 0 || w <= 0)
+          return;
+        if (w / h > playAspect) {
+          canvasH = h;
+          canvasW = Math.round(h * playAspect);
+        } else {
+          canvasW = w;
+          canvasH = Math.round(w / playAspect);
+        }
+        canvas.style.width = canvasW + "px";
+        canvas.style.height = canvasH + "px";
+      }
+      function scheduleFit() {
+        fitCanvas();
+        requestAnimationFrame(fitCanvas);
+      }
+      window.addEventListener("resize", scheduleFit);
+      document.addEventListener("fullscreenchange", scheduleFit);
+      scheduleFit();
+
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
 
@@ -149,9 +176,7 @@
 #endif
 
       } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "{{{ WIDTH }}}px";
-        canvas.style.height = "{{{ HEIGHT }}}px";
+        scheduleFit();
       }
 
 #if BACKGROUND_FILENAME
@@ -172,7 +197,12 @@
                 };
 #endif
                 document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
+                  var container = document.querySelector("#unity-container");
+                  if (document.fullscreenElement)
+                    document.exitFullscreen();
+                  else if (container.requestFullscreen)
+                    container.requestFullscreen();
+                  scheduleFit();
                 };
 
 #if DEVELOPMENT_PLAYER

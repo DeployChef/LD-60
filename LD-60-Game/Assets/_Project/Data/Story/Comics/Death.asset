@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: LD60.UI::LD60.UI.StoryComicsData
   background: {fileID: 21300000, guid: f528da51ac12f8d469c3eb563e32a7bc, type: 3}
   blocks:
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: 86dce57c4e821ed4883c7859db9ae5f0, type: 3}
     subtitle: Everyone in the newsroom knew that knock. Polite guests don't use a
       rifle butt on frosted glass.
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: b18636128c1d66a4fa3e4343b7cbed30, type: 3}
     subtitle: The secret police officer took his time. He smoked his cigar down to
       the band before tossing a stack of crime clippings onto my desk.
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: 0cdd9f4df7ee81e41a6dcac50f65bebb, type: 3}
     subtitle: '"Thought you were clever, Citizen Editor? Thought the syndicate would
       cover for you? Your final issue just went to print."'
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: 7613f3c163f29ab4ab448efc8b5c4d17, type: 3}
     subtitle: The iron cuffs clicked louder than the rotary press. Spilled ink spread
       across the layout like a black shroud.
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: d2f57da1fa4e31a4e88681bb94aa3195, type: 3}
     subtitle: The publisher didn't even come downstairs to watch. A minute later,
       the black van's engine roared, carrying me somewhere no one comes back from.
-  - image: {fileID: 0}
+  - image: {fileID: 21300000, guid: ddc5370fa8fc2044b8a6e4ddd7792cc0, type: 3}
     subtitle: By the next morning, my name was crossed out of the Ministry archives
       in black ink. The editor's chair was vacant once again.
