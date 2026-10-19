@@ -22,6 +22,7 @@ namespace LD60.UI
         private IShellService _shell;
         private InputAction _pause;
         private bool _open;
+        private EditionPreview _editionPreview;
         private MenuButtonHover _optionsHover;
 
         [Inject]
@@ -32,6 +33,7 @@ namespace LD60.UI
 
         private void Awake()
         {
+            _editionPreview = FindAnyObjectByType<EditionPreview>(FindObjectsInactive.Include);
             _optionsHover = optionsButton.GetComponent<MenuButtonHover>();
             _pause = input.FindAction("Game/Pause", true);
             exitButton.onClick.AddListener(OnExitClicked);
@@ -64,6 +66,8 @@ namespace LD60.UI
 
         private void OnPause(InputAction.CallbackContext context)
         {
+            if (_editionPreview != null && _editionPreview.IsOpen)
+                return;
             SetOpen(!_open);
         }
 

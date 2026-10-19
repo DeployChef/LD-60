@@ -27,6 +27,7 @@ namespace LD60.UI
         [SerializeField] private Vector2 notePosition = new(5.7f, 3.35f);
         [SerializeField] private TMP_Text stats;
         [SerializeField] private TextMeshPro noticePrefab;
+        [SerializeField] private EditionPreview editionPreview;
         [SerializeField] private ArticlePiece dot;
         [SerializeField] private ArticlePiece line2H;
         [SerializeField] private ArticlePiece line2V;
@@ -179,9 +180,14 @@ namespace LD60.UI
 
         public void CommitStamp()
         {
+            if (editionPreview != null && editionPreview.IsOpen)
+                return;
             _hasStamped = true;
             if (firstStampHint != null)
                 firstStampHint.SetHighlighted(false);
+            HideNotice();
+            if (editionPreview != null && editionPreview.Show(this, () => _desk?.Stamp()))
+                return;
             _desk?.Stamp();
         }
 
