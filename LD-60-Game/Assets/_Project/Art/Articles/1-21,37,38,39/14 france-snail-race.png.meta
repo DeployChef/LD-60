@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4aa22a4dad2398e4296eda4669aef583
+guid: d2cdcefb7257fa44fafa19b35bd5be0f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3011755532848792049
-    second: 16 chinese cup_0
+      213: 5096109770911569319
+    second: 14 Snail_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 16 chinese cup_0
+      name: 14 Snail_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 80
-        height: 80
+        width: 40
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f0efa32cc481436d0800000000000000
-      internalID: -3011755532848792049
+      spriteID: 7a5d49716d409b640800000000000000
+      internalID: 5096109770911569319
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      16 chinese cup_0: -3011755532848792049
+      14 Snail_0: 5096109770911569319
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

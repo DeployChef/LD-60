@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Deep Ultimatum
   body: '"Pull every net and hook from the bay by tonight, or the water takes the
     piers."'
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 06dc3b2e66d4994468a4529121ed3355, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 0

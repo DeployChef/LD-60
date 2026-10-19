@@ -17,7 +17,7 @@ MonoBehaviour:
   kind: 0
   title: Crise du Pain
   body: "Les boulangers parisiens manifestent pour fixer la baguette \xE0 65 centim\xE8tres."
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 42c387834c7c2dd43aba672e10170ce0, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 0

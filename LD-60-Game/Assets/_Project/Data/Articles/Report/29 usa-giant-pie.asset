@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Forty-Foot Pie
   body: Manhattan bakers cooled a forty-foot apple pie on flatbed wagons and cut
     it with a saw.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 48a7cb28cc378e7459293c8664f48b2a, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 0

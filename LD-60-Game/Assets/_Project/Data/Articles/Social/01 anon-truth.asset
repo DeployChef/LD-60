@@ -20,7 +20,7 @@ MonoBehaviour:
     me into a lime pit because I refused to kill this story. The Commandant and our
     own publisher emptied the city treasury into foreign banks. Don''t let them slip
     out on the night train. Take the streets!"'
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 648a32dc7185c3949973ee1401bc75ae, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.39999998
   politics: 0

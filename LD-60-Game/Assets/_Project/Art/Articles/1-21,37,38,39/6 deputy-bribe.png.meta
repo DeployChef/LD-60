@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 42c387834c7c2dd43aba672e10170ce0
+guid: ed86ff5d9f4d5724b837af20d2e333d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2265407531660927025
-    second: 18 Baguette_0
+      213: 2597183511525843536
+    second: 6 deputy bribe_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 18 Baguette_0
+      name: 6 deputy bribe_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 80
-        height: 80
+        width: 79
+        height: 79
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 130e42cb528507f10800000000000000
-      internalID: 2265407531660927025
+      spriteID: 052effca4ac0b0420800000000000000
+      internalID: 2597183511525843536
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      18 Baguette_0: 2265407531660927025
+      6 deputy bribe_0: 2597183511525843536
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

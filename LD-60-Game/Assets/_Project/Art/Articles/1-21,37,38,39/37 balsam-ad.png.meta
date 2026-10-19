@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5ca72032fcdf5cd4eb642ad36b7277c3
+guid: 3b77f69ead9abf94cb3773cfcebc56d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4699415957064144106
-    second: 17 Barzha_0
+      213: 6603160363164497387
+    second: "37 \u041B\u0435\u043A\u0430\u0440\u0441\u0442\u0432\u043E_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 17 Barzha_0
+      name: "37 \u041B\u0435\u043A\u0430\u0440\u0441\u0442\u0432\u043E_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 80
-        height: 80
+        width: 40
+        height: 70
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 61ba36be51258ceb0800000000000000
-      internalID: -4699415957064144106
+      spriteID: be5fb518d5323ab50800000000000000
+      internalID: 6603160363164497387
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      17 Barzha_0: -4699415957064144106
+      "37 \u041B\u0435\u043A\u0430\u0440\u0441\u0442\u0432\u043E_0": 6603160363164497387
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

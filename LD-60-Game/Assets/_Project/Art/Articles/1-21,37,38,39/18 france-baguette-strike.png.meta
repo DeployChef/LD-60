@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5ec1315cf04d18b4288f70c767a3319b
+guid: 42c387834c7c2dd43aba672e10170ce0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1105717366985043800
-    second: 12 Trafalgar_0
+      213: 2265407531660927025
+    second: 18 Baguette_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 12 Trafalgar_0
+      name: 18 Baguette_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 40
-        height: 40
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8a050eeb9e3b7a0f0800000000000000
-      internalID: -1105717366985043800
+      spriteID: 130e42cb528507f10800000000000000
+      internalID: 2265407531660927025
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      12 Trafalgar_0: -1105717366985043800
+      18 Baguette_0: 2265407531660927025
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

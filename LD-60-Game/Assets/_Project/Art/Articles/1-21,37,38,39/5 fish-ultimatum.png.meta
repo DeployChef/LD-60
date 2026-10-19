@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c53f7c3820863aa42ace7fbb055d0fb2
+guid: 06dc3b2e66d4994468a4529121ed3355
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7517255331880480167
-    second: 2 Martial Law Decree_0
+      213: -7067633639220924449
+    second: 5 fish-ultimate_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 2 Martial Law Decree_0
+      name: 5 fish-ultimate_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 224
-        height: 165
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7ada5ae65e7a25860800000000000000
-      internalID: 7517255331880480167
+      spriteID: fdfa2aba6a8baed90800000000000000
+      internalID: -7067633639220924449
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      2 Martial Law Decree_0: 7517255331880480167
+      5 fish-ultimate_0: -7067633639220924449
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

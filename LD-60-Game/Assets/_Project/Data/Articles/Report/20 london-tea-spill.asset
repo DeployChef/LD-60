@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Thames Tea Spill
   body: A lighter carrying three hundred chests of Earl Grey overturned by Tower
     Bridge at high tide.
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: 5ca72032fcdf5cd4eb642ad36b7277c3, type: 3}
   pictureLayout: {fileID: 11400000, guid: 595d4f4fb34918345b23c687031bcfd1, type: 2}
   fill: 0.12
   politics: 0

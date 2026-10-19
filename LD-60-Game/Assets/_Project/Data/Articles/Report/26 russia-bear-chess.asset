@@ -24,7 +24,7 @@ MonoBehaviour:
     \u043C\u0430\u0442 \u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0443 \u0438 \u043F\u043E\u0442\u0440\u0435\u0431\u043E\u0432\u0430\u043B
     \u0433\u0440\u0430\u0444\u0438\u043D \xAB\u0421\u0442\u043E\u043B\u0438\u0447\u043D\u043E\u0439\xBB
     \u0441 \u0433\u0440\u0443\u0437\u0434\u044F\u043C\u0438."
-  picture: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
+  picture: {fileID: 21300000, guid: d4bc13cc491b1ef4fb598c813356d988, type: 3}
   pictureLayout: {fileID: 11400000, guid: 36411242de6674d40ab0d40961a2c9bc, type: 2}
   fill: 0.16
   politics: 0

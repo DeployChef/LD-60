@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d2cdcefb7257fa44fafa19b35bd5be0f
+guid: c53f7c3820863aa42ace7fbb055d0fb2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5096109770911569319
-    second: 14 Snail_0
+      213: 7517255331880480167
+    second: 2 Martial Law Decree_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 14 Snail_0
+      name: 2 Martial Law Decree_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 40
-        height: 40
+        width: 224
+        height: 165
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7a5d49716d409b640800000000000000
-      internalID: 5096109770911569319
+      spriteID: 7ada5ae65e7a25860800000000000000
+      internalID: 7517255331880480167
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      14 Snail_0: 5096109770911569319
+      2 Martial Law Decree_0: 7517255331880480167
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
