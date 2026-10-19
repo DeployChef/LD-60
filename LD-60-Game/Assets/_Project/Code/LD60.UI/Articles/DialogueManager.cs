@@ -13,6 +13,7 @@ namespace LD60.UI
         [SerializeField] private SpriteRenderer panel;
         [SerializeField] private TMP_Text line;
         [SerializeField] private DialogueChoice[] choices = System.Array.Empty<DialogueChoice>();
+        [SerializeField] private string continueLabel = "Continue";
 
         private WorkstationViewController _views;
         private CinemachineBrain _brain;
@@ -44,22 +45,7 @@ namespace LD60.UI
 
         public async UniTask Say(string text, CancellationToken token)
         {
-            ShowPanel(true);
-            SetActive(line, true);
-            if (line != null)
-                line.text = text ?? string.Empty;
-
-            HideChoices();
-            await UniTask.Yield(token);
-            while (!token.IsCancellationRequested)
-            {
-                var mouse = Mouse.current;
-                if (mouse != null && mouse.leftButton.wasPressedThisFrame && Time.timeScale > 0f)
-                    return;
-                await UniTask.Yield(token);
-            }
-
-            token.ThrowIfCancellationRequested();
+            await Choose(new[] { continueLabel }, token, text ?? string.Empty);
         }
 
         public async UniTask<int> Choose(string[] options, CancellationToken token, string prompt = null)
@@ -68,34 +54,39 @@ namespace LD60.UI
             if (line != null && prompt != null)
                 line.text = prompt;
             SetActive(line, line != null && !string.IsNullOrEmpty(line.text));
+            if (options == null || !System.Array.Exists(options, option => !string.IsNullOrWhiteSpace(option)))
+                options = new[] { continueLabel };
             ShowChoices(options);
+            panel?.GetComponent<DialoguePanelLayout>()?.RefreshLayout();
             try
             {
-                await UniTask.Yield(token);
-                // The click that chose the previous reply must not also choose this one.
-                while (!token.IsCancellationRequested && Mouse.current != null && Mouse.current.leftButton.isPressed)
-                    await UniTask.Yield(token);
-
-                while (!token.IsCancellationRequested)
-                {
-                    var mouse = Mouse.current;
-                    if (mouse != null && mouse.leftButton.wasPressedThisFrame && Time.timeScale > 0f)
-                    {
-                        var index = HitChoice(mouse.position.ReadValue());
-                        if (index >= 0)
-                            return index;
-                    }
-
-                    await UniTask.Yield(token);
-                }
-
-                token.ThrowIfCancellationRequested();
-                return 0;
+                return await WaitForChoice(token);
             }
             finally
             {
                 HideChoices();
             }
+        }
+
+        private async UniTask<int> WaitForChoice(CancellationToken token)
+        {
+            await UniTask.Yield(token);
+            // A held click from the previous reply must not advance the next one.
+            while (!token.IsCancellationRequested && Mouse.current != null && Mouse.current.leftButton.isPressed)
+                await UniTask.Yield(token);
+            while (!token.IsCancellationRequested)
+            {
+                var mouse = Mouse.current;
+                if (mouse != null && mouse.leftButton.wasPressedThisFrame && Time.timeScale > 0f)
+                {
+                    var index = HitChoice(mouse.position.ReadValue());
+                    if (index >= 0)
+                        return index;
+                }
+                await UniTask.Yield(token);
+            }
+            token.ThrowIfCancellationRequested();
+            return 0;
         }
 
         public void Hide()
@@ -127,7 +118,7 @@ namespace LD60.UI
                 if (choice == null || choice.root == null)
                     continue;
 
-                var visible = i < count;
+                var visible = i < count && !string.IsNullOrWhiteSpace(options[i]);
                 SetActive(choice.root, visible);
                 if (choice.label != null)
                 {
