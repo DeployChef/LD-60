@@ -16,6 +16,11 @@ namespace LD60.UI.Audio
         private static readonly string[] StartOrMenuPaths = { "event:/menu/start or menu", "event:/start or menu" };
         private static readonly string[] UiMenuPaths = { "event:/menu/UI menu", "event:/UI menu" };
         private static readonly string[] StampPaths = { "event:/SFX/type", "event:/type" };
+        private const string SfxPath = "event:/SFX";
+        private const string NewspaperParameter = "newspaper";
+        // Как раньше на субтитрах: щелчок 2 → 1. В собранном банке это и есть удар штампа.
+        private const float StampOffValue = 2f;
+        private const float StampOnValue = 1f;
         private static readonly string[] PaperHandlingPaths = { "event:/oneshot/paper_handing", "event:/paper_handing" };
         private static readonly string[] ConvertPaths = { "event:/oneshot/convert", "event:/convert" };
         private static readonly string[] CutsceneOrMenuParamNames = { "cutscene or menu", "cutscene or menu " };
@@ -33,8 +38,8 @@ namespace LD60.UI.Audio
         private const int MenuTimelinePositionMilliseconds = 16000;
 
         private static SoundService _instance;
-        private static bool _stampMissing;
         private EventInstance _menuMusic;
+        private EventInstance _sfx;
         private EventInstance _typewriter;
         private EventInstance _final;
         private EventInstance _pauseSnapshot;
@@ -96,14 +101,13 @@ namespace LD60.UI.Audio
             PlayFirstAvailable(ConvertPaths);
         }
 
-        /// <summary>Удар штампа. event:/SFX/type, не печатная машинка.</summary>
+        /// <summary>
+        /// Тот же щелчок, что раньше играл на субтитрах комикса: newspaper 2 → 1.
+        /// </summary>
         public static void PlayStamp()
         {
-            if (PlayFirstAvailable(StampPaths) || _stampMissing || !RuntimeManager.IsInitialized)
-                return;
-
-            _stampMissing = true;
-            Debug.LogWarning("[Sound] event:/SFX/type не найден в банках");
+            EnsureCreated();
+            _instance.TriggerStamp();
         }
 
         /// <summary>Луп печатной машинки на время печати субтитров.</summary>
@@ -303,6 +307,52 @@ namespace LD60.UI.Audio
             instance.setParameterByName(paramName, value, ignoreseekspeed: true);
         }
 
+        private void TriggerStamp()
+        {
+            try
+            {
+                if (!_sfx.isValid())
+                {
+                    _sfx = RuntimeManager.CreateInstance(SfxPath);
+                    if (_sfx.isValid())
+                    {
+                        _sfx.setVolume(1f);
+                        _sfx.start();
+                    }
+                }
+
+                if (_sfx.isValid())
+                {
+                    _sfx.setVolume(1f);
+                    _sfx.setParameterByName(NewspaperParameter, StampOffValue, ignoreseekspeed: true);
+                    _sfx.setParameterByName(NewspaperParameter, StampOnValue, ignoreseekspeed: true);
+                    return;
+                }
+            }
+            catch (EventNotFoundException)
+            {
+            }
+
+            for (var i = 0; i < StampPaths.Length; i++)
+            {
+                try
+                {
+                    if (RuntimeManager.StudioSystem.getEvent(StampPaths[i], out var description) != FMOD.RESULT.OK
+                        || !description.isValid())
+                        continue;
+
+                    var instance = RuntimeManager.CreateInstance(StampPaths[i]);
+                    instance.setVolume(1f);
+                    instance.start();
+                    instance.release();
+                    return;
+                }
+                catch (EventNotFoundException)
+                {
+                }
+            }
+        }
+
         private void BeginTypewriter(float volume)
         {
             if (_typewriter.isValid())
@@ -418,6 +468,7 @@ namespace LD60.UI.Audio
         private void OnDestroy()
         {
             ReleaseMusicInstance(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            ReleaseInstance(ref _sfx, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             EndTypewriter();
             StopFinal();
             ReleaseInstance(ref _pauseSnapshot, FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
