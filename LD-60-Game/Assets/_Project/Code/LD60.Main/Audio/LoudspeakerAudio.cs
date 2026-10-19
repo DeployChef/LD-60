@@ -87,14 +87,21 @@ namespace LD60.Main.Audio
             await FmodWebglPreloader.PrepareAsync();
 
             _loudspeaker = RuntimeManager.CreateInstance(LoudspeakerPath);
-            _music = RuntimeManager.CreateInstance(MusicPath);
+            try
+            {
+                _music = RuntimeManager.CreateInstance(MusicPath);
+                _music.start();
+            }
+            catch (EventNotFoundException)
+            {
+                Debug.LogWarning($"[Loudspeaker] ивент {MusicPath} не найден в банках FMOD (музыка играет через громофон)");
+            }
 
             // Громофон стартует выключенным: включение — start() + параметры
             // (чтобы не озвучивать ритуал выключения на буте).
             ApplyParameters(verbose: true);
-            _music.start();
 
-            Debug.Log("[Loudspeaker] громофон (отдельный ивент) и Music готовы: off, track1 (тест: 9=on, 0=off, 1/2/3=трек)");
+            Debug.Log("[Loudspeaker] громофон готов: off, track1 (тест: 9=on, 0=off, 1/2/3=трек)");
         }
 
         // ВРЕМЕННЫЙ ТЕСТ: переключение параметров клавишами (верхний ряд и numpad).

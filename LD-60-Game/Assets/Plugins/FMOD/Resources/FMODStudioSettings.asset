@@ -454,12 +454,12 @@ MonoBehaviour:
   HasSourceProject: 0
   HasPlatforms: 0
   sourceProjectPath: 
-  sourceBankPath: ../Audio_Fmod/LD-60/Build/Desktop/Desktop/Desktop
+  sourceBankPath: ../Audio_Fmod/LD-60/Build/Desktop
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 0
-  BankLoadType: 1
+  BankLoadType: 0
   AutomaticSampleLoading: 1
   EncryptionKey: 
   ImportType: 0
@@ -482,12 +482,7 @@ MonoBehaviour:
   - Master.assets
   - Menu
   - Menu.assets
-  BanksToLoad:
-  - Master.assets
-  - Master
-  - Master.strings
-  - Menu.assets
-  - Menu
+  BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
   AndroidUseOBB: 0

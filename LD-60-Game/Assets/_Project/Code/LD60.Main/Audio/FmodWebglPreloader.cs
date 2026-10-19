@@ -55,7 +55,7 @@ namespace LD60.Main.Audio
 
         public static UniTask PrepareAsync(CancellationToken cancellationToken = default)
         {   
-            Debug.Log("efiiiiiiiiiiiiiim1");
+            Debug.Log("[FmodPreloader] PrepareAsync: запуск подготовки звука");
             if (IsReady)
                 return UniTask.CompletedTask;
 
@@ -74,7 +74,7 @@ namespace LD60.Main.Audio
 
         private async UniTask RunAsync(CancellationToken cancellationToken)
         {   
-            Debug.Log("efiiiiiiiiiiiiiim2");
+            Debug.Log("[FmodPreloader] RunAsync: старт асинхронной инициализации FMOD");
             var stopwatch = Stopwatch.StartNew();
 
             // Доступ к StudioSystem инициализирует FMOD и запускает загрузку банков.
@@ -89,20 +89,40 @@ namespace LD60.Main.Audio
             // 1. Банки. Имя банка без расширения: bankId = "Master", "Master.strings".
             Stage = PreloadStage.Banks;
             var stall = 0;
+            const int maxStallFrames = 600; // ~10 секунд при 60 fps
             while (!(RuntimeManager.HasBankLoaded("Master")
                      && RuntimeManager.HasBankLoaded("Master.strings")))
             {
                 Progress01 = 0.2f;
-                if (++stall % StallLogFrames == 0)
+                stall++;
+                if (stall % StallLogFrames == 0)
                     Debug.Log($"[FmodPreloader] ждём банки ({stopwatch.ElapsedMilliseconds} ms): {DescribeBanks()}");
+
+                if (stall >= maxStallFrames)
+                {
+                    Debug.LogWarning($"[FmodPreloader] таймаут ожидания банков ({stopwatch.ElapsedMilliseconds} ms): {DescribeBanks()}");
+                    break;
+                }
+
                 await UniTask.Yield(cancellationToken);
             }
 
-                Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
+            Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
 
             // 2. Сэмплы: инстанс, созданный раньше сэмплов, даёт «API отвечает, а звука нет».
             Stage = PreloadStage.Samples;
             stall = 0;
+
+            // Гарантируем, что для всех загруженных банков запущен loadSampleData
+            if (RuntimeManager.StudioSystem.getBankList(out var loadedBankList) == FMOD.RESULT.OK)
+            {
+                foreach (var b in loadedBankList)
+                {
+                    if (b.isValid())
+                        b.loadSampleData();
+                }
+            }
+
             while (true)
             {
                 var (done, total) = CountSampleLoading();
@@ -112,8 +132,16 @@ namespace LD60.Main.Audio
                 if (done >= total)
                     break;
 
-                if (++stall % StallLogFrames == 0)
+                stall++;
+                if (stall % StallLogFrames == 0)
                     Debug.LogWarning($"[FmodPreloader] сэмплы {done}/{total} за {stopwatch.ElapsedMilliseconds} ms");
+
+                if (stall >= maxStallFrames)
+                {
+                    Debug.LogWarning($"[FmodPreloader] таймаут ожидания сэмплов ({done}/{total} за {stopwatch.ElapsedMilliseconds} ms), продолжаем запуск");
+                    break;
+                }
+
                 await UniTask.Yield(cancellationToken);
             }
 
@@ -136,7 +164,7 @@ namespace LD60.Main.Audio
 
         private static bool AnyUserInputThisFrame()
         {   
-            Debug.Log("efiiiiiiiiiiiiiim3");
+            Debug.Log("[FmodPreloader] Ожидание ввода игрока (клик / тач / клавиша)");
             var mouse = Mouse.current;
             if (mouse != null && mouse.leftButton.wasPressedThisFrame)
                 return true;
@@ -151,7 +179,7 @@ namespace LD60.Main.Audio
 
         private static (int done, int total) CountSampleLoading()
         {   
-            Debug.Log("efiiiiiiiiiiiiiim4");
+            Debug.Log("[FmodPreloader] Опрос состояния сэмплов событий...");
             var done = 0;
             var total = 0;
 
@@ -184,7 +212,7 @@ namespace LD60.Main.Audio
 
         private static string DescribeBanks()
         {   
-            Debug.Log("efiiiiiiiiiiiiiim5");
+            Debug.Log("[FmodPreloader] Получение списка банков...");
             if (RuntimeManager.StudioSystem.getBankList(out var banks) != FMOD.RESULT.OK)
                 return "неизвестно";
 
