@@ -11,6 +11,10 @@ namespace LD60.UI
         [SerializeField] private Rect captureRect = new(-4.55f, -5.01f, 9.1f, 8.74f);
         [SerializeField] private Canvas canvas;
         [SerializeField] private CanvasGroup group;
+        [SerializeField] private CanvasGroup content;
+        [SerializeField] private CanvasGroup blackout;
+        [SerializeField, Min(0.05f)] private float blackoutSeconds = 1f;
+        [SerializeField, Min(0.05f)] private float revealSeconds = 1f;
         [SerializeField] private UnityEngine.UI.RawImage newspaper;
         [SerializeField] private UnityEngine.UI.AspectRatioFitter aspect;
         [SerializeField] private UnityEngine.UI.Button continueButton;
@@ -48,9 +52,14 @@ namespace LD60.UI
             canvas.enabled = true;
             group.blocksRaycasts = true;
             group.interactable = false;
-            group.alpha = 0f;
-            _fade = DOTween.To(() => group.alpha, value => group.alpha = value, 1f, 0.3f)
+            group.alpha = 1f;
+            content.alpha = 0f;
+            blackout.alpha = 0f;
+            _fade = DOTween.Sequence()
                 .SetUpdate(true)
+                .Append(DOTween.To(() => blackout.alpha, value => blackout.alpha = value, 1f, blackoutSeconds).SetEase(Ease.Linear))
+                .AppendCallback(() => content.alpha = 1f)
+                .Append(DOTween.To(() => blackout.alpha, value => blackout.alpha = value, 0f, revealSeconds).SetEase(Ease.Linear))
                 .OnComplete(() => group.interactable = true);
             return true;
         }
@@ -63,14 +72,18 @@ namespace LD60.UI
             _closing = true;
             group.interactable = false;
             _fade?.Kill();
-            _fade = DOTween.To(() => group.alpha, value => group.alpha = value, 0f, 0.2f)
+            _fade = DOTween.Sequence()
                 .SetUpdate(true)
-                .OnComplete(() =>
+                .Append(DOTween.To(() => blackout.alpha, value => blackout.alpha = value, 1f, blackoutSeconds).SetEase(Ease.Linear))
+                .AppendCallback(() =>
                 {
+                    content.alpha = 0f;
                     var next = _continue;
-                    Close();
+                    _continue = null;
                     next?.Invoke();
-                });
+                })
+                .Append(DOTween.To(() => blackout.alpha, value => blackout.alpha = value, 0f, revealSeconds).SetEase(Ease.Linear))
+                .OnComplete(Close);
         }
 
         private RenderTexture Capture(NewspaperDesk board)
@@ -170,6 +183,10 @@ namespace LD60.UI
                 group.interactable = false;
                 group.blocksRaycasts = false;
             }
+            if (content != null)
+                content.alpha = 0f;
+            if (blackout != null)
+                blackout.alpha = 0f;
             if (IsOpen)
                 Time.timeScale = _previousTimeScale;
             IsOpen = false;
