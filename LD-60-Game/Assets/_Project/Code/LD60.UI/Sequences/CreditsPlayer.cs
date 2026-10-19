@@ -65,11 +65,12 @@ And You, The Player!";
         [SerializeField] private float crawlFastForwardMultiplier = 4f;
         [SerializeField] private float thanksFadeInDuration = 0.8f;
         [SerializeField] private float thanksStayDuration = 2.5f;
+        [SerializeField] private float thanksFadeOutDuration = 0.6f;
         [SerializeField] private float blackFadeDuration = 1.2f;
         [SerializeField] private float postBlackDelay = 0.5f;
 
         [Header("Flow")]
-        [SerializeField] private bool returnToMainMenuOnFinish = true;
+        [SerializeField] private bool returnToMainMenuOnFinish = false;
         [SerializeField] private bool playOnStart = false;
 
         private IShellService _shell;
@@ -77,6 +78,7 @@ And You, The Player!";
         private bool _playing;
         private bool _hasFinished;
         private bool _skipRequested;
+        private float _sequenceStartTime;
         private CancellationTokenSource _playCts;
 
         public event Action Finished;
@@ -103,12 +105,9 @@ And You, The Player!";
         private void Awake()
         {
             if (input != null)
-                _skipAction = input.FindAction("Menu/Skip", false);
+                _skipAction = input.FindAction("Game/Pause", false);
 
             ResetVisuals();
-
-            if (!playOnStart)
-                gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -154,12 +153,30 @@ And You, The Player!";
 
         private void OnSkipPerformed(InputAction.CallbackContext _)
         {
+            if (!_playing || Time.unscaledTime - _sequenceStartTime < 0.6f)
+                return;
+
             _skipRequested = true;
+        }
+
+        private bool ConsumeSkipRequest()
+        {
+            if (_skipAction != null && _skipAction.triggered && Time.unscaledTime - _sequenceStartTime >= 0.6f)
+                _skipRequested = true;
+
+            var kb = Keyboard.current;
+            if (kb != null && kb.escapeKey.wasPressedThisFrame && Time.unscaledTime - _sequenceStartTime >= 0.6f)
+                _skipRequested = true;
+
+            if (!_skipRequested)
+                return false;
+
+            _skipRequested = false;
+            return true;
         }
 
         public void Play()
         {
-            gameObject.SetActive(true);
             PlayAsync().Forget();
         }
 
@@ -181,25 +198,35 @@ And You, The Player!";
 
         public async UniTask PlayAsync(CancellationToken externalToken = default)
         {
-            if (_playing || _hasFinished)
+            if (_playing)
                 return;
 
+            Debug.Log("[CreditsPlayer] Starting credits sequence...");
             _playing = true;
+            _hasFinished = false;
             _skipRequested = false;
+            _sequenceStartTime = Time.unscaledTime;
 
             if (_playCts != null)
             {
                 _playCts.Cancel();
                 _playCts.Dispose();
             }
-            _playCts = CancellationTokenSource.CreateLinkedTokenSource(
-                externalToken,
-                destroyCancellationToken);
+
+            _playCts = externalToken.CanBeCanceled
+                ? CancellationTokenSource.CreateLinkedTokenSource(externalToken, this.GetCancellationTokenOnDestroy())
+                : CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
 
             var token = _playCts.Token;
 
             gameObject.SetActive(true);
             ResetVisuals();
+
+            if (rootCanvasGroup != null)
+            {
+                rootCanvasGroup.blocksRaycasts = true;
+                rootCanvasGroup.interactable = true;
+            }
 
             // Prepare audio
             try
@@ -211,17 +238,24 @@ And You, The Player!";
                 Debug.LogWarning($"[CreditsPlayer] Audio switch warning: {e.Message}");
             }
 
+            // Wait one frame to avoid consuming clicks that ended the previous screen
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+            _skipRequested = false;
+            _sequenceStartTime = Time.unscaledTime;
+
             if (skipHint != null)
                 skipHint.SetActive(true);
 
             try
             {
                 // Phase 1: Fade in Frame & Background ("затемняем в эту рамку")
+                Debug.Log("[CreditsPlayer] Phase 1: Fade in Frame");
                 await FadeCanvasGroupAsync(rootCanvasGroup, 0f, 1f, frameFadeInDuration, token);
 
                 // Phase 2: Game Over appears ("там пишется гейм овер с тем шрифтом, который в интро")
                 if (gameOverGroup != null)
                 {
+                    Debug.Log("[CreditsPlayer] Phase 2: Game Over");
                     if (gameOverText != null)
                         gameOverText.text = gameOverString;
 
@@ -231,27 +265,31 @@ And You, The Player!";
                 }
 
                 // Phase 3: Crawling credits ("начинают титры ползти снизу вверх")
+                Debug.Log("[CreditsPlayer] Phase 3: Crawl");
                 await PlayCrawlAsync(token);
 
                 // Phase 4: Thank you message ("пишем спасибо за игру")
                 if (thanksGroup != null)
                 {
+                    Debug.Log("[CreditsPlayer] Phase 4: Thanks");
                     if (thanksText != null)
                         thanksText.text = thanksString;
 
                     await FadeCanvasGroupAsync(thanksGroup, 0f, 1f, thanksFadeInDuration, token);
                     await DelayOrSkipAsync(thanksStayDuration, token);
+                    await FadeCanvasGroupAsync(thanksGroup, 1f, 0f, thanksFadeOutDuration, token);
                 }
 
                 // Phase 5: Fade completely to black ("экран темнеет полностью")
                 if (blackFadeGroup != null)
                 {
+                    Debug.Log("[CreditsPlayer] Phase 5: Fade to black");
                     await FadeCanvasGroupAsync(blackFadeGroup, 0f, 1f, blackFadeDuration, token);
                     if (postBlackDelay > 0f)
                         await UniTask.Delay((int)(postBlackDelay * 1000f), ignoreTimeScale: true, cancellationToken: token);
                 }
 
-                // Phase 6: Return to main menu with intro ("запускается самое начальное меню. С интро.")
+                // Phase 6: Standalone Return to main menu (if requested)
                 if (returnToMainMenuOnFinish)
                 {
                     await ReturnToMainMenuAsync();
@@ -259,13 +297,19 @@ And You, The Player!";
             }
             catch (OperationCanceledException)
             {
-                // Cancelled or destroyed
+                Debug.Log("[CreditsPlayer] Sequence cancelled.");
             }
             finally
             {
                 _playing = false;
                 _hasFinished = true;
+                if (rootCanvasGroup != null)
+                {
+                    rootCanvasGroup.blocksRaycasts = false;
+                    rootCanvasGroup.interactable = false;
+                }
                 Finished?.Invoke();
+                Debug.Log("[CreditsPlayer] Credits sequence complete.");
             }
         }
 
@@ -277,7 +321,7 @@ And You, The Player!";
             if (!string.IsNullOrEmpty(creditsContent))
                 crawlText.text = creditsContent;
 
-            // Viewport is invisible while computing layout and setting start position
+            // Make sure viewport is invisible while setting initial offscreen position
             if (crawlGroup != null)
                 crawlGroup.alpha = 0f;
             crawlViewport.gameObject.SetActive(true);
@@ -305,11 +349,8 @@ And You, The Player!";
                 if (token.IsCancellationRequested)
                     return;
 
-                if (_skipRequested)
-                {
-                    _skipRequested = false;
+                if (ConsumeSkipRequest())
                     break;
-                }
 
                 var speed = crawlSpeed;
                 if (IsFastForwardHeld())
@@ -351,11 +392,8 @@ And You, The Player!";
                 if (token.IsCancellationRequested)
                     return;
 
-                if (_skipRequested)
-                {
-                    _skipRequested = false;
+                if (ConsumeSkipRequest())
                     return;
-                }
 
                 var dt = Time.unscaledDeltaTime;
                 if (IsFastForwardHeld())
@@ -384,9 +422,8 @@ And You, The Player!";
                 if (token.IsCancellationRequested)
                     return;
 
-                if (_skipRequested)
+                if (ConsumeSkipRequest())
                 {
-                    _skipRequested = false;
                     group.alpha = to;
                     return;
                 }
@@ -405,8 +442,8 @@ And You, The Player!";
             if (rootCanvasGroup != null)
             {
                 rootCanvasGroup.alpha = 0f;
-                rootCanvasGroup.blocksRaycasts = true;
-                rootCanvasGroup.interactable = true;
+                rootCanvasGroup.blocksRaycasts = false;
+                rootCanvasGroup.interactable = false;
             }
 
             if (gameOverGroup != null)
@@ -439,7 +476,6 @@ And You, The Player!";
                 return;
             }
 
-            // Fallback resolution from scene/root scope
             var scope = FindAnyObjectByType<VContainer.Unity.LifetimeScope>();
             if (scope != null && scope.Container != null)
             {
@@ -458,7 +494,6 @@ And You, The Player!";
                 }
             }
 
-            // Final fallback: standard scene load
             Debug.LogWarning("[CreditsPlayer] IShellService not found, falling back to SceneManager.LoadScene(MainMenu).");
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GameScenes.MainMenu);
         }

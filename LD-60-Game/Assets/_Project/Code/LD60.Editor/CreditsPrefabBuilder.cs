@@ -41,10 +41,12 @@ namespace LD60.Editor
             root.layer = LayerMask.NameToLayer("UI");
 
             var rootRect = root.GetComponent<RectTransform>();
+            rootRect.localScale = Vector3.one;
             rootRect.anchorMin = Vector2.zero;
             rootRect.anchorMax = Vector2.one;
             rootRect.offsetMin = Vector2.zero;
             rootRect.offsetMax = Vector2.zero;
+            rootRect.pivot = new Vector2(0.5f, 0.5f);
 
             var canvas = root.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -58,8 +60,8 @@ namespace LD60.Editor
 
             var rootCanvasGroup = root.GetComponent<CanvasGroup>();
             rootCanvasGroup.alpha = 0f;
-            rootCanvasGroup.blocksRaycasts = true;
-            rootCanvasGroup.interactable = true;
+            rootCanvasGroup.blocksRaycasts = false;
+            rootCanvasGroup.interactable = false;
 
             var creditsPlayer = root.GetComponent<CreditsPlayer>();
 
@@ -234,8 +236,10 @@ namespace LD60.Editor
             so.FindProperty("input").objectReferenceValue = input;
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            // Default to inactive so it never shows on scene start
-            root.SetActive(false);
+            // Ensure root is active so localScale remains (1, 1, 1)
+            // CanvasGroup.alpha = 0 and blocksRaycasts = false keeps it invisible and uninteractive on scene start
+            root.SetActive(true);
+            rootRect.localScale = Vector3.one;
 
             // Save Prefab
             var dir = Path.GetDirectoryName(PrefabPath);
@@ -245,20 +249,35 @@ namespace LD60.Editor
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             Object.DestroyImmediate(root);
 
+            // Guarantee prefab root scale is (1, 1, 1)
+            using (var scope = new PrefabUtility.EditPrefabContentsScope(PrefabPath))
+            {
+                var contentRoot = scope.prefabContentsRoot;
+                contentRoot.SetActive(true);
+                var scopeRect = contentRoot.GetComponent<RectTransform>();
+                if (scopeRect != null)
+                {
+                    scopeRect.localScale = Vector3.one;
+                    scopeRect.anchorMin = Vector2.zero;
+                    scopeRect.anchorMax = Vector2.one;
+                    scopeRect.offsetMin = Vector2.zero;
+                    scopeRect.offsetMax = Vector2.zero;
+                    scopeRect.pivot = new Vector2(0.5f, 0.5f);
+                }
+            }
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
             Debug.Log($"[CreditsPrefabBuilder] Successfully created Credits prefab at '{PrefabPath}'.");
-            return prefab;
+            return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
         }
 
         [MenuItem("LD60/Wire Credits into Game Scene and Story")]
         public static void WireCredits()
         {
-            // 1. Ensure Prefab exists
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            if (prefab == null)
-                prefab = BuildPrefab();
+            // 1. Ensure fresh Prefab exists
+            var prefab = BuildPrefab();
 
             // 2. Create CreditsAction asset
             var actionDir = Path.GetDirectoryName(CreditsActionAssetPath);
@@ -290,26 +309,58 @@ namespace LD60.Editor
             var shouldReopen = activeScene.path != gameScenePath;
 
             var gameScene = EditorSceneManager.OpenScene(gameScenePath, OpenSceneMode.Single);
-            var existingCredits = Object.FindAnyObjectByType<CreditsPlayer>(FindObjectsInactive.Include);
-            if (existingCredits == null)
+
+            // Clean up any old Credits GameObjects to avoid stale broken serialized overrides
+            var oldCreditsList = Object.FindObjectsByType<CreditsPlayer>(FindObjectsInactive.Include);
+            foreach (var old in oldCreditsList)
             {
-                var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, gameScene);
-                instance.name = "Credits";
-                existingCredits = instance.GetComponent<CreditsPlayer>();
+                if (old != null && old.gameObject != null)
+                    Object.DestroyImmediate(old.gameObject);
             }
 
-            existingCredits.gameObject.SetActive(false);
-            EditorUtility.SetDirty(existingCredits.gameObject);
+            // Instantiate fresh prefab
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, gameScene);
+            instance.name = "Credits";
+            instance.SetActive(true);
 
+            var rect = instance.GetComponent<RectTransform>();
+            if (rect != null)
+            {
+                rect.localScale = Vector3.one;
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(rect);
+            }
+
+            var creditsPlayer = instance.GetComponent<CreditsPlayer>();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(instance);
+            EditorUtility.SetDirty(instance);
+
+            // Wire into SequencePlayer
             var seqPlayer = Object.FindAnyObjectByType<SequencePlayer>(FindObjectsInactive.Include);
             if (seqPlayer != null)
             {
                 var seqSo = new SerializedObject(seqPlayer);
                 var creditsProp = seqSo.FindProperty("_credits");
                 if (creditsProp != null)
-                    creditsProp.objectReferenceValue = existingCredits;
+                    creditsProp.objectReferenceValue = creditsPlayer;
                 seqSo.ApplyModifiedPropertiesWithoutUndo();
                 EditorUtility.SetDirty(seqPlayer);
+            }
+
+            // Wire into StoryBook finale
+            var storyBook = Object.FindAnyObjectByType<StoryBook>(FindObjectsInactive.Include);
+            if (storyBook != null && chapter != null)
+            {
+                var sbSo = new SerializedObject(storyBook);
+                var finaleProp = sbSo.FindProperty("finale");
+                if (finaleProp != null)
+                    finaleProp.objectReferenceValue = chapter;
+                sbSo.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(storyBook);
             }
 
             EditorSceneManager.MarkSceneDirty(gameScene);
@@ -323,7 +374,7 @@ namespace LD60.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("[CreditsPrefabBuilder] Successfully wired Credits into Story and Game scene.");
+            Debug.Log("[CreditsPrefabBuilder] Successfully wired fresh Credits prefab into Game.unity, SequencePlayer, StoryBook and Credits chapter.");
         }
     }
 }

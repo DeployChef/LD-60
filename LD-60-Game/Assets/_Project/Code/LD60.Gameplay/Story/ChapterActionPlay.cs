@@ -90,7 +90,7 @@ namespace LD60.Gameplay.Story
             if (credits != null)
             {
                 if (Alive(_player))
-                    await _player.PlayCredits(chapter.Token);
+                    await _player.PlayCredits();
 
                 chapter.End(ChapterResult.Ending);
                 return;
