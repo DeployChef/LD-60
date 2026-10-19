@@ -1058,7 +1058,7 @@ MonoBehaviour:
   one: {fileID: 42437959372488329}
   two: {fileID: 4114158849706450540}
   three: {fileID: 7094253299665598388}
-  styles: {fileID: 11400000, guid: 95f379c3a628af4469853e277c65c4fc, type: 2}
+  styles: {fileID: 11400000, guid: 972f7563aff2eeb408ab840a9f7552da, type: 2}
 --- !u!114 &7003089234019774268
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b21fe3efada99439db6c2560703243, type: 3}
+  m_Name: ArticleStyles
+  m_EditorClassIdentifier: LD60.UI::LD60.UI.ArticleStyles
+  report:
+    dot: {fileID: 21300000, guid: 4f69066a0392875418405c8bb2904bdb, type: 3}
+    line2H: {fileID: 21300000, guid: 8c683ca393285234b85546b200c96909, type: 3}
+    line2V: {fileID: 21300000, guid: 86f592a73d613e345b6e90d28c85ceda, type: 3}
+    line3H: {fileID: 21300000, guid: 1a2193674079b8f4b86dff41f7c45595, type: 3}
+    line3V: {fileID: 21300000, guid: 43befeafea85f18478098bb7e34401ee, type: 3}
+    square: {fileID: 21300000, guid: 73bedbb7ee0fbf740ba39227c7f8ff21, type: 3}
+    banner5x2: {fileID: 21300000, guid: c4a0b4aa3ad1b6546a40607bfda844e9, type: 3}
+  politics:
+    dot: {fileID: 21300000, guid: 0790a8b0dc73b3645a00c9cd4be191a9, type: 3}
+    line2H: {fileID: 21300000, guid: 6c74e33a9d4ce6c4391928ac0b710bbc, type: 3}
+    line2V: {fileID: 21300000, guid: 41e0a300ed39597458fc27d17a13af0c, type: 3}
+    line3H: {fileID: 21300000, guid: e52a8ee4432a69341aacc5396b89d61c, type: 3}
+    line3V: {fileID: 21300000, guid: fca032657a32f824fbcb63ab8b1faea4, type: 3}
+    square: {fileID: 21300000, guid: 25247b1555750b543ba15c4307136eac, type: 3}
+    banner5x2: {fileID: 21300000, guid: c4a0b4aa3ad1b6546a40607bfda844e9, type: 3}
+  social:
+    dot: {fileID: 21300000, guid: d1f4700ebcd7e094583a1a12dda5154f, type: 3}
+    line2H: {fileID: 21300000, guid: fd3ad389304214943bcc2844bd83c7fe, type: 3}
+    line2V: {fileID: 21300000, guid: 40a459c0f243d9641960e0ff1cac66df, type: 3}
+    line3H: {fileID: 21300000, guid: a0605d31bfd96ac40a7f00c2708a7f16, type: 3}
+    line3V: {fileID: 21300000, guid: efaf9c9b11270fa49bd6ea1eb529a5d5, type: 3}
+    square: {fileID: 21300000, guid: fe3f501c79753b445b5465005971ff15, type: 3}
+    banner5x2: {fileID: 21300000, guid: c4a0b4aa3ad1b6546a40607bfda844e9, type: 3}
+  ad:
+    dot: {fileID: 21300000, guid: 58891a9b790da8d4c8233ad3ff64415b, type: 3}
+    line2H: {fileID: 21300000, guid: 0b02e568f2d1bbb4c978add3b6212373, type: 3}
+    line2V: {fileID: 21300000, guid: 573ed9d5418b62c45a574e614e073e1a, type: 3}
+    line3H: {fileID: 21300000, guid: 5e73c39eb07f49442a44254842ff2073, type: 3}
+    line3V: {fileID: 21300000, guid: 8e2194aef08f77847b631dba08bd3bd1, type: 3}
+    square: {fileID: 21300000, guid: f513c1475e7f3f748b72b1ee5de57303, type: 3}
+    banner5x2: {fileID: 21300000, guid: c4a0b4aa3ad1b6546a40607bfda844e9, type: 3}

@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 1.45, z: 1}
+  m_LocalScale: {x: 0.67, y: 1.02, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8452864211461342982}
@@ -82,12 +82,12 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6620443678240376230, guid: 82e7724b35d5b764dad559681666bc95, type: 3}
-  m_Color: {r: 0.96, g: 0.9, b: 0.62, a: 1}
+  m_Sprite: {fileID: 21300000, guid: c4b02909cf0f3344ca7b90fa9bc1ca53, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.98, y: 1.62}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Fill at least 72% of the page (18/25 cells). Never place Ads beside Politics.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09b7fcdbf63e11941ab2cda4fa53a16b, type: 2}
   m_sharedMaterial: {fileID: 5030029927831948561, guid: 09b7fcdbf63e11941ab2cda4fa53a16b, type: 2}
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279902505
   m_fontColor: {r: 0.16, g: 0.13, b: 0.1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -241,18 +241,18 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 1.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0.8
   m_fontSizeMax: 3
-  m_fontStyle: 2
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_isVolumetricText: 0
   _SortingLayer: 0
   _SortingLayerID: 0
-  _SortingOrder: 0
+  _SortingOrder: 126
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7781791770960878745}
   m_maskType: 0
