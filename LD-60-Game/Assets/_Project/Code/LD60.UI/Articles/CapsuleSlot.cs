@@ -18,13 +18,15 @@ namespace LD60.UI
         [SerializeField] private ArticlePiece line3H;
         [SerializeField] private ArticlePiece line3V;
         [SerializeField] private ArticlePiece square;
+        [SerializeField] private ArticlePiece banner5x2;
         [SerializeField] private NoteSlip note;
         [SerializeField] private Transform desk;
-        [SerializeField] private Vector2 tray = new(-6.6f, 2.4f);
+        [SerializeField] private Transform pile;
         [SerializeField] private float spacing = 2.7f;
 
         private IMessageBus _bus;
         private StoryBook _story;
+        private NewspaperDesk _board;
         private WorkstationViewController _views;
         private CinemachineBrain _brain;
         private SpriteRenderer _renderer;
@@ -33,10 +35,11 @@ namespace LD60.UI
         private string _pending;
 
         [Inject]
-        public void Construct(IMessageBus bus, StoryBook story)
+        public void Construct(IMessageBus bus, StoryBook story, NewspaperDesk board)
         {
             _bus = bus;
             _story = story;
+            _board = board;
             _arrived?.Dispose();
             _arrived = _bus.Subscribe<CapsuleArrived>(OnArrived);
         }
@@ -50,6 +53,8 @@ namespace LD60.UI
                 _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
             if (_brain == null)
                 _brain = FindAnyObjectByType<CinemachineBrain>();
+            if (pile == null && desk != null)
+                pile = desk.Find("Pile");
             var box = GetComponent<BoxCollider>();
             if (box != null)
                 box.size = new Vector3(1.4f, 1.4f, 1.2f);
@@ -104,6 +109,7 @@ namespace LD60.UI
         private void LayOut(CapsuleDelivery delivery)
         {
             var articles = delivery.Articles;
+            var spawned = new System.Collections.Generic.List<ArticlePiece>();
             for (var i = 0; i < articles.Length; i++)
             {
                 var source = Form(articles[i]);
@@ -112,19 +118,28 @@ namespace LD60.UI
 
                 var piece = Instantiate(source, desk);
                 piece.Bind(articles[i]);
-                piece.transform.localRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(-8f, 8f));
-                piece.transform.localPosition = new Vector3(
-                    tray.x + UnityEngine.Random.Range(-spacing * 0.55f, spacing * 0.55f),
-                    tray.y + UnityEngine.Random.Range(-spacing, spacing * 0.55f),
-                    -0.08f - i * 0.01f);
+                spawned.Add(piece);
+            }
+
+            for (var i = 0; i < spawned.Count; i++)
+            {
+                if (_board != null)
+                    _board.Deliver(spawned[i], i, spawned.Count);
+                else
+                    spawned[i].transform.localPosition = new Vector3(
+                        -7.2f + (i % 3) * spacing * 0.7f,
+                        2.2f - (i / 3) * spacing * 0.85f,
+                        -0.08f);
             }
 
             if (note != null && !string.IsNullOrEmpty(delivery.Note))
             {
                 var slip = Instantiate(note, desk);
                 slip.Bind(delivery.Note);
-                slip.transform.localPosition = new Vector3(tray.x + 3.4f, tray.y, -0.08f);
-                slip.transform.localRotation = Quaternion.identity;
+                if (_board != null)
+                    _board.PlaceNote(slip);
+                else
+                    slip.transform.localPosition = new Vector3(-7.8f, 4.1f, -0.12f);
             }
         }
 
@@ -139,6 +154,7 @@ namespace LD60.UI
                 case ArticleShape.Line2V: return line2V;
                 case ArticleShape.Line3H: return line3H;
                 case ArticleShape.Line3V: return line3V;
+                case ArticleShape.Banner5x2: return banner5x2 != null ? banner5x2 : square;
                 default: return square;
             }
         }

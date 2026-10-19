@@ -10,7 +10,8 @@ namespace LD60.Gameplay.Articles
         Line2V,
         Line3H,
         Line3V,
-        Square
+        Square,
+        Banner5x2
     }
 
     public enum ArticleKind
@@ -30,6 +31,7 @@ namespace LD60.Gameplay.Articles
         [SerializeField] private string title;
         [SerializeField, TextArea(3, 8)] private string body;
         [SerializeField] private Sprite picture;
+        [SerializeField] private ArticlePictureLayout pictureLayout;
         [SerializeField] private float fill;
         [SerializeField] private float politics;
         [SerializeField] private float social;
@@ -42,10 +44,41 @@ namespace LD60.Gameplay.Articles
         public string Title => title;
         public string Body => body;
         public Sprite Picture => picture;
+        public ArticlePictureLayout PictureLayout => pictureLayout;
         public float Fill => fill;
         public float Politics => politics;
         public float Social => social;
         public float Money => money;
         public ArticleKind[] ForbiddenNeighbors => forbiddenNeighbors ?? Array.Empty<ArticleKind>();
+
+#if UNITY_EDITOR
+        public void EditorConfigure(
+            string articleId,
+            ArticleShape articleShape,
+            ArticleKind articleKind,
+            string headline,
+            string copy,
+            Sprite sprite,
+            ArticlePictureLayout layout,
+            float fillValue,
+            float politicsValue,
+            float socialValue,
+            float moneyValue,
+            ArticleKind[] forbidden)
+        {
+            id = articleId;
+            shape = articleShape;
+            kind = articleKind;
+            title = headline;
+            body = copy;
+            picture = sprite;
+            pictureLayout = layout;
+            fill = fillValue;
+            politics = politicsValue;
+            social = socialValue;
+            money = moneyValue;
+            forbiddenNeighbors = forbidden ?? Array.Empty<ArticleKind>();
+        }
+#endif
     }
 }

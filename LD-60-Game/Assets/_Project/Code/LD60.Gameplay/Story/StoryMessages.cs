@@ -29,10 +29,12 @@ namespace LD60.Gameplay.Story
     public readonly struct DayStarted
     {
         public readonly string Title;
+        public readonly ChapterDefinition Chapter;
 
-        public DayStarted(string title)
+        public DayStarted(ChapterDefinition chapter)
         {
-            Title = title;
+            Chapter = chapter;
+            Title = chapter != null ? chapter.Title : string.Empty;
         }
     }
 
@@ -43,6 +45,20 @@ namespace LD60.Gameplay.Story
         public PaperStamped(float fill)
         {
             Fill = fill;
+        }
+    }
+
+    public readonly struct DaySummary
+    {
+        public readonly float Fill;
+        public readonly float Politics;
+        public readonly float Social;
+
+        public DaySummary(float fill, float politics, float social)
+        {
+            Fill = fill;
+            Politics = politics;
+            Social = social;
         }
     }
 

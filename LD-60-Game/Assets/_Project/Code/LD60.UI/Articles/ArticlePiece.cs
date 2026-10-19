@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using LD60.Gameplay.Articles;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LD60.UI
 {
@@ -9,11 +10,21 @@ namespace LD60.UI
     public sealed class ArticlePiece : MonoBehaviour
     {
         [SerializeField] private ArticleDefinition article;
-        [SerializeField] private SpriteRenderer picture;
-        [SerializeField] private TMP_Text title;
-        [SerializeField] private TMP_Text body;
+        [SerializeField] private ArticleFace one;
+        [SerializeField] private ArticleFace two;
+        [SerializeField] private ArticleFace three;
 
         public ArticleDefinition Article => article;
+
+        private Tween _motion;
+
+        private void Awake()
+        {
+            if (!Application.isPlaying)
+                return;
+
+            EnsureShadow();
+        }
 
         private void OnEnable()
         {
@@ -22,6 +33,8 @@ namespace LD60.UI
 
         private void OnValidate()
         {
+            if (!isActiveAndEnabled || !InScene())
+                return;
             Refresh();
         }
 
@@ -33,123 +46,120 @@ namespace LD60.UI
 
         public void Refresh()
         {
+            if (!InScene())
+                return;
+
             var debug = ArticleDebugView.ShowValues && article != null;
-            if (title != null)
-                title.text = debug
-                    ? article.Id + "\n" + article.Kind + "  " + article.Shape
-                    : article != null ? article.Title : string.Empty;
-            if (body != null)
-                body.text = debug ? Values() : article != null ? article.Body : string.Empty;
+            var sprite = !debug && article != null ? article.Picture : null;
+            var slot = !debug && article != null && article.PictureLayout != null ? article.PictureLayout.Slot : 1;
+            if (!debug && slot == 1 && sprite != null)
+                slot = 2;
+            var headline = debug
+                ? article.Id + "\n" + article.Kind + "  " + article.Shape
+                : article != null ? article.Title : string.Empty;
+            var copy = debug ? Values() : article != null ? article.Body : string.Empty;
 
-            var showPicture = !debug && article != null && article.Picture != null;
-            if (picture != null)
+            Show(one, slot == 1, headline, copy, null);
+            Show(two, slot == 2, headline, copy, sprite);
+            Show(three, slot == 3, headline, copy, sprite);
+        }
+
+        public void SetGhost(bool ghost)
+        {
+            var alpha = ghost ? 0.4f : 1f;
+            var renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
             {
-                picture.gameObject.SetActive(showPicture);
-                if (showPicture)
-                {
-                    picture.sprite = article.Picture;
-                    picture.color = Color.white;
-                }
+                var color = renderers[i].color;
+                var shadow = renderers[i].gameObject.name == "Shadow";
+                color.a = shadow ? (ghost ? 0.16f : 0.42f) : alpha;
+                renderers[i].color = color;
             }
 
-            Layout(showPicture);
+            Fade(one, alpha);
+            Fade(two, alpha);
+            Fade(three, alpha);
         }
 
-        private string Values()
+        public void StopMotion()
         {
-            return "fill " + article.Fill.ToString("0.##")
-                + "\npolitics " + article.Politics.ToString("0.##")
-                + "\nsocial " + article.Social.ToString("0.##")
-                + "\nmoney " + article.Money.ToString("0.##");
-        }
-
-        private void Layout(bool pictureOn)
-        {
-            var cells = Cells();
-            if (cells.Count == 0 || title == null || body == null)
+            if (_motion == null)
                 return;
 
-            var textCells = cells;
-            if (pictureOn && picture != null)
-            {
-                FitSprite(picture, cells[0]);
-                textCells = new List<CellBox>(cells);
-                textCells.RemoveAt(0);
-            }
+            _motion.Kill();
+            _motion = null;
+        }
 
-            if (textCells.Count == 0)
-                textCells = cells;
+        public void PlayLift()
+        {
+            if (!isActiveAndEnabled)
+                return;
 
-            var top = Rows(textCells);
-            FitText(title, BoundsOf(top[0]));
-            if (top.Count == 1)
+            StopMotion();
+            var spin = transform.DOLocalRotateQuaternion(Quaternion.identity, 0.2f).SetEase(Ease.OutQuad);
+            var shadow = transform.Find("Shadow");
+            if (shadow == null)
             {
-                var band = BoundsOf(top[0]);
-                FitText(title, new Rect(band.x, band.y + band.height * 0.62f, band.width, band.height * 0.38f));
-                FitText(body, new Rect(band.x, band.y, band.width, band.height * 0.62f));
+                _motion = spin.SetTarget(this);
                 return;
             }
 
-            FitText(body, BoundsOf(BodyCells(top)));
+            _motion = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(spin)
+                .Join(shadow.DOLocalMove(ShadowOut(), 0.2f).SetEase(Ease.OutQuad));
         }
 
-        private List<List<CellBox>> Rows(List<CellBox> cells)
+        public void PlayDrop()
         {
-            var rows = new List<List<CellBox>>();
-            for (var i = 0; i < cells.Count; i++)
-            {
-                if (rows.Count == 0 || cells[i].Center.y < rows[rows.Count - 1][0].Center.y - cells[i].Size.y * 0.45f)
-                    rows.Add(new List<CellBox>());
-                rows[rows.Count - 1].Add(cells[i]);
-            }
+            if (!isActiveAndEnabled)
+                return;
 
-            return rows;
+            StopMotion();
+            var endPos = transform.localPosition;
+            var endRot = transform.localRotation;
+            var startPos = endPos;
+            startPos.z -= 0.26f;
+            transform.localPosition = startPos;
+            transform.localRotation = Quaternion.Euler(18f, 0f, 0f);
+            var drop = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(transform.DOLocalMove(endPos, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOLocalRotateQuaternion(endRot, 0.32f).SetEase(Ease.OutQuad));
+            var shadow = transform.Find("Shadow");
+            if (shadow != null)
+                drop.Join(shadow.DOLocalMove(ShadowUnder(), 0.32f).SetEase(Ease.OutQuad));
+            _motion = drop;
         }
 
-        private static List<CellBox> BodyCells(List<List<CellBox>> rows)
+        public void PlayDropOnto(Vector3 worldPos, Quaternion worldRot, float worldScale, TweenCallback done)
         {
-            var rest = new List<CellBox>();
-            for (var i = 1; i < rows.Count; i++)
-                rest.AddRange(rows[i]);
-
-            var sameSpan = true;
-            var first = Span(rows[1]);
-            for (var i = 2; i < rows.Count; i++)
+            if (!isActiveAndEnabled)
             {
-                var span = Span(rows[i]);
-                if (Mathf.Abs(span.x - first.x) > 0.2f || Mathf.Abs(span.y - first.y) > 0.2f)
-                    sameSpan = false;
+                if (done != null)
+                    done();
+                return;
             }
 
-            if (sameSpan)
-                return rest;
-
-            var bestX = rest[0].Center.x;
-            var best = 1;
-            for (var i = 0; i < rest.Count; i++)
-            {
-                var count = 0;
-                for (var j = 0; j < rest.Count; j++)
-                {
-                    if (Mathf.Abs(rest[j].Center.x - rest[i].Center.x) < rest[i].Size.x * 0.45f)
-                        count++;
-                }
-
-                if (count > best)
-                {
-                    best = count;
-                    bestX = rest[i].Center.x;
-                }
-            }
-
-            var column = new List<CellBox>();
-            for (var i = 0; i < rest.Count; i++)
-            {
-                if (Mathf.Abs(rest[i].Center.x - bestX) < rest[i].Size.x * 0.45f)
-                    column.Add(rest[i]);
-            }
-
-            return column;
+            StopMotion();
+            var parent = transform.parent;
+            var endPos = parent != null ? parent.InverseTransformPoint(worldPos) : worldPos;
+            var endRot = parent != null ? Quaternion.Inverse(parent.rotation) * worldRot : worldRot;
+            var startPos = transform.localPosition;
+            startPos.z -= 0.26f;
+            transform.localPosition = startPos;
+            transform.localRotation = Quaternion.Euler(18f, 0f, 0f);
+            var drop = DOTween.Sequence()
+                .SetTarget(this)
+                .Join(transform.DOLocalMove(endPos, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOLocalRotateQuaternion(endRot, 0.32f).SetEase(Ease.OutQuad))
+                .Join(transform.DOScale(Vector3.one * worldScale, 0.32f).SetEase(Ease.OutQuad));
+            var shadow = transform.Find("Shadow");
+            if (shadow != null)
+                drop.Join(shadow.DOLocalMove(ShadowUnder(), 0.32f).SetEase(Ease.OutQuad));
+            if (done != null)
+                drop.OnComplete(done);
+            _motion = drop;
         }
 
         public void CopyCells(List<Vector2> centers)
@@ -164,68 +174,138 @@ namespace LD60.UI
             }
         }
 
-        private static Vector2 Span(List<CellBox> row)
+        public static int ApplyDrawOrder(GameObject root, int order)
         {
-            var bounds = BoundsOf(row);
-            return new Vector2(bounds.xMin, bounds.xMax);
-        }
+            if (root == null)
+                return order;
 
-        private List<CellBox> Cells()
-        {
-            var cells = new List<CellBox>();
-            for (var i = 0; i < transform.childCount; i++)
+            var layer = 0;
+            var renderers = root.GetComponentsInChildren<Renderer>(true);
+            var drawn = false;
+            for (var i = 0; i < renderers.Length; i++)
             {
-                var child = transform.GetChild(i);
-                if (child.name != "Cell")
+                var renderer = renderers[i];
+                if (renderer == null || renderer.GetComponent<TMPro.TMP_SubMesh>() != null)
                     continue;
-                var scale = child.localScale;
-                cells.Add(new CellBox(child.localPosition, new Vector2(Mathf.Abs(scale.x), Mathf.Abs(scale.y))));
+                if (renderer.GetComponent<TMPro.TextMeshPro>() != null)
+                    continue;
+
+                renderer.sortingOrder = renderer.gameObject.name == "Shadow" ? order : order + 1;
+                layer = renderer.sortingLayerID;
+                drawn = true;
             }
 
-            cells.Sort((a, b) => b.Center.y.CompareTo(a.Center.y));
-            return cells;
-        }
+            if (drawn)
+                order += 2;
 
-        private static Rect BoundsOf(List<CellBox> cells)
-        {
-            var first = cells[0];
-            var min = first.Center - first.Size * 0.5f;
-            var max = first.Center + first.Size * 0.5f;
-            for (var i = 1; i < cells.Count; i++)
+            for (var i = 0; i < renderers.Length; i++)
             {
-                var cellMin = cells[i].Center - cells[i].Size * 0.5f;
-                var cellMax = cells[i].Center + cells[i].Size * 0.5f;
-                min = Vector2.Min(min, cellMin);
-                max = Vector2.Max(max, cellMax);
+                var text = renderers[i] != null ? renderers[i].GetComponent<TMPro.TextMeshPro>() : null;
+                if (text == null)
+                    continue;
+
+                text.sortingOrder = order;
+                order++;
             }
 
-            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
-        }
-
-        private static void FitSprite(SpriteRenderer renderer, CellBox cell)
-        {
-            renderer.transform.localPosition = new Vector3(cell.Center.x, cell.Center.y, -0.02f);
-            renderer.transform.localScale = new Vector3(cell.Size.x * 0.78f, cell.Size.y * 0.78f, 1f);
-        }
-
-        private static void FitText(TMP_Text text, Rect area)
-        {
-            text.gameObject.SetActive(true);
-            var rect = text.rectTransform;
-            rect.localPosition = new Vector3(area.center.x, area.center.y, -0.03f);
-            rect.sizeDelta = new Vector2(area.width * 0.92f, area.height * 0.9f);
-        }
-
-        private readonly struct CellBox
-        {
-            public readonly Vector2 Center;
-            public readonly Vector2 Size;
-
-            public CellBox(Vector3 center, Vector2 size)
+            var canvases = root.GetComponentsInChildren<Canvas>(true);
+            var stacked = false;
+            for (var i = 0; i < canvases.Length; i++)
             {
-                Center = center;
-                Size = size;
+                if (canvases[i] == null)
+                    continue;
+
+                canvases[i].overrideSorting = true;
+                if (layer != 0)
+                    canvases[i].sortingLayerID = layer;
+                canvases[i].sortingOrder = order;
+                stacked = true;
             }
+
+            if (stacked)
+                order++;
+
+            return order;
+        }
+
+        private void EnsureShadow()
+        {
+            if (transform.Find("Shadow") != null)
+                return;
+
+            var paper = transform.Find("Paper");
+            var source = paper != null ? paper.GetComponent<SpriteRenderer>() : null;
+            if (source == null || source.sprite == null)
+                return;
+
+            var shadow = new GameObject("Shadow");
+            shadow.transform.SetParent(transform, false);
+            shadow.transform.localRotation = Quaternion.identity;
+            shadow.transform.localPosition = paper.localPosition + new Vector3(0f, 0f, 0.03f);
+            shadow.transform.localScale = paper.localScale;
+            var renderer = shadow.AddComponent<SpriteRenderer>();
+            renderer.sprite = source.sprite;
+            renderer.sharedMaterial = source.sharedMaterial;
+            renderer.color = new Color(0.05f, 0.04f, 0.03f, 0.42f);
+            renderer.sortingLayerID = source.sortingLayerID;
+            renderer.sortingOrder = source.sortingOrder - 1;
+        }
+
+        private Vector3 ShadowUnder()
+        {
+            var paper = transform.Find("Paper");
+            var origin = paper != null ? paper.localPosition : Vector3.zero;
+            origin.z += 0.03f;
+            return origin;
+        }
+
+        private Vector3 ShadowOut()
+        {
+            return ShadowUnder() + new Vector3(0.07f, -0.08f, 0f);
+        }
+
+        private void OnDisable()
+        {
+            StopMotion();
+        }
+
+        private static void Fade(ArticleFace face, float alpha)
+        {
+            if (face == null)
+                return;
+
+            var group = face.GetComponent<CanvasGroup>();
+            if (group == null)
+                group = face.gameObject.AddComponent<CanvasGroup>();
+            group.alpha = alpha;
+            group.blocksRaycasts = false;
+        }
+
+        private static void Show(ArticleFace face, bool on, string headline, string copy, Sprite sprite)
+        {
+            if (face == null)
+                return;
+
+            face.gameObject.SetActive(on);
+            if (on)
+                face.Apply(headline, copy, sprite);
+        }
+
+        private bool InScene()
+        {
+#if UNITY_EDITOR
+            if (UnityEditor.EditorUtility.IsPersistent(this))
+                return false;
+#endif
+            return gameObject.scene.IsValid();
+        }
+
+        private string Values()
+        {
+            return "fill " + article.Fill.ToString("0.##")
+                + "\npolitics " + article.Politics.ToString("0.##")
+                + "\nsocial " + article.Social.ToString("0.##")
+                + "\nmoney " + article.Money.ToString("0.##");
         }
     }
 }

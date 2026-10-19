@@ -54,7 +54,8 @@ namespace LD60.Main.Audio
         private static UniTask _pending;
 
         public static UniTask PrepareAsync(CancellationToken cancellationToken = default)
-        {
+        {   
+            Debug.Log("efiiiiiiiiiiiiiim1");
             if (IsReady)
                 return UniTask.CompletedTask;
 
@@ -72,7 +73,8 @@ namespace LD60.Main.Audio
         }
 
         private async UniTask RunAsync(CancellationToken cancellationToken)
-        {
+        {   
+            Debug.Log("efiiiiiiiiiiiiiim2");
             var stopwatch = Stopwatch.StartNew();
 
             // Доступ к StudioSystem инициализирует FMOD и запускает загрузку банков.
@@ -96,7 +98,7 @@ namespace LD60.Main.Audio
                 await UniTask.Yield(cancellationToken);
             }
 
-            Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
+                Debug.Log($"[FmodPreloader] банки загружены: {DescribeBanks()} (+{stopwatch.ElapsedMilliseconds} ms)");
 
             // 2. Сэмплы: инстанс, созданный раньше сэмплов, даёт «API отвечает, а звука нет».
             Stage = PreloadStage.Samples;
@@ -133,7 +135,8 @@ namespace LD60.Main.Audio
         }
 
         private static bool AnyUserInputThisFrame()
-        {
+        {   
+            Debug.Log("efiiiiiiiiiiiiiim3");
             var mouse = Mouse.current;
             if (mouse != null && mouse.leftButton.wasPressedThisFrame)
                 return true;
@@ -147,7 +150,8 @@ namespace LD60.Main.Audio
         }
 
         private static (int done, int total) CountSampleLoading()
-        {
+        {   
+            Debug.Log("efiiiiiiiiiiiiiim4");
             var done = 0;
             var total = 0;
 
@@ -179,7 +183,8 @@ namespace LD60.Main.Audio
         }
 
         private static string DescribeBanks()
-        {
+        {   
+            Debug.Log("efiiiiiiiiiiiiiim5");
             if (RuntimeManager.StudioSystem.getBankList(out var banks) != FMOD.RESULT.OK)
                 return "неизвестно";
 

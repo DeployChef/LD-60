@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{719432f5-c927-43d7-8560-a26c169cd8ec}">
+		<property name="name">
+			<value>cutscene or menu </value>
+		</property>
+		<relationship name="folder">
+			<destination>{7f390524-f814-4a2f-89ec-2963220960c9}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{a673fefb-1b60-4060-8d4e-68a0ff498dc1}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{a673fefb-1b60-4060-8d4e-68a0ff498dc1}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>3</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>cut</value>
+			<value>menu</value>
+			<value>start</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

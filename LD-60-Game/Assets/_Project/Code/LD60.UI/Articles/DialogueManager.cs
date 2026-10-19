@@ -14,19 +14,31 @@ namespace LD60.UI
         [SerializeField] private TMP_Text line;
         [SerializeField] private DialogueChoice[] choices = System.Array.Empty<DialogueChoice>();
 
+        private WorkstationViewController _views;
         private CinemachineBrain _brain;
         private bool _open = true;
+
+        private void Update()
+        {
+            var mouse = Mouse.current;
+            var hovered = mouse != null && Time.timeScale > 0f ? HitChoice(mouse.position.ReadValue()) : -1;
+            for (var i = 0; i < choices.Length; i++)
+                if (choices[i]?.view != null)
+                    choices[i].view.SetHovered(i == hovered);
+        }
 
         private void OnDestroy()
         {
             _open = false;
+            if (_views != null)
+                _views.AllowLookDown(true);
         }
 
         private void Awake()
         {
-            var views = FindAnyObjectByType<WorkstationViewController>();
-            if (views != null)
-                _brain = views.GetComponentInChildren<CinemachineBrain>(true);
+            _views = FindAnyObjectByType<WorkstationViewController>();
+            if (_views != null)
+                _brain = _views.GetComponentInChildren<CinemachineBrain>(true);
             Hide();
         }
 
@@ -50,14 +62,20 @@ namespace LD60.UI
             token.ThrowIfCancellationRequested();
         }
 
-        public async UniTask<int> Choose(string[] options, CancellationToken token)
+        public async UniTask<int> Choose(string[] options, CancellationToken token, string prompt = null)
         {
             ShowPanel(true);
-            SetActive(line, false);
+            if (line != null && prompt != null)
+                line.text = prompt;
+            SetActive(line, line != null && !string.IsNullOrEmpty(line.text));
             ShowChoices(options);
-            await UniTask.Yield(token);
             try
             {
+                await UniTask.Yield(token);
+                // The click that chose the previous reply must not also choose this one.
+                while (!token.IsCancellationRequested && Mouse.current != null && Mouse.current.leftButton.isPressed)
+                    await UniTask.Yield(token);
+
                 while (!token.IsCancellationRequested)
                 {
                     var mouse = Mouse.current;
@@ -87,6 +105,8 @@ namespace LD60.UI
 
             ShowPanel(false);
             SetActive(line, false);
+            if (line != null)
+                line.text = string.Empty;
             HideChoices();
         }
 
@@ -94,6 +114,8 @@ namespace LD60.UI
         {
             if (panel != null)
                 panel.enabled = show;
+            if (_views != null)
+                _views.AllowLookDown(!show);
         }
 
         private void ShowChoices(string[] options)
