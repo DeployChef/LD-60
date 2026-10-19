@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using LD60.Core;
 using LD60.Main.Audio;
 using LD60.Main.DI;
+using LD60.UI;
 using LD60.UI.Audio;
 using UnityEngine;
 using VContainer;
@@ -16,6 +17,8 @@ namespace LD60.Main
 
         private void Awake()
         {
+            CursorManager.EnsureCreated();
+
             if (_started)
                 return;
 

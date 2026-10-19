@@ -41,6 +41,8 @@ namespace LD60.UI
         private bool _hasOpenedLetter;
         private Vector3 _letterPosition;
 
+        public bool HasPendingCapsule => !string.IsNullOrEmpty(_pending);
+
         [Inject]
         public void Construct(IMessageBus bus, StoryBook story, NewspaperDesk board)
         {

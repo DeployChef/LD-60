@@ -11,6 +11,9 @@ namespace LD60.UI
         private const int LiftOrder = 4000;
         private const float LiftDistance = 0.28f;
 
+        private static int _heldCount;
+        public static bool IsAnyHeld => _heldCount > 0;
+
         private WorkstationViewController _views;
         private NewspaperDesk _board;
         private CinemachineBrain _brain;
@@ -129,6 +132,7 @@ namespace LD60.UI
                 .SetTarget(this);
             _grab = transform.position - ray.GetPoint(distance);
             _held = true;
+            _heldCount++;
             if (piece != null && _views != null)
                 _views.AllowLookUp(false);
             transform.position = _home;
@@ -151,7 +155,11 @@ namespace LD60.UI
 
         private void Drop()
         {
-            _held = false;
+            if (_held)
+            {
+                _held = false;
+                _heldCount = Mathf.Max(0, _heldCount - 1);
+            }
             _rise?.Kill();
             transform.position += _lift * _risen;
             var piece = GetComponent<ArticlePiece>();
@@ -304,6 +312,15 @@ namespace LD60.UI
         private void Lift(bool held)
         {
             ArticlePiece.ApplyDrawOrder(gameObject, held ? LiftOrder : _rest);
+        }
+
+        private void OnDisable()
+        {
+            if (_held)
+            {
+                _held = false;
+                _heldCount = Mathf.Max(0, _heldCount - 1);
+            }
         }
 
 #if UNITY_EDITOR
