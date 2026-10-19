@@ -573,6 +573,9 @@ namespace LD60.UI
             {
                 try
                 {
+                    if (RuntimeManager.StudioSystem.getEvent(TypeEventPaths[i], out var description) != FMOD.RESULT.OK
+                        || !description.isValid())
+                        continue;
                     RuntimeManager.PlayOneShot(TypeEventPaths[i]);
                     return;
                 }
