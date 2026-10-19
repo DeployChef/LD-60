@@ -24,6 +24,9 @@ namespace LD60.UI
         private bool _lookDown = true;
         private bool _lookUp = true;
         private bool _holdLookUp;
+        private int _cutUntilFrame = -1;
+        private CinemachineBlendDefinition _blendBeforeCut;
+        private CinemachineBlenderSettings _customBeforeCut;
 
         public bool IsShowingTable => _showingTable;
 
@@ -65,6 +68,7 @@ namespace LD60.UI
 
         private void OnDisable()
         {
+            RestoreBlend();
             _point.performed -= OnPoint;
             _point.Disable();
         }
@@ -90,6 +94,8 @@ namespace LD60.UI
         {
             if (_holdLookUp && _showingTable)
                 ShowTable(false, true);
+            if (_cutUntilFrame >= 0 && Time.frameCount >= _cutUntilFrame)
+                RestoreBlend();
         }
 
         public void ShowTable(bool show, bool cut = false)
@@ -106,13 +112,25 @@ namespace LD60.UI
             if (brain == null)
                 return;
 
-            var custom = brain.CustomBlends;
-            var previous = brain.DefaultBlend;
+            if (_cutUntilFrame < 0)
+            {
+                _blendBeforeCut = brain.DefaultBlend;
+                _customBeforeCut = brain.CustomBlends;
+            }
+
             brain.CustomBlends = null;
             brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
-            brain.ManualUpdate();
-            brain.DefaultBlend = previous;
-            brain.CustomBlends = custom;
+            _cutUntilFrame = Time.frameCount + 1;
+        }
+
+        private void RestoreBlend()
+        {
+            if (_cutUntilFrame < 0 || brain == null)
+                return;
+
+            brain.DefaultBlend = _blendBeforeCut;
+            brain.CustomBlends = _customBeforeCut;
+            _cutUntilFrame = -1;
         }
 
 #if UNITY_EDITOR

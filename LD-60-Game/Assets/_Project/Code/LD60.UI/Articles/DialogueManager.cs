@@ -16,8 +16,12 @@ namespace LD60.UI
         [SerializeField] private string continueLabel = "Continue";
         [Header("NPC typing")]
         [SerializeField, Min(1f)] private float charactersPerSecond = 45f;
-        [Tooltip("Volume of all NPC voices. Can be adjusted during Play Mode.")]
-        [SerializeField, Range(0f, 1f)] private float voiceVolume = 0.5f;
+        [Tooltip("Громкость голосов. В ивенте дорожка уже на −13.5 dB, поэтому 1 — всё ещё тихо. Можно крутить в Play Mode.")]
+        [SerializeField, Range(0f, 4f)] private float voiceVolume = 2.6f;
+        [Tooltip("Как часто стартует новый кусок, в секундах.")]
+        [SerializeField, Min(0.05f)] private float voiceGap = 0.55f;
+        [Tooltip("Длина одного куска. Ивент лупится, поэтому его надо обрывать.")]
+        [SerializeField, Range(0.05f, 0.4f)] private float voiceBite = 0.12f;
 
         private GuestVoice _voice = GuestVoice.None;
         private bool _typing;
@@ -28,6 +32,8 @@ namespace LD60.UI
         private FMOD.Studio.PARAMETER_ID _wordParameter;
         private bool _voiceParametersReady;
         private bool _voiceWarningLogged;
+        private float _nextVoiceTime;
+        private int _voiceCut;
 
         private WorkstationViewController _views;
         private CinemachineBrain _brain;
@@ -35,7 +41,7 @@ namespace LD60.UI
 
         private void OnValidate()
         {
-            voiceVolume = Mathf.Clamp01(voiceVolume);
+            voiceVolume = Mathf.Clamp(voiceVolume, 0f, 4f);
             if (Application.isPlaying && _wordVoice.isValid())
                 _wordVoice.setVolume(voiceVolume);
         }
@@ -149,7 +155,6 @@ namespace LD60.UI
                     speak |= wordStarts[visible];
                     visible++;
                 }
-                // Coalesce word starts on a slow frame instead of playing a burst of sounds.
                 if (speak)
                     PlayWordVoice();
                 line.maxVisibleCharacters = visible;
@@ -157,13 +162,12 @@ namespace LD60.UI
             }
             line.maxVisibleCharacters = int.MaxValue;
             _typing = false;
-            StopWordVoices();
         }
 
         private void PlayWordVoice()
         {
-            // One voice at a time: even a looping bank event cannot accumulate instances.
-            StopWordVoices();
+            if (VoiceBusy())
+                return;
             if (_voice == GuestVoice.None || voiceVolume <= 0f || !FMODUnity.RuntimeManager.IsInitialized)
                 return;
             if (!_voiceEvent.isValid())
@@ -210,13 +214,52 @@ namespace LD60.UI
             if (result == FMOD.RESULT.OK)
                 result = instance.start();
             if (result == FMOD.RESULT.OK)
+            {
                 _wordVoice = instance;
+                _nextVoiceTime = Time.time + voiceGap;
+                CutVoiceAsync(++_voiceCut).Forget();
+            }
             else
                 instance.release();
         }
 
+        private async UniTaskVoid CutVoiceAsync(int cut)
+        {
+            var cancelled = await UniTask.Delay(
+                    System.TimeSpan.FromSeconds(voiceBite),
+                    cancellationToken: this.GetCancellationTokenOnDestroy())
+                .SuppressCancellationThrow();
+            if (cancelled || cut != _voiceCut || !_wordVoice.isValid())
+                return;
+
+            _wordVoice.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            _wordVoice.release();
+            _wordVoice = default;
+        }
+
+        private bool VoiceBusy()
+        {
+            if (_wordVoice.isValid())
+            {
+                var playing = _wordVoice.getPlaybackState(out var state) == FMOD.RESULT.OK
+                    && (state == FMOD.Studio.PLAYBACK_STATE.STARTING
+                        || state == FMOD.Studio.PLAYBACK_STATE.PLAYING
+                        || state == FMOD.Studio.PLAYBACK_STATE.SUSTAINING
+                        || state == FMOD.Studio.PLAYBACK_STATE.STOPPING);
+                if (playing)
+                    return true;
+
+                _wordVoice.release();
+                _wordVoice = default;
+            }
+
+            return Time.time < _nextVoiceTime;
+        }
+
         private void StopWordVoices()
         {
+            _voiceCut++;
+            _nextVoiceTime = 0f;
             if (_wordVoice.isValid())
             {
                 _wordVoice.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);

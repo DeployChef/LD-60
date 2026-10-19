@@ -6479,7 +6479,9 @@ MonoBehaviour:
     view: {fileID: 363181647}
   continueLabel: Continue
   charactersPerSecond: 45
-  voiceVolume: 0.914
+  voiceVolume: 4
+  voiceGap: 0.1
+  voiceBite: 0.161
 --- !u!4 &2003089151
 Transform:
   m_ObjectHideFlags: 0
