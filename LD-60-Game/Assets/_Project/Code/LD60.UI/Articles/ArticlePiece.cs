@@ -13,10 +13,14 @@ namespace LD60.UI
         [SerializeField] private ArticleFace one;
         [SerializeField] private ArticleFace two;
         [SerializeField] private ArticleFace three;
+        [SerializeField] private ArticleStyles styles;
 
         public ArticleDefinition Article => article;
 
         private Tween _motion;
+        private SpriteRenderer _paper;
+        private Sprite _defaultPaper;
+        private Vector3 _defaultPaperScale;
 
         private void Awake()
         {
@@ -44,11 +48,13 @@ namespace LD60.UI
             Refresh();
         }
 
+        [ContextMenu("Refresh Article")]
         public void Refresh()
         {
             if (!InScene())
                 return;
 
+            RefreshPaper();
             var debug = ArticleDebugView.ShowValues && article != null;
             var sprite = !debug && article != null ? article.Picture : null;
             var slot = !debug && article != null && article.PictureLayout != null ? article.PictureLayout.Slot : 1;
@@ -62,6 +68,41 @@ namespace LD60.UI
             Show(one, slot == 1, headline, copy, null);
             Show(two, slot == 2, headline, copy, sprite);
             Show(three, slot == 3, headline, copy, sprite);
+        }
+
+        private void RefreshPaper()
+        {
+            if (_paper == null)
+            {
+                var paper = transform.Find("Paper");
+                _paper = paper != null ? paper.GetComponent<SpriteRenderer>() : null;
+                if (_paper == null)
+                    return;
+                _defaultPaper = _paper.sprite;
+                _defaultPaperScale = paper.localScale;
+            }
+
+            var background = styles != null && article != null
+                ? styles.GetBackground(article.Kind, article.Shape)
+                : null;
+            _paper.sprite = background != null ? background : _defaultPaper;
+            var paperScale = _defaultPaperScale;
+            if (_paper.drawMode == SpriteDrawMode.Simple && _paper.sprite != null && _defaultPaper != null)
+            {
+                // PNG resolution / pixels per unit must not change the puzzle's footprint.
+                var original = _defaultPaper.bounds.size;
+                var selected = _paper.sprite.bounds.size;
+                paperScale.x *= original.x / Mathf.Max(0.001f, selected.x);
+                paperScale.y *= original.y / Mathf.Max(0.001f, selected.y);
+            }
+            _paper.transform.localScale = paperScale;
+
+            var shadow = transform.Find("Shadow");
+            if (shadow != null && shadow.TryGetComponent<SpriteRenderer>(out var shadowRenderer))
+            {
+                shadowRenderer.sprite = _paper.sprite;
+                shadow.localScale = paperScale;
+            }
         }
 
         public void SetGhost(bool ghost)

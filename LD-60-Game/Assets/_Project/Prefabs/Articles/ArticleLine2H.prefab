@@ -668,6 +668,7 @@ MonoBehaviour:
   one: {fileID: 2364097458001561234}
   two: {fileID: 5705704262650612588}
   three: {fileID: 7233017060455648823}
+  styles: {fileID: 11400000, guid: 95f379c3a628af4469853e277c65c4fc, type: 2}
 --- !u!114 &1926691985015127937
 MonoBehaviour:
   m_ObjectHideFlags: 0
