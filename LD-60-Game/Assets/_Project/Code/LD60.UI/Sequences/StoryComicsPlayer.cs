@@ -44,6 +44,10 @@ namespace LD60.UI
         [SerializeField] private float compositionFadeOutDuration = 0.8f;
         [SerializeField] private bool deactivateOnFinish = true;
 
+        [Header("Audio")]
+        [Tooltip("Typing sound volume in this comic only. Master and SFX sliders still apply.")]
+        [SerializeField, Range(0f, 1f)] private float typingVolume = 0.35f;
+
         private InputAction _skipAction;
         private bool _skipPressed;
         private bool _playing;
@@ -501,6 +505,9 @@ namespace LD60.UI
             if (!_typingSoundActive)
                 return;
 
+            if (_sfxInstance.isValid())
+                _sfxInstance.setVolume(typingVolume);
+
             var now = Time.unscaledTime;
             if (now - _lastTypeSoundTime < Mathf.Max(0.08f, typeSoundInterval))
                 return;
@@ -555,11 +562,15 @@ namespace LD60.UI
                 {
                     _sfxInstance = RuntimeManager.CreateInstance(SfxEventPath);
                     if (_sfxInstance.isValid())
+                    {
+                        _sfxInstance.setVolume(typingVolume);
                         _sfxInstance.start();
+                    }
                 }
 
                 if (_sfxInstance.isValid())
                 {
+                    _sfxInstance.setVolume(typingVolume);
                     _sfxInstance.setParameterByName(NewspaperParameter, NewspaperNoneValue, ignoreseekspeed: true);
                     _sfxInstance.setParameterByName(NewspaperParameter, NewspaperTypeValue, ignoreseekspeed: true);
                     return;
@@ -576,7 +587,10 @@ namespace LD60.UI
                     if (RuntimeManager.StudioSystem.getEvent(TypeEventPaths[i], out var description) != FMOD.RESULT.OK
                         || !description.isValid())
                         continue;
-                    RuntimeManager.PlayOneShot(TypeEventPaths[i]);
+                    var instance = RuntimeManager.CreateInstance(TypeEventPaths[i]);
+                    instance.setVolume(typingVolume);
+                    instance.start();
+                    instance.release();
                     return;
                 }
                 catch (EventNotFoundException)

@@ -100,6 +100,9 @@ namespace FMODUnity
         private static void RemoveListener(StudioListener listener)
         {
             listeners.Remove(listener);
+            // Disabling a listener must not initialize FMOD again after a failed startup.
+            if (!RuntimeManager.IsInitialized)
+                return;
             RuntimeManager.StudioSystem.setNumListeners(Mathf.Clamp(listeners.Count, 1, FMOD.CONSTANTS.MAX_LISTENERS));
         }
 
@@ -136,6 +139,9 @@ namespace FMODUnity
 
         private void Update()
         {
+            // The cached initialization exception would otherwise be thrown every frame.
+            if (!RuntimeManager.IsInitialized)
+                return;
             if (ListenerNumber < 0 || ListenerNumber >= FMOD.CONSTANTS.MAX_LISTENERS)
             {
                 return;

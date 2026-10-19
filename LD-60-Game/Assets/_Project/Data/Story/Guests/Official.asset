@@ -13,12 +13,21 @@ MonoBehaviour:
   m_Name: Official
   m_EditorClassIdentifier: LD60.Gameplay::LD60.Gameplay.Story.GuestDefinition
   displayName: Ministry Official
+  voice: 1
   emotions:
   - key: default
     sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: cold
     sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: scorn
     sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+    overrideVoice: 0
+    voice: 0
   - key: threat
     sprite: {fileID: 21300000, guid: 938b18af085ebd249a5d232f7690c9aa, type: 3}
+    overrideVoice: 0
+    voice: 0
